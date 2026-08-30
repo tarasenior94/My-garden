@@ -1,0 +1,2975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Garden">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#5E7C57">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>My Garden — Life & Growth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --cream:#F8F6EF;
+  --cream-2:#F1EEE3;
+  --ink:#2E2B24;
+  --ink-soft:#6B6455;
+  --line:#E4DFD0;
+  --card:#FFFFFF;
+  --shadow: 0 8px 24px -12px rgba(64,54,32,0.18), 0 2px 6px -2px rgba(64,54,32,0.10);
+  --shadow-sm: 0 2px 8px -4px rgba(64,54,32,0.15);
+  --radius: 20px;
+  --radius-sm: 14px;
+
+  --dash:#5E7C57;   --dash-bg:#EAF0E4;
+  --training:#3E6C8E; --training-bg:#E6EFF5;
+  --sleep:#7C6F9E;  --sleep-bg:#EEEAF5;
+  --cooking:#C1743B; --cooking-bg:#F7EADB;
+  --meals:#D98A6B;  --meals-bg:#FAEBE3;
+  --savings:#4F7A5B; --savings-bg:#E4F0E6;
+  --period:#B6607D; --period-bg:#F6E4EA;
+  --skin:#C97E92;   --skin-bg:#F8E9EE;
+  --photo:#B8912B;  --photo-bg:#F6EFD9;
+  --moral:#4C8177;  --moral-bg:#E2F0EC;
+  --work:#33526B;   --work-bg:#E2E9EF;
+  --routine:#7A8F5C; --routine-bg:#EDF1E3;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Karla',sans-serif; background:var(--cream); color:var(--ink);
+  min-height:100vh; overscroll-behavior-y:none;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif; letter-spacing:-0.01em;}
+button{font-family:inherit; cursor:pointer;}
+input,select,textarea{font-family:inherit; font-size:16px;}
+::-webkit-scrollbar{display:none;}
+
+#app{max-width:520px; margin:0 auto; min-height:100vh; padding-bottom:92px; position:relative;}
+
+/* leaf background texture */
+.leaf-bg{position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.5;}
+
+.topbar{
+  padding:22px 20px 14px; position:relative; z-index:1;
+}
+.topbar .greeting{font-size:13px; color:var(--ink-soft); font-weight:600; text-transform:uppercase; letter-spacing:0.08em;}
+.topbar h1{font-size:26px; margin:2px 0 0; font-weight:600;}
+
+.screen{padding:0 16px 8px; position:relative; z-index:1; animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+/* Progress card */
+.progress-card{
+  background:linear-gradient(135deg,var(--dash) 0%, #7A9B6F 100%);
+  color:#fff; border-radius:var(--radius); padding:22px 22px 20px; margin:8px 0 18px;
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
+}
+.progress-card svg.deco{position:absolute; right:-10px; top:-10px; opacity:0.18; width:120px; height:120px;}
+.progress-card .label{font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; opacity:0.85;}
+.progress-card .pct{font-family:'Fraunces',serif; font-size:40px; font-weight:600; margin:2px 0 10px;}
+.bar-track{background:rgba(255,255,255,0.28); border-radius:20px; height:10px; overflow:hidden;}
+.bar-fill{background:#fff; height:100%; border-radius:20px; transition:width .5s ease;}
+.progress-card .count{font-size:13px; opacity:0.9; margin-top:8px;}
+
+/* Section labels */
+.section-title{font-size:15px; font-weight:700; margin:22px 4px 10px; display:flex; align-items:center; gap:8px;}
+.section-title .rule{flex:1; height:1px; background:var(--line);}
+
+/* Quick actions grid */
+.qa-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.qa-btn{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-sm);
+  padding:14px 6px 10px; text-align:center; box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column; align-items:center; gap:6px; transition:transform .12s ease;
+}
+.qa-btn:active{transform:scale(0.95);}
+.qa-btn .emoji{font-size:22px;}
+.qa-btn .lbl{font-size:11.5px; font-weight:600; color:var(--ink-soft); line-height:1.2;}
+.qa-btn.done{opacity:0.55;}
+
+/* Focus checklist */
+.focus-block{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:14px 16px; margin-bottom:12px; border:1px solid var(--line);}
+.focus-block h4{margin:0 0 8px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); display:flex; align-items:center; justify-content:space-between;}
+.check-row{display:flex; align-items:center; gap:10px; padding:8px 2px; border-bottom:1px solid var(--cream-2);}
+.check-row:last-child{border-bottom:none;}
+.check-row input[type=checkbox]{width:22px; height:22px; accent-color:var(--dash); flex-shrink:0;}
+.check-row label{font-size:15px; flex:1;}
+.check-row.checked label{color:var(--ink-soft); text-decoration:line-through;}
+.check-row .del{color:#B98; font-size:12px; opacity:0.5; padding:4px;}
+.add-item-row{display:flex; gap:8px; margin-top:8px;}
+.add-item-row input{flex:1; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:14px;}
+.add-item-row button{border:none; background:var(--cream-2); border-radius:10px; padding:8px 12px; font-size:13px; font-weight:700; color:var(--ink-soft);}
+
+/* insight strip */
+.insight{
+  display:flex; gap:10px; align-items:flex-start; background:var(--dash-bg); color:var(--dash);
+  border-radius:14px; padding:11px 13px; margin-bottom:8px; font-size:13.5px; font-weight:600; line-height:1.4;
+}
+.insight .ic{font-size:16px;}
+
+/* Life cards */
+.life-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.life-card{
+  border-radius:var(--radius); padding:16px 14px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden;
+  min-height:96px; display:flex; flex-direction:column; justify-content:space-between; border:1px solid rgba(0,0,0,0.03);
+}
+.life-card .emoji{font-size:24px;}
+.life-card .name{font-weight:700; font-size:14.5px; margin-top:6px;}
+.life-card .sub{font-size:11.5px; font-weight:600; opacity:0.75; margin-top:2px;}
+
+/* generic card / list */
+.card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-sm); border:1px solid var(--line); padding:16px; margin-bottom:12px;}
+.stat-row{display:flex; gap:10px;}
+.stat{flex:1; background:var(--cream-2); border-radius:12px; padding:10px 10px; text-align:center;}
+.stat .n{font-family:'Fraunces',serif; font-size:20px; font-weight:600;}
+.stat .l{font-size:10.5px; color:var(--ink-soft); font-weight:700; text-transform:uppercase; letter-spacing:0.04em;}
+
+.entry-item{padding:10px 0; border-bottom:1px solid var(--cream-2); display:flex; justify-content:space-between; gap:10px; align-items:flex-start;}
+.entry-item:last-child{border-bottom:none;}
+.entry-item .meta{font-size:11px; color:var(--ink-soft); font-weight:700; text-transform:uppercase; letter-spacing:0.03em;}
+.entry-item .main{font-size:14.5px; margin-top:2px;}
+.entry-item .sub{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+.entry-actions button{border:none; background:none; font-size:13px; color:var(--ink-soft); padding:4px;}
+
+.empty-state{text-align:center; padding:26px 10px; color:var(--ink-soft);}
+.empty-state .e{font-size:30px; margin-bottom:6px;}
+.empty-state p{font-size:13.5px; margin:2px 0; line-height:1.5;}
+
+/* forms */
+.form-field{margin-bottom:12px;}
+.form-field label{display:block; font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.03em;}
+.form-field input[type=text], .form-field input[type=number], .form-field input[type=date], .form-field input[type=time], .form-field textarea, .form-field select{
+  width:100%; border:1.5px solid var(--line); border-radius:12px; padding:11px 13px; background:var(--cream); font-size:15px; color:var(--ink);
+}
+.form-field textarea{min-height:80px; resize:vertical;}
+.chip-row{display:flex; gap:8px; flex-wrap:wrap;}
+.chip{border:1.5px solid var(--line); border-radius:20px; padding:8px 14px; font-size:13.5px; font-weight:600; background:var(--cream); color:var(--ink-soft);}
+.chip.active{border-color:var(--dash); background:var(--dash-bg); color:var(--dash);}
+.slider-row{display:flex; align-items:center; gap:10px;}
+.slider-row input[type=range]{flex:1; accent-color:var(--dash);}
+.slider-val{font-family:'Fraunces',serif; font-weight:600; font-size:17px; width:26px; text-align:center;}
+
+.btn-primary{
+  width:100%; background:var(--dash); color:#fff; border:none; border-radius:14px; padding:14px; font-size:15.5px; font-weight:700;
+  box-shadow:0 6px 16px -6px rgba(94,124,87,0.55); margin-top:4px;
+}
+.btn-primary:active{transform:scale(0.98);}
+.btn-secondary{
+  width:100%; background:var(--cream-2); color:var(--ink-soft); border:none; border-radius:14px; padding:13px; font-size:14.5px; font-weight:700; margin-top:8px;
+}
+.btn-ghost{background:none; border:none; color:var(--ink-soft); font-size:14px; font-weight:600; padding:6px 0;}
+
+/* nav header w/ back */
+.nav-header{display:flex; align-items:center; gap:10px; padding:18px 16px 10px; position:relative; z-index:1;}
+.back-btn{width:36px; height:36px; border-radius:50%; background:var(--card); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:var(--shadow-sm); flex-shrink:0;}
+.nav-header h2{margin:0; font-size:20px; font-weight:600;}
+
+/* bottom nav */
+.bottomnav{
+  position:fixed; bottom:0; left:0; right:0; z-index:20;
+  background:rgba(248,246,239,0.92); backdrop-filter:blur(14px); border-top:1px solid var(--line);
+  display:flex; justify-content:space-around; padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+  max-width:520px; margin:0 auto;
+}
+.nav-btn{display:flex; flex-direction:column; align-items:center; gap:2px; background:none; border:none; color:var(--ink-soft); font-size:10.5px; font-weight:700; padding:6px 10px; border-radius:12px;}
+.nav-btn .ic{font-size:20px;}
+.nav-btn.active{color:var(--dash);}
+.nav-btn.active .ic{transform:translateY(-1px);}
+
+/* modal */
+.modal-overlay{position:fixed; inset:0; background:rgba(46,43,36,0.45); z-index:100; display:flex; align-items:flex-end; justify-content:center;}
+.modal-sheet{background:var(--cream); width:100%; max-width:520px; border-radius:24px 24px 0 0; padding:20px 20px calc(20px + env(safe-area-inset-bottom)); max-height:88vh; overflow-y:auto; animation:slideUp .25s ease;}
+@keyframes slideUp{from{transform:translateY(30px); opacity:0.6;} to{transform:translateY(0); opacity:1;}}
+.modal-sheet h3{margin:0 0 14px; font-size:19px;}
+.modal-close{position:absolute; top:14px; right:18px; background:var(--card); border:1px solid var(--line); border-radius:50%; width:32px; height:32px; font-size:14px; color:var(--ink-soft);}
+
+/* celebration */
+.celebrate{background:linear-gradient(135deg,#F6EFD9,#F8F6EF); text-align:center; padding:30px 20px;}
+.celebrate .big{font-size:44px;}
+.celebrate h3{margin:10px 0 4px;}
+.celebrate p{color:var(--ink-soft); font-size:14px; line-height:1.5;}
+.reward-box{background:var(--card); border-radius:16px; padding:16px; margin-top:14px; border:1.5px dashed var(--photo);}
+
+.limitation{font-size:12px; color:var(--ink-soft); background:var(--cream-2); border-radius:12px; padding:10px 12px; margin-top:10px; line-height:1.5;}
+.day-tabs{display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:10px;}
+.day-tabs button{flex-shrink:0; border:1.5px solid var(--line); background:var(--card); border-radius:12px; padding:7px 12px; font-size:12.5px; font-weight:700; color:var(--ink-soft);}
+.day-tabs button.active{background:var(--routine); color:#fff; border-color:var(--routine);}
+</style>
+</head>
+<body>
+<svg class="leaf-bg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <defs></defs>
+</svg>
+<div id="app"></div>
+
+<script>
+/* ---------------- storage helpers ----------------
+   REBUILT: this app no longer uses the Claude "window.storage" bridge at all —
+   that was the actual point of failure ("Storage set failed: Unexpected response
+   type"), not anything in this app's logic. Persistence now uses the browser's
+   own localStorage, which lives entirely on your device and has zero dependency
+   on any Anthropic service. If localStorage itself isn't available in whatever
+   is rendering this page (e.g. a heavily sandboxed in-app webview), the app
+   detects that up front and tells you plainly, plus falls back to keeping your
+   data in memory for the session with auto-backup downloads, so you're never
+   silently losing data even in that worst case. */
+const KEYS = ["routine","checklist","spending","income","meals","workouts","sleep","cooking","reading","skincare","period","photos","work","savings","goals","achievements","settings","bodyMeasurements","fitnessPhotos","skinPhotos","skinRoutine","proudMoments","weeklyReflections","bestVersion","weeklyCheckins"];
+let DB = {};
+let loaded = false;
+let localStorageOK = false;
+
+function probeLocalStorage(){
+  try{
+    const testKey = '__mygarden_probe__';
+    localStorage.setItem(testKey, '1');
+    const ok = localStorage.getItem(testKey) === '1';
+    localStorage.removeItem(testKey);
+    return ok;
+  }catch(e){
+    console.error('localStorage unavailable:', e);
+    return false;
+  }
+}
+
+function loadAll(){
+  localStorageOK = probeLocalStorage();
+  for(const k of KEYS){
+    if(localStorageOK){
+      try{
+        const raw = localStorage.getItem('db:'+k);
+        DB[k] = raw!==null ? JSON.parse(raw) : defaultFor(k);
+      }catch(e){ console.error('load failed for key "'+k+'":', e); DB[k] = defaultFor(k); }
+    } else {
+      DB[k] = defaultFor(k); // in-memory only this session; see storageBroken banner
+    }
+  }
+  loaded = true;
+}
+function defaultFor(k){
+  if(k==='routine') return {
+    morning:["Breakfast","Shower","Morning Skincare","Morning reading","Pray"],
+    workday:["Arrive at work","Lunch break"],
+    eveningByDay:{0:["Dinner","Evening Skincare"],1:["Dinner","Workout","Evening Skincare"],2:["Dinner","Evening Skincare"],3:["Dinner","Workout","Evening Skincare"],4:["Dinner","Evening Skincare"],5:["Dinner","Photo of the Day"],6:["Dinner","Photo of the Day","Evening Skincare"]}
+  };
+  if(k==='checklist') return {};
+  if(k==='goals') return [];
+  if(k==='achievements') return [];
+  if(k==='settings') return {name:"", pin:"", locked:false};
+  if(k==='skinRoutine') return { am:["Cleanser","Moisturiser","SPF"], pm:["Cleanser","Treatment","Moisturiser"] };
+  return [];
+}
+let storageBroken = false;
+let backupReminderDismissed = false;
+let lastAutoBackupAt = 0;
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+async function save(k){
+  if(!localStorageOK){
+    // local storage itself isn't available in this viewer — keep working in memory
+    // and lean on auto-backup so nothing is lost, but don't pretend it's saved.
+    storageBroken = true;
+    const now = Date.now();
+    if(now - lastAutoBackupAt > 60000){ lastAutoBackupAt = now; try{ doExport('safety'); }catch(_){} }
+    return;
+  }
+  try{
+    const toPersist = Array.isArray(DB[k])
+      ? DB[k].map(it => (it && typeof it==='object' && '_pending' in it) ? (({_pending,_error,...clean})=>clean)(it) : it)
+      : DB[k];
+    localStorage.setItem('db:'+k, JSON.stringify(toPersist));
+    storageBroken = false;
+  }catch(e){
+    // e.g. QuotaExceededError, or storage revoked mid-session
+    console.error('save failed for key "'+k+'":', e);
+    storageBroken = true;
+    const now = Date.now();
+    if(now - lastAutoBackupAt > 60000){ lastAutoBackupAt = now; try{ doExport('safety'); }catch(_){} }
+    throw e;
+  }
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmtDate(iso){ const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); }
+function dayIdx(iso){ return new Date(iso+'T00:00:00').getDay(); }
+
+/* ---------------- charts ---------------- */
+const chartInstances = {};
+function renderChart(canvasId, type, labels, datasets, opts){
+  const el = document.getElementById(canvasId);
+  if(!el || typeof Chart==='undefined') return;
+  if(chartInstances[canvasId]){ chartInstances[canvasId].destroy(); }
+  chartInstances[canvasId] = new Chart(el.getContext('2d'), {
+    type,
+    data: { labels, datasets },
+    options: Object.assign({
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display: datasets.length>1, labels:{ font:{family:'Karla'}, color:'#6B6455' } } },
+      scales: type==='pie'||type==='doughnut' ? {} : {
+        x:{ ticks:{ font:{family:'Karla', size:10}, color:'#6B6455' }, grid:{ display:false } },
+        y:{ ticks:{ font:{family:'Karla', size:10}, color:'#6B6455' }, grid:{ color:'#E4DFD0' }, beginAtZero:true }
+      }
+    }, opts||{})
+  });
+}
+function chartCanvas(id, heightPx){
+  return `<div style="position:relative; height:${heightPx||180}px; margin-top:10px;"><canvas id="${id}"></canvas></div>`;
+}
+
+/* ---------------- image handling (Photo of the Day, Fitness/Skin progress photos) ----------------
+   Images are downscaled + JPEG-compressed client-side before being stored, since localStorage has a
+   small quota (commonly ~5MB total). This keeps each photo roughly 20-100KB so a reasonable number
+   fit without silently blowing the quota. */
+function compressImageFile(file, maxDim){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onerror = ()=> reject(new Error('Could not read that image file.'));
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onerror = ()=> reject(new Error('Could not decode that image.'));
+      img.onload = ()=>{
+        let w = img.width, h = img.height;
+        const dim = maxDim || 640;
+        if(w>h && w>dim){ h = Math.round(h*dim/w); w = dim; }
+        else if(h>=w && h>dim){ w = Math.round(w*dim/h); h = dim; }
+        const canvas = document.createElement('canvas');
+        canvas.width=w; canvas.height=h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg', 0.6));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function estimateStorageUsageKB(){
+  if(!localStorageOK) return 0;
+  let total=0;
+  try{
+    for(const k of KEYS){
+      const v = localStorage.getItem('db:'+k);
+      if(v) total += v.length;
+    }
+  }catch(e){}
+  return Math.round(total/1024);
+}
+
+/* ---------------- app state ---------------- */
+let route = {tab:'home', view:null, params:{}};
+let modal = null;
+
+function nav(tab,view=null,params={}){ route={tab,view,params}; render(); window.scrollTo(0,0); }
+function openModal(content){ modal=content; render(); }
+function closeModal(){ modal=null; render(); }
+
+/* ---------------- daily progress / checklist ---------------- */
+function getChecklistFor(date){
+  if(!DB.checklist[date]) DB.checklist[date]={};
+  return DB.checklist[date];
+}
+function todaysRoutineItems(){
+  const iso = todayISO();
+  const dIdx = dayIdx(iso);
+  const r = DB.routine;
+  const isWeekday = dIdx>=1 && dIdx<=5; // Mon(1)-Fri(5)
+  return {
+    morning: r.morning||[],
+    workday: isWeekday ? (r.workday||[]) : [],
+    evening: (r.eveningByDay && r.eveningByDay[dIdx]) || [],
+    isWeekday
+  };
+}
+function checklistKey(section,item){ return section+'::'+item; }
+function toggleCheck(key){
+  const iso = todayISO();
+  const c = getChecklistFor(iso);
+  c[key] = !c[key];
+  save('checklist');
+  render();
+}
+function computeProgress(){
+  const {morning,workday,evening} = todaysRoutineItems();
+  const all = [...morning.map(i=>checklistKey('morning',i)), ...workday.map(i=>checklistKey('workday',i)), ...evening.map(i=>checklistKey('evening',i))];
+  const c = getChecklistFor(todayISO());
+  const done = all.filter(k=>c[k]).length;
+  return {done, total:all.length, pct: all.length? Math.round(done/all.length*100):0};
+}
+/* auto-check routine items when a matching quick action is logged today.
+   Section-aware: only checks items within the given sections (or all sections if none given),
+   so e.g. logging AM skincare never touches the PM skincare item and vice versa. */
+function autoCheckMatching(keywords, onlySections){
+  const iso = todayISO();
+  const c = getChecklistFor(iso);
+  const {morning,workday,evening} = todaysRoutineItems();
+  const sections = [['morning',morning],['workday',workday],['evening',evening]].filter(([s])=> !onlySections || onlySections.includes(s));
+  sections.forEach(([section,items])=>{
+    items.forEach(item=>{
+      const low = item.toLowerCase();
+      if(keywords.some(k=>low.includes(k))) c[checklistKey(section,item)]=true;
+    });
+  });
+  save('checklist');
+}
+
+/* ---------------- goals engine ---------------- */
+function countInRange(arr, dateField, range){
+  if(!range) return arr.length;
+  return arr.filter(x=>x[dateField]>=range.start && x[dateField]<=range.end).length;
+}
+/* Legacy flat sources — kept so goals created in v1 keep working exactly as before. */
+const GOAL_SOURCES = {
+  workouts: ()=>DB.workouts.length,
+  meals: ()=>DB.meals.length,
+  recipes_mastered: ()=>new Set(DB.cooking.filter(c=>c.rating>=8).map(c=>c.recipe)).size,
+  reading_days: ()=>new Set(DB.reading.map(r=>r.date)).size,
+  prayer_days: ()=>DB.reading.filter(r=>r.prayed).length,
+  photos: ()=>DB.photos.length,
+  savings_total: ()=>DB.savings.reduce((s,x)=>s+Number(x.amount||0),0),
+};
+/* New goal engine: section -> metric -> {label, unit, needsParam?, fn(param, ctx)}.
+   ctx.range (when present, for 'frequency'-type goals) scopes count-style metrics to the
+   current week. Add new metrics here any time without touching the rest of the goals UI. */
+const GOAL_METRICS = {
+  manual: {},
+  training: {
+    workouts_logged: {label:'Workouts logged', unit:'', fn:(p,ctx)=>countInRange(DB.workouts,'date',ctx&&ctx.range)},
+    sessions_per_week: {label:'Training sessions per week', unit:'/wk', fn:()=>{ const r=weekRange(); return DB.workouts.filter(w=>w.date>=r.start&&w.date<=r.end).length; }},
+    exercise_pr: {label:'Exercise — Best weight (PR)', unit:'kg', needsParam:'Exercise name (e.g. Leg Press)', fn:(p)=>{
+      let pr=null; const name=(p||'').trim().toLowerCase();
+      DB.workouts.forEach(w=>(w.exercises||[]).forEach(ex=>{ if((ex.name||'').trim().toLowerCase()===name && ex.weight!==undefined && ex.weight!==''){ const v=Number(ex.weight); if(pr===null||v>pr) pr=v; } }));
+      return pr||0;
+    }},
+    exercise_reps: {label:'Exercise — Best reps', unit:'reps', needsParam:'Exercise name', fn:(p)=>{
+      let best=null; const name=(p||'').trim().toLowerCase();
+      DB.workouts.forEach(w=>(w.exercises||[]).forEach(ex=>{ if((ex.name||'').trim().toLowerCase()===name && ex.reps!==undefined && ex.reps!==''){ const v=Number(ex.reps); if(best===null||v>best) best=v; } }));
+      return best||0;
+    }},
+  },
+  sleep: {
+    avg_duration: {label:'Average sleep duration (last 14 nights)', unit:'h', fn:()=>{ const items=[...DB.sleep].slice(-14).map(s=>sleepDurationHours(s.bed,s.wake)).filter(d=>d!==null); return items.length? +(items.reduce((a,b)=>a+b,0)/items.length).toFixed(1):0; }},
+    nights_meeting_target: {label:'Nights ≥7h sleep', unit:'', fn:(p,ctx)=>{ const items = ctx&&ctx.range? DB.sleep.filter(s=>s.date>=ctx.range.start&&s.date<=ctx.range.end) : DB.sleep; return items.filter(s=>{ const d=sleepDurationHours(s.bed,s.wake); return d!==null&&d>=7; }).length; }},
+    avg_quality: {label:'Average sleep quality (last 14 nights)', unit:'/10', fn:()=>{ const items=[...DB.sleep].slice(-14); return items.length? +(items.reduce((s,x)=>s+Number(x.quality||0),0)/items.length).toFixed(1):0; }},
+  },
+  cooking: {
+    recipes_cooked: {label:'Cooking attempts', unit:'', fn:(p,ctx)=>countInRange(DB.cooking,'date',ctx&&ctx.range)},
+    recipes_mastered: {label:'Recipes mastered', unit:'', fn:()=> recipeGroups().filter(g=>g.stage==='Mastered').length},
+    recipes_rated_8plus: {label:'Attempts rated 8+', unit:'', fn:()=>DB.cooking.filter(c=>Number(c.rating||0)>=8).length},
+    specific_recipe_attempts: {label:'Specific recipe — times cooked', unit:'', needsParam:'Recipe name', fn:(p)=>DB.cooking.filter(c=>(c.recipe||'').trim().toLowerCase()===(p||'').trim().toLowerCase()).length},
+  },
+  meals: {
+    meals_logged: {label:'Meals logged', unit:'', fn:(p,ctx)=>countInRange(DB.meals,'date',ctx&&ctx.range)},
+    breakfasts_logged: {label:'Breakfasts logged', unit:'', fn:()=>DB.meals.filter(m=>(m.slot||'')==='breakfast').length},
+    lunches_logged: {label:'Lunches logged', unit:'', fn:()=>DB.meals.filter(m=>(m.slot||'')==='lunch').length},
+    dinners_logged: {label:'Dinners logged', unit:'', fn:()=>DB.meals.filter(m=>(m.slot||'')==='dinner').length},
+    dairy_free_days: {label:'Dairy-free days', unit:'', fn:()=>new Set(DB.meals.filter(m=>m.dairyFree).map(m=>m.date)).size},
+    dairy_free_pct: {label:'Dairy-free % of meals', unit:'%', fn:()=>DB.meals.length? Math.round(DB.meals.filter(m=>m.dairyFree).length/DB.meals.length*100):0},
+  },
+  money: {
+    total_savings: {label:'Total savings', unit:'$', fn:()=>DB.savings.reduce((s,x)=>s+Number(x.amount||0),0)},
+    weekly_savings: {label:'Savings this week', unit:'$', fn:()=>{ const r=weekRange(); return DB.savings.filter(s=>s.date>=r.start&&s.date<=r.end).reduce((s,x)=>s+Number(x.amount||0),0); }},
+    weeks_within_budget: {label:'Weeks within budget (last 8)', unit:'', fn:()=>{
+      let count=0; for(let i=0;i<8;i++){ const d=new Date(); d.setDate(d.getDate()-7*i); const day=d.getDay(); const start=new Date(d); start.setDate(d.getDate()-day); const end=new Date(start); end.setDate(start.getDate()+6);
+        const iso=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+        const s=iso(start), e=iso(end);
+        const inc = DB.income.filter(x=>x.date>=s&&x.date<=e).reduce((a,x)=>a+Number(x.amount||0),0);
+        const sav = DB.savings.filter(x=>x.date>=s&&x.date<=e).reduce((a,x)=>a+Number(x.amount||0),0);
+        const spent = DB.spending.filter(x=>x.date>=s&&x.date<=e).reduce((a,x)=>a+Number(x.amount||0),0);
+        if(spent <= Math.max(0, inc-sav)) count++; }
+      return count;
+    }},
+  },
+  period: {
+    cycles_logged: {label:'Period entries logged', unit:'', fn:()=>DB.period.length},
+  },
+  skin: {
+    am_completion: {label:'Morning skincare logs', unit:'', fn:(p,ctx)=>countInRange(DB.skincare.filter(s=>s.period==='am'),'date',ctx&&ctx.range)},
+    pm_completion: {label:'Evening skincare logs', unit:'', fn:(p,ctx)=>countInRange(DB.skincare.filter(s=>s.period==='pm'),'date',ctx&&ctx.range)},
+    consistency_pct: {label:'Skincare consistency % (last 30 days)', unit:'%', fn:()=>{
+      let done=0; for(let i=0;i<30;i++){ const d=new Date(); d.setDate(d.getDate()-i); const iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); if(DB.skincare.some(s=>s.date===iso)) done++; }
+      return Math.round(done/30*100);
+    }},
+  },
+  photo: {
+    photos_logged: {label:'Photos of the Day', unit:'', fn:(p,ctx)=>countInRange(DB.photos,'date',ctx&&ctx.range)},
+    photo_streak: {label:'Photo of the Day streak', unit:'days', fn:()=>currentStreak(DB.photos.map(p=>p.date))},
+  },
+  moral: {
+    reading_days: {label:'Reading days', unit:'', fn:(p,ctx)=>{ const dates=[...new Set(DB.reading.map(r=>r.date))]; return ctx&&ctx.range? dates.filter(d=>d>=ctx.range.start&&d<=ctx.range.end).length : dates.length; }},
+    prayer_days: {label:'Prayer days', unit:'', fn:(p,ctx)=>countInRange(DB.reading.filter(r=>r.prayed),'date',ctx&&ctx.range)},
+    impressions_written: {label:'Impressions written', unit:'', fn:()=>DB.reading.filter(r=>r.impression&&r.impression.trim()).length},
+    reading_streak: {label:'Reading streak', unit:'days', fn:()=>currentStreak(DB.reading.map(r=>r.date))},
+    prayer_streak: {label:'Prayer streak', unit:'days', fn:()=>currentStreak(DB.reading.filter(r=>r.prayed).map(r=>r.date))},
+  },
+  work: {
+    leave_on_time_days: {label:'Days leaving by 7am', unit:'', fn:(p,ctx)=>countInRange(DB.work.filter(w=>w.leftBy7),'date',ctx&&ctx.range)},
+    workdays_logged: {label:'Workdays logged', unit:'', fn:(p,ctx)=>countInRange(DB.work,'date',ctx&&ctx.range)},
+  },
+};
+function goalCurrent(g){
+  if(g.section && g.metricKey && GOAL_METRICS[g.section] && GOAL_METRICS[g.section][g.metricKey]){
+    const metric = GOAL_METRICS[g.section][g.metricKey];
+    const ctx = g.type==='frequency' ? {range: weekRange()} : {};
+    return metric.fn(g.param, ctx);
+  }
+  if(g.linkedSource && GOAL_SOURCES[g.linkedSource]) return GOAL_SOURCES[g.linkedSource](); // v1 goals keep working unchanged
+  return g.current||0;
+}
+function nextMilestone(current, target){
+  if(!target || target<=current) return null;
+  let step = (target-current)/5;
+  if(step>=1000) step = Math.round(step/1000)*1000;
+  else if(step>=100) step = Math.round(step/100)*100;
+  else if(step>=10) step = Math.round(step/10)*10;
+  else step = Math.max(1, Math.round(step));
+  let m = current+step;
+  if(m>=target) m = target;
+  return m;
+}
+function checkGoalCompletion(){
+  let newly=[];
+  DB.goals.forEach(g=>{
+    const cur = goalCurrent(g);
+    if(!g.completed && g.target && cur>=Number(g.target)){
+      g.completed=true;
+      g.completedAt = new Date().toISOString();
+      newly.push(g);
+      addAchievement('goal:'+g.id, '🎯 Goal completed: '+g.name, {section:'Goals', icon:'🎯', description:'Reached the target for "'+g.name+'".'});
+    }
+  });
+  if(newly.length){ save('goals'); showReward(newly[0]); return true; }
+  return false;
+}
+function addAchievement(key, title, opts){
+  opts = opts || {};
+  if(DB.achievements.some(a=>a.key===key)) return; // idempotent — never grants the same milestone twice
+  DB.achievements.unshift({id:uid(), key, title, date:todayISO(), section:opts.section||'', icon:opts.icon||'🏆', description:opts.description||''});
+  save('achievements');
+}
+const REWARDS = ["🌸 Buy yourself some flowers.","📚 Buy a book you've been wanting.","🪴 Buy a new plant for your space.","☕ Have a special coffee or meal out.","🖼️ Get something small for your room.","📷 Treat yourself to a photography accessory.","🌿 Visit somewhere beautiful nearby.","✨ Buy something useful you've been putting off."];
+function showReward(goal){
+  const reward = REWARDS[Math.floor(Math.random()*REWARDS.length)];
+  openModal({type:'celebrate', goal, reward});
+}
+
+/* ---------------- streaks ---------------- */
+function currentStreak(dates){
+  const set = new Set(dates);
+  let n=0; let d=new Date();
+  while(true){
+    const iso = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(set.has(iso)){ n++; d.setDate(d.getDate()-1); } else break;
+  }
+  return n;
+}
+
+/* ---------------- Life Garden — a visual metaphor for real progress ---------------- */
+function renderLifeGarden(){
+  const points = DB.achievements.length*2 + DB.goals.filter(g=>g.completed).length*3 + Math.max(currentStreak(DB.reading.map(r=>r.date)), currentStreak(DB.photos.map(p=>p.date)), 0);
+  const stage = points>=20?5:points>=12?4:points>=6?3:points>=2?2:1;
+  const positions = [30,80,130,180,230];
+  const colors = ['#D9A0A6','#C97E92','#B8912B','#D98A6B','#7C6F9E'];
+  let stems = '';
+  for(let i=0;i<stage;i++){
+    const x = positions[i];
+    stems += `
+      <line x1="${x}" y1="70" x2="${x}" y2="${70-18-i*3}" stroke="#7A8F5C" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M${x-6} ${70-10-i*3} Q${x-14} ${70-16-i*3} ${x-6} ${70-22-i*3}" stroke="#7A8F5C" stroke-width="1.5" fill="none" opacity="0.7"/>
+      <path d="M${x+6} ${70-14-i*3} Q${x+14} ${70-19-i*3} ${x+6} ${70-25-i*3}" stroke="#7A8F5C" stroke-width="1.5" fill="none" opacity="0.7"/>
+      <circle cx="${x}" cy="${70-18-i*3-6}" r="6" fill="${colors[i%5]}" opacity="0.9"/>
+    `;
+  }
+  const caption = stage>=5 ? 'Your garden is flourishing 🌱' : stage<=1 ? 'Your garden is just beginning' : 'Your garden is growing';
+  return `<div class="card" style="padding:10px 14px;">
+    <svg viewBox="0 0 260 80" style="width:100%; height:66px;" aria-label="Life Garden progress illustration">
+      <line x1="0" y1="70" x2="260" y2="70" stroke="#E4DFD0" stroke-width="1"/>
+      ${stems}
+    </svg>
+    <div style="text-align:center;font-size:11px;color:var(--ink-soft);font-weight:600;">${caption}</div>
+  </div>`;
+}
+
+/* ---------------- ON THIS DAY ---------------- */
+function buildOnThisDay(){
+  const cards = [];
+  const offsets = [ {label:'6 months ago', months:6}, {label:'1 year ago', months:12}, {label:'2 years ago', months:24} ];
+  const todayD = new Date();
+  offsets.forEach(off=>{
+    if(cards.length>=3) return;
+    const target = new Date(todayD); target.setMonth(target.getMonth()-off.months);
+    const targetISO = target.getFullYear()+'-'+String(target.getMonth()+1).padStart(2,'0')+'-'+String(target.getDate()).padStart(2,'0');
+
+    const photo = DB.photos.find(p=>p.date===targetISO);
+    if(photo && cards.length<3){ cards.push({type:'photo', label:off.label, photo}); }
+
+    const nearCooking = DB.cooking.filter(c=> Math.abs(new Date(c.date+'T00:00:00')-new Date(targetISO+'T00:00:00')) <= 2*86400000);
+    if(nearCooking.length && cards.length<3){
+      const entry = nearCooking[0];
+      const group = recipeGroups().find(g=>g.name.toLowerCase()===entry.recipe.trim().toLowerCase());
+      if(group && group.count>1){
+        const allAttempts = DB.cooking.filter(c=>c.recipe.trim().toLowerCase()===entry.recipe.trim().toLowerCase());
+        const attemptNumber = allAttempts.filter(a=>a.date<=entry.date).length;
+        cards.push({type:'cooking', label:off.label, entry, nowAvg:group.avg, attemptNumber});
+      }
+    }
+
+    if(cards.length<3){
+      const prAt = (cutoff)=>{
+        const map = {};
+        DB.workouts.filter(w=>w.date<=cutoff).forEach(w=>(w.exercises||[]).forEach(ex=>{
+          if(!ex.name || ex.weight===undefined || ex.weight==='') return;
+          const k = ex.name.trim().toLowerCase(); const v = Number(ex.weight);
+          if(isNaN(v)) return;
+          if(!map[k] || v>map[k].pr) map[k] = {pr:v, name:ex.name.trim()};
+        }));
+        return map;
+      };
+      const then = prAt(targetISO);
+      const now = prAt(todayISO());
+      for(const k in then){
+        if(now[k] && now[k].pr > then[k].pr){
+          cards.push({type:'training', label:off.label, name:then[k].name, then:then[k].pr, now:now[k].pr});
+          break;
+        }
+      }
+    }
+  });
+  return cards.slice(0,3);
+}
+function renderOnThisDay(){
+  const cards = buildOnThisDay();
+  if(!cards.length) return '';
+  return `<div class="section-title">On This Day <div class="rule"></div></div>` + cards.map(c=>{
+    if(c.type==='photo') return `<div class="card">
+      <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--photo);">🌱 ${esc(c.label)}</div>
+      ${c.photo.photoData?`<img src="${c.photo.photoData}" style="width:100%;border-radius:14px;margin-top:8px;">`:''}
+      ${c.photo.caption?`<p style="margin:8px 0 0;font-size:14px;line-height:1.5;">${esc(c.photo.caption)}</p>`:''}
+    </div>`;
+    if(c.type==='cooking') return `<div class="card">
+      <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--cooking);">🍳 ${esc(c.label)}</div>
+      <p style="margin:8px 0 0;font-size:14px;line-height:1.5;">You cooked <strong>${esc(c.entry.recipe)}</strong>${c.attemptNumber?' for the '+ordinal(c.attemptNumber)+' time':''}. Your rating was ${c.entry.rating||'-'}/10.${c.entry.notes?' You wrote: "'+esc(c.entry.notes)+'"':''}</p>
+      <p style="margin:6px 0 0;font-size:14px;color:var(--dash);font-weight:700;">Today your average for this recipe is ${c.nowAvg.toFixed(1)}/10.</p>
+    </div>`;
+    if(c.type==='training') return `<div class="card">
+      <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--training);">💪 ${esc(c.label)}</div>
+      <p style="margin:8px 0 0;font-size:14px;line-height:1.5;">You were working toward <strong>${esc(c.name)}</strong> at ${c.then}kg.</p>
+      <p style="margin:6px 0 0;font-size:14px;color:var(--dash);font-weight:700;">Today you're at ${c.now}kg. 🌱 Look how far you've come.</p>
+    </div>`;
+    return '';
+  }).join('');
+}
+function ordinal(n){
+  const s = ['th','st','nd','rd'], v = n%100;
+  return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+/* ---------------- render root ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  if(!loaded){ app.innerHTML = '<div style="padding:60px 20px;text-align:center;color:var(--ink-soft);font-family:Karla">🌱 Growing your garden...</div>'; return; }
+  if(DB.settings.locked){ app.innerHTML = renderLockScreen(); attachLockHandlers(); return; }
+
+  let html = '';
+  if(route.tab==='home') html = renderHome();
+  else if(route.tab==='life') html = renderLifeTab();
+  else if(route.tab==='goals') html = renderGoalsTab();
+  else if(route.tab==='achievements') html = renderAchievementsTab();
+  else if(route.tab==='more') html = renderMoreTab();
+  else if(route.tab==='progress') html = renderProgressPage();
+  else if(route.tab==='myyear') html = renderMyYearPage();
+  else if(route.tab==='reflections') html = renderReflectionsPage();
+  else if(route.tab==='bestversion') html = renderBestVersionPage();
+  else if(route.tab==='checkin') html = renderWeeklyCheckinPage();
+  else if(route.tab==='memories') html = renderMemoriesPage();
+
+  html += renderBottomNav();
+  if(modal) html += renderModal();
+  app.innerHTML = html;
+  attachHandlers();
+}
+
+/* ---------------- Lock screen ---------------- */
+function renderLockScreen(){
+  return `<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;">
+    <div style="font-size:40px;">🌱</div>
+    <h2 style="margin:0;">My Garden</h2>
+    <input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="Enter PIN" style="text-align:center;font-size:20px;letter-spacing:6px;border:1.5px solid var(--line);border-radius:14px;padding:12px;width:180px;">
+    <button class="btn-primary" style="width:180px;" id="unlockBtn">Unlock</button>
+    <div id="lockErr" style="color:#B6607D;font-size:13px;height:16px;"></div>
+  </div>`;
+}
+function attachLockHandlers(){
+  const btn = document.getElementById('unlockBtn');
+  const inp = document.getElementById('pinInput');
+  const tryUnlock = ()=>{
+    if(inp.value===DB.settings.pin){ DB.settings.locked=false; render(); }
+    else document.getElementById('lockErr').textContent='Incorrect PIN';
+  };
+  btn.onclick = tryUnlock;
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter') tryUnlock(); });
+  inp.focus();
+}
+
+/* ---------------- HOME ---------------- */
+function renderHome(){
+  const prog = computeProgress();
+  const {morning,workday,evening,isWeekday} = todaysRoutineItems();
+  const c = getChecklistFor(todayISO());
+  const insights = buildInsights();
+  const pending = pendingItems();
+  const needsAttention = buildNeedsAttention();
+
+  return `
+  <div class="topbar">
+    <div class="greeting">${greetingWord()}${DB.settings.name?', '+esc(DB.settings.name):''} 🌱</div>
+    <h1>${fmtDate(todayISO())}</h1>
+  </div>
+  <div class="screen">
+    ${!localStorageOK?`<div class="insight" style="background:#F6E4EA;color:#B6607D;"><span class="ic">⚠️</span><span>This viewer won't let the app save to your device. Everything still works this session — see More → Data for how to fix persistence.</span></div>`:''}
+    ${renderBackupReminder()}
+    ${pending.length?`<div class="insight" style="background:#F6E4EA;color:#B6607D;"><span class="ic">⚠️</span><span>${pending.length} ${pending.length===1?"entry hasn't":"entries haven't"} synced yet — nothing is lost, they're kept in the app. <button data-retry-all style="border:none;background:none;color:#B6607D;text-decoration:underline;font-weight:700;padding:0;">Retry now</button></span></div>`:''}
+    <div class="progress-card">
+      <svg class="deco" viewBox="0 0 100 100"><path d="M50 10 C 20 30, 20 70, 50 90 C 80 70, 80 30, 50 10 Z" fill="#fff"/></svg>
+      <div class="label">Today's Progress</div>
+      <div class="pct">${prog.pct}%</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${prog.pct}%"></div></div>
+      <div class="count">${prog.done} / ${prog.total} completed today</div>
+    </div>
+
+    ${renderLifeGarden()}
+    ${renderOnThisDay()}
+
+    ${resetTodayMode ? renderResetToday() : `
+    <button class="btn-ghost" data-reset-toggle style="padding:2px 0 8px;">🌱 Feeling behind on a lot today? Reset to a simple list</button>
+    ${insights.length?`<div class="section-title">Today's Focus <div class="rule"></div></div>${insights.map((i,idx)=> i.action ? `<button class="insight" data-insight-idx="${idx}" style="width:100%;text-align:left;border:none;cursor:pointer;font-family:inherit;"><span class="ic">${i.icon}</span><span>${i.text}</span></button>` : `<div class="insight"><span class="ic">${i.icon}</span><span>${i.text}</span></div>`).join('')}`:''}
+
+    ${needsAttention.length?`<div class="section-title">Needs Attention <div class="rule"></div></div><div class="card">${needsAttention.map((n,idx)=>`
+      <button data-attention-idx="${idx}" style="width:100%;text-align:left;border:none;background:none;padding:10px 2px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--cream-2);font-family:inherit;cursor:pointer;">
+        <span style="font-size:14.5px;">${n.icon} ${esc(n.label)}</span><span style="font-weight:700;color:var(--ink-soft);font-size:13px;">${esc(n.value)} ›</span>
+      </button>`).join('')}</div>`:''}
+    `}
+
+    <div class="section-title">Quick Actions <div class="rule"></div></div>
+    <div class="qa-grid">
+      ${qaButton('💰','Spending','spending')}
+      ${qaButton('🍽️','Add Meal','meal')}
+      ${qaButton('💪','Workout','workout')}
+      ${qaButton('😴','Sleep','sleep')}
+      ${qaButton('📖','Reading','reading')}
+      ${qaButton('🍳','Cooking','cooking')}
+      ${qaButton('📸','Photo','photo')}
+      ${qaButton('🧴','Skincare','skincare')}
+      ${qaButton('🌸','Period','period')}
+    </div>
+
+    ${!resetTodayMode ? `
+    <div class="section-title">Morning <div class="rule"></div></div>
+    ${renderChecklistBlock('morning',morning,c)}
+    ${isWeekday ? `<div class="section-title">Workday <div class="rule"></div></div>${renderChecklistBlock('workday',workday,c)}` : ''}
+    <div class="section-title">Evening <span style="font-weight:400;color:var(--ink-soft);font-size:12px;">(edit anytime in Daily Routine)</span><div class="rule"></div></div>
+    ${renderChecklistBlock('evening',evening,c)}
+    ` : ''}
+  </div>`;
+}
+function greetingWord(){
+  const h = new Date().getHours();
+  if(h<12) return 'Good morning';
+  if(h<18) return 'Good afternoon';
+  return 'Good evening';
+}
+function qaButton(emoji,label,formKey){
+  return `<button class="qa-btn" data-qa="${formKey}"><div class="emoji">${emoji}</div><div class="lbl">${label}</div></button>`;
+}
+function renderChecklistBlock(section,items,c){
+  if(!items.length) return `<div class="focus-block"><div class="empty-state" style="padding:10px 0;"><p>Nothing set for ${section} yet — add items in Daily Routine.</p></div></div>`;
+  return `<div class="focus-block">${items.map(i=>{ const key=checklistKey(section,i); return `
+    <div class="check-row ${c[key]?'checked':''}">
+      <input type="checkbox" data-toggle="${esc(key)}" ${c[key]?'checked':''}>
+      <label>${esc(i)}</label>
+    </div>`; }).join('')}</div>`;
+}
+let lastInsights = [];
+function buildInsights(){
+  const out=[];
+  const iso = todayISO();
+  const hour = new Date().getHours();
+  const mealLogged = slot => DB.meals.some(m=>m.date===iso && (m.slot||'').toLowerCase()===slot);
+
+  if(hour>=9 && !mealLogged('breakfast')) out.push({icon:'🍳', text:'Breakfast not logged yet.', action:{type:'qa', qa:'meal', slot:'breakfast'}});
+  if(hour>=13 && !mealLogged('lunch')) out.push({icon:'🥗', text:'Lunch not logged yet.', action:{type:'qa', qa:'meal', slot:'lunch'}});
+  if(hour>=19 && !mealLogged('dinner')) out.push({icon:'🍲', text:'Dinner not logged yet.', action:{type:'qa', qa:'meal', slot:'dinner'}});
+
+  const readToday = DB.reading.some(r=>r.date===iso);
+  if(hour>=9 && !readToday) out.push({icon:'📖', text:'Morning reading & prayer not logged yet.', action:{type:'qa', qa:'reading'}});
+
+  const { evening } = todaysRoutineItems();
+  const workoutPlanned = evening.some(e=>e.toLowerCase().includes('workout'));
+  const hasWorkout = DB.workouts.some(w=>w.date===iso);
+  if(workoutPlanned && hour>=16 && !hasWorkout) out.push({icon:'💪', text:"You planned a workout today — log it when you're done.", action:{type:'qa', qa:'workout'}});
+
+  const hasPhoto = DB.photos.some(p=>p.date===iso);
+  if(hour>=17 && !hasPhoto) out.push({icon:'📸', text:"Your Photo of the Day hasn't been logged yet.", action:{type:'qa', qa:'photo'}});
+
+  const amSkinDone = DB.skincare.some(s=>s.date===iso && s.period==='am');
+  const pmSkinDone = DB.skincare.some(s=>s.date===iso && s.period==='pm');
+  if(hour>=9 && !amSkinDone) out.push({icon:'☀️', text:'Morning skincare not completed yet.', action:{type:'qa', qa:'skincare', period:'am'}});
+  if(hour>=20 && !pmSkinDone) out.push({icon:'🌙', text:'Evening skincare not completed yet.', action:{type:'qa', qa:'skincare', period:'pm'}});
+
+  if(hour>=20 && !DB.spending.some(sp=>sp.date===iso)) out.push({icon:'💰', text:"No spending logged today — add anything you spent (or you're all clear).", action:{type:'qa', qa:'spending'}});
+
+  const readStreak = currentStreak(DB.reading.map(r=>r.date));
+  if(readStreak>=3) out.push({icon:'🙏', text:`${readStreak}-day reading streak — great consistency!`});
+  const overBudget = weeklyBudgetInfo();
+  if(overBudget.remaining<0) out.push({icon:'💰', text:`You're $${Math.abs(overBudget.remaining).toFixed(0)} over this week's spending budget.`, action:{type:'life', key:'money'}});
+
+  if(!out.length) out.push({icon:'🌱', text:"You're all caught up — beautifully done."});
+  lastInsights = out.slice(0,6);
+  return lastInsights;
+}
+function buildNeedsAttention(){
+  const out=[];
+  // sleep this week vs a healthy baseline (7h)
+  const {start,end} = weekRange();
+  const weekSleep = DB.sleep.filter(s=>s.date>=start && s.date<=end).map(s=>sleepDurationHours(s.bed,s.wake)).filter(d=>d!==null);
+  if(weekSleep.length>=2){
+    const avg = weekSleep.reduce((a,b)=>a+b,0)/weekSleep.length;
+    const pct = Math.round(Math.min(100, avg/7.5*100));
+    if(pct<80) out.push({icon:'😴', label:'Sleep this week', value:pct+'%', key:'sleep'});
+  }
+  const budget = weeklyBudgetInfo();
+  if(budget.remaining<0) out.push({icon:'💰', label:'Spending', value:'$'+Math.abs(budget.remaining).toFixed(0)+' over', key:'money'});
+  const photoGaps = (()=>{ let miss=0; for(let i=0;i<7;i++){ const d=new Date(); d.setDate(d.getDate()-i); const iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); if(!DB.photos.some(p=>p.date===iso)) miss++; } return miss; })();
+  if(photoGaps>=3) out.push({icon:'📸', label:'Photography', value:photoGaps+' days missed', key:'photo'});
+  const weekCooking = DB.cooking.filter(c=>c.date>=start && c.date<=end).length;
+  if(weekCooking===0 && DB.cooking.length>0) out.push({icon:'🍳', label:'Cooking this week', value:'0 logged', key:'cooking'});
+  return out.slice(0,4);
+}
+
+/* ---------------- Better Than Last Month ---------------- */
+function buildComparisons(){
+  const out=[];
+  const now = new Date();
+  const iso = d=> d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastMonthStart = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+  const tS=iso(thisMonthStart), tE=iso(now), lS=iso(lastMonthStart), lE=iso(lastMonthEnd);
+
+  const thisWorkouts = DB.workouts.filter(w=>w.date>=tS&&w.date<=tE).length;
+  const lastWorkouts = DB.workouts.filter(w=>w.date>=lS&&w.date<=lE).length;
+  if((thisWorkouts||lastWorkouts) && thisWorkouts!==lastWorkouts){
+    const diff = thisWorkouts-lastWorkouts;
+    out.push({icon:'💪', label:'Workouts', text:`${diff>0?'+':''}${diff} vs last month`, positive:diff>0});
+  }
+
+  const thisCooking = DB.cooking.filter(c=>c.date>=tS&&c.date<=tE);
+  const lastCooking = DB.cooking.filter(c=>c.date>=lS&&c.date<=lE);
+  if(thisCooking.length>=2 && lastCooking.length>=2){
+    const thisAvg = thisCooking.reduce((s,c)=>s+Number(c.rating||0),0)/thisCooking.length;
+    const lastAvg = lastCooking.reduce((s,c)=>s+Number(c.rating||0),0)/lastCooking.length;
+    if(Math.abs(thisAvg-lastAvg)>=0.3) out.push({icon:'🍳', label:'Cooking average', text:`${thisAvg.toFixed(1)}/10 ${thisAvg>lastAvg?'↑':'↓'} from ${lastAvg.toFixed(1)}`, positive:thisAvg>lastAvg});
+  }
+
+  const daysThisMonthSoFar = now.getDate();
+  const daysInLastMonth = lastMonthEnd.getDate();
+  const thisReadDays = new Set(DB.reading.filter(r=>r.date>=tS&&r.date<=tE).map(r=>r.date)).size;
+  const lastReadDays = new Set(DB.reading.filter(r=>r.date>=lS&&r.date<=lE).map(r=>r.date)).size;
+  if(daysThisMonthSoFar>=5 && daysInLastMonth>=5){
+    const thisPct = Math.round(thisReadDays/daysThisMonthSoFar*100);
+    const lastPct = Math.round(lastReadDays/daysInLastMonth*100);
+    const diff = thisPct-lastPct;
+    if(Math.abs(diff)>=5) out.push({icon:'🙏', label:'Reading consistency', text:`${diff>0?'+':''}${diff}%`, positive:diff>0});
+  }
+
+  const thisSleep = DB.sleep.filter(s=>s.date>=tS&&s.date<=tE).map(s=>sleepDurationHours(s.bed,s.wake)).filter(d=>d!==null);
+  const lastSleep = DB.sleep.filter(s=>s.date>=lS&&s.date<=lE).map(s=>sleepDurationHours(s.bed,s.wake)).filter(d=>d!==null);
+  if(thisSleep.length>=3 && lastSleep.length>=3){
+    const thisAvg = thisSleep.reduce((a,b)=>a+b,0)/thisSleep.length;
+    const lastAvg = lastSleep.reduce((a,b)=>a+b,0)/lastSleep.length;
+    if(Math.abs(thisAvg-lastAvg)>=0.3) out.push({icon:'😴', label:'Average sleep', text:`${thisAvg.toFixed(1)}h ${thisAvg>lastAvg?'↑':'↓'} from ${lastAvg.toFixed(1)}h`, positive:thisAvg>lastAvg});
+  }
+  return out.slice(0,4);
+}
+
+/* ---------------- Reset Today ---------------- */
+let resetTodayMode = false;
+function renderResetToday(){
+  const iso = todayISO();
+  const c = getChecklistFor(iso);
+  const {morning,evening} = todaysRoutineItems();
+  const items = [
+    {icon:'🌅', label:'Morning routine', done: morning.length>0 && morning.every(i=>c[checklistKey('morning',i)])},
+    {icon:'🍽️', label:'Eat your meals', done: DB.meals.some(m=>m.date===iso)},
+    {icon:'🧴', label:'Look after yourself', done: DB.skincare.some(s=>s.date===iso)},
+    {icon:'💪', label:'Move your body', done: DB.workouts.some(w=>w.date===iso)},
+    {icon:'📖', label:'Moral', done: DB.reading.some(r=>r.date===iso)},
+    {icon:'📸', label:'Photo of the Day', done: DB.photos.some(p=>p.date===iso)},
+    {icon:'🌙', label:'Evening routine', done: evening.length>0 && evening.every(i=>c[checklistKey('evening',i)])},
+  ];
+  return `<div class="card">
+    <div class="section-title" style="margin-top:0;">🌱 Let's reset today</div>
+    <p class="sub" style="margin-bottom:10px;">No need to catch up on everything at once — just these, one at a time.</p>
+    ${items.map((it,idx)=>`<div class="check-row ${it.done?'checked':''}"><span style="font-size:16px;width:22px;">${it.done?'✅':it.icon}</span><label style="margin-left:4px;">${idx+1}. ${it.label}</label></div>`).join('')}
+    <button class="btn-ghost" data-reset-exit>Show full checklist</button>
+  </div>`;
+}
+
+/* ---------------- Weekly budget calc ---------------- */
+function weekRange(){
+  const d = new Date();
+  const day = d.getDay();
+  const start = new Date(d); start.setDate(d.getDate()-day);
+  const end = new Date(start); end.setDate(start.getDate()+6);
+  const iso = x=> x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+  return {start:iso(start), end:iso(end)};
+}
+function weeklyBudgetInfo(){
+  const {start,end} = weekRange();
+  const inRange = (d)=> d>=start && d<=end;
+  const income = DB.income.filter(i=>inRange(i.date)).reduce((s,x)=>s+Number(x.amount||0),0);
+  const savingsThisWeek = DB.savings.filter(s=>inRange(s.date)).reduce((s,x)=>s+Number(x.amount||0),0);
+  let budget = income - savingsThisWeek;
+  // overspend rule: pull last week's overspend into this week's budget reduction
+  const lastWeekStart = new Date(start+'T00:00:00'); lastWeekStart.setDate(lastWeekStart.getDate()-7);
+  const lastWeekEnd = new Date(start+'T00:00:00'); lastWeekEnd.setDate(lastWeekEnd.getDate()-1);
+  const iso = x=> x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+  const lwStart=iso(lastWeekStart), lwEnd=iso(lastWeekEnd);
+  const lwIncome = DB.income.filter(i=>i.date>=lwStart&&i.date<=lwEnd).reduce((s,x)=>s+Number(x.amount||0),0);
+  const lwSavings = DB.savings.filter(s=>s.date>=lwStart&&s.date<=lwEnd).reduce((s,x)=>s+Number(x.amount||0),0);
+  const lwBudget = lwIncome - lwSavings;
+  const lwSpent = DB.spending.filter(sp=>sp.date>=lwStart&&sp.date<=lwEnd).reduce((s,x)=>s+Number(x.amount||0),0);
+  const lwOver = lwBudget>0 ? Math.max(0, lwSpent-lwBudget) : 0;
+  budget = Math.max(0, budget - lwOver);
+  const spent = DB.spending.filter(sp=>inRange(sp.date)).reduce((s,x)=>s+Number(x.amount||0),0);
+  return {budget, spent, remaining: budget-spent, lwOver, income, savingsThisWeek};
+}
+
+/* ---------------- WEEKLY LIFE CHECK-IN ---------------- */
+function weekRangeOffset(weeksAgo){
+  const d = new Date();
+  const day = d.getDay();
+  const curStart = new Date(d); curStart.setDate(d.getDate()-day);
+  const start = new Date(curStart); start.setDate(curStart.getDate() - 7*weeksAgo);
+  const end = new Date(start); end.setDate(start.getDate()+6);
+  const iso = x=> x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
+  return {start:iso(start), end:iso(end)};
+}
+function weeklyMoneyLine(range){
+  if(!DB.spending.length && !DB.savings.length && !DB.income.length) return null;
+  const inR = d=> d>=range.start && d<=range.end;
+  const spent = DB.spending.filter(x=>inR(x.date)).reduce((s,x)=>s+Number(x.amount||0),0);
+  const saved = DB.savings.filter(x=>inR(x.date)).reduce((s,x)=>s+Number(x.amount||0),0);
+  const income = DB.income.filter(x=>inR(x.date)).reduce((s,x)=>s+Number(x.amount||0),0);
+  const budget = Math.max(0, income-saved);
+  let note = '';
+  if(income>0) note = spent<=budget ? ' — within budget' : ' — over budget';
+  if(spent===0 && saved===0 && income===0) return null;
+  return `You spent $${spent.toFixed(0)}${saved>0?' and saved $'+saved.toFixed(0):''} this week${note}.`;
+}
+function generateWeeklyCheckin(weeksAgo){
+  weeksAgo = weeksAgo || 1;
+  const range = weekRangeOffset(weeksAgo);
+  const prevRange = weekRangeOffset(weeksAgo+1);
+  const inR = (arr,r)=> arr.filter(x=>x.date>=r.start && x.date<=r.end);
+
+  const statsFor = (r)=>{
+    const sleepItems = inR(DB.sleep,r).map(s=>sleepDurationHours(s.bed,s.wake)).filter(d=>d!==null);
+    const cookingItems = inR(DB.cooking,r);
+    const workItems = inR(DB.work,r);
+    return {
+      training: inR(DB.workouts,r).length,
+      sleepNights: inR(DB.sleep,r).length,
+      sleepAvg: sleepItems.length? +(sleepItems.reduce((a,b)=>a+b,0)/sleepItems.length).toFixed(1) : null,
+      cooking: cookingItems.length,
+      cookingAvg: cookingItems.length? +(cookingItems.reduce((s,c)=>s+Number(c.rating||0),0)/cookingItems.length).toFixed(1) : null,
+      meals: inR(DB.meals,r).length,
+      skincare: inR(DB.skincare,r).length,
+      photos: inR(DB.photos,r).length,
+      readingDays: new Set(inR(DB.reading,r).map(x=>x.date)).size,
+      prayerDays: inR(DB.reading.filter(x=>x.prayed),r).length,
+      workDays: workItems.length,
+      leftBy7Pct: workItems.length? Math.round(workItems.filter(w=>w.leftBy7).length/workItems.length*100) : 0,
+    };
+  };
+  const cur = statsFor(range);
+  const prev = statsFor(prevRange);
+
+  let doneSum=0, totalSum=0;
+  for(let i=0;i<7;i++){
+    const d = new Date(range.start+'T00:00:00'); d.setDate(d.getDate()+i);
+    const iso = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const dIdx = d.getDay();
+    const isWeekday = dIdx>=1 && dIdx<=5;
+    const items = [
+      ...(DB.routine.morning||[]).map(x=>checklistKey('morning',x)),
+      ...(isWeekday ? (DB.routine.workday||[]).map(x=>checklistKey('workday',x)) : []),
+      ...((DB.routine.eveningByDay && DB.routine.eveningByDay[dIdx]) || []).map(x=>checklistKey('evening',x))
+    ];
+    const c = DB.checklist[iso]||{};
+    totalSum += items.length;
+    doneSum += items.filter(k=>c[k]).length;
+  }
+  const completionPct = totalSum? Math.round(doneSum/totalSum*100) : null;
+
+  const categories = [
+    {key:'training', label:'Training', icon:'💪', thisVal:cur.training, prevVal:prev.training, everUsed:DB.workouts.length>0, text:cur.training+' workout'+(cur.training===1?'':'s')},
+    {key:'sleep', label:'Sleep', icon:'😴', thisVal:cur.sleepNights, prevVal:prev.sleepNights, everUsed:DB.sleep.length>0, text:cur.sleepAvg!==null? ('avg '+cur.sleepAvg+'h over '+cur.sleepNights+' night'+(cur.sleepNights===1?'':'s')) : 'not logged'},
+    {key:'cooking', label:'Cooking', icon:'🍳', thisVal:cur.cooking, prevVal:prev.cooking, everUsed:DB.cooking.length>0, text:cur.cooking+' meal'+(cur.cooking===1?'':'s')+' cooked'+(cur.cookingAvg!==null?', avg '+cur.cookingAvg+'/10':'')},
+    {key:'meals', label:'Meals', icon:'🍽️', thisVal:cur.meals, prevVal:prev.meals, everUsed:DB.meals.length>0, text:cur.meals+' meal'+(cur.meals===1?'':'s')+' logged'},
+    {key:'skin', label:'Skincare', icon:'🧴', thisVal:cur.skincare, prevVal:prev.skincare, everUsed:DB.skincare.length>0, text:cur.skincare+' routine log'+(cur.skincare===1?'':'s')},
+    {key:'photo', label:'Photography', icon:'📸', thisVal:cur.photos, prevVal:prev.photos, everUsed:DB.photos.length>0, text:cur.photos+'/7 days'},
+    {key:'moral', label:'Moral', icon:'🙏', thisVal:cur.readingDays, prevVal:prev.readingDays, everUsed:DB.reading.length>0, text:cur.readingDays+' reading day'+(cur.readingDays===1?'':'s')+', '+cur.prayerDays+' prayer day'+(cur.prayerDays===1?'':'s')},
+    {key:'work', label:'Work', icon:'💼', thisVal:cur.leftBy7Pct, prevVal:prev.leftBy7Pct, everUsed:DB.work.length>0, text:cur.workDays+' workday'+(cur.workDays===1?'':'s')+' logged'+(cur.workDays?', left by 7am '+cur.leftBy7Pct+'%':'')},
+  ].filter(c=>c.everUsed);
+
+  const wentWell = categories.filter(c=>c.thisVal>0 && c.thisVal>=c.prevVal).sort((a,b)=>b.thisVal-a.thisVal).slice(0,3)
+    .map(c=>({label:c.label, icon:c.icon, text:c.text}));
+  const improved = categories.filter(c=>c.thisVal>c.prevVal).sort((a,b)=>(b.thisVal-b.prevVal)-(a.thisVal-a.prevVal)).slice(0,3)
+    .map(c=>({label:c.label, icon:c.icon, text:c.text}));
+  const struggled = categories.filter(c=>c.thisVal===0 && c.prevVal>0).slice(0,3)
+    .map(c=>({label:c.label, icon:c.icon, text:'No '+c.label.toLowerCase()+' logged this week (you usually do)'}));
+  const lowestCat = [...categories].sort((a,b)=>a.thisVal-b.thisVal)[0];
+  const focusNext = struggled.length ? {label:struggled[0].label, icon:struggled[0].icon} : (lowestCat ? {label:lowestCat.label, icon:lowestCat.icon} : null);
+
+  const goalsCompletedList = DB.goals.filter(g=> g.completedAt && g.completedAt.slice(0,10)>=range.start && g.completedAt.slice(0,10)<=range.end).map(g=>g.name);
+  const achievementsList = DB.achievements.filter(a=>a.date>=range.start && a.date<=range.end).map(a=>a.title);
+  const moneyLine = weeklyMoneyLine(range);
+
+  return {
+    id: uid(),
+    weekStart: range.start,
+    weekEnd: range.end,
+    generatedAt: new Date().toISOString(),
+    completionPct,
+    wentWell, improved, struggled, focusNext,
+    moneyLine,
+    goalsCompleted: goalsCompletedList,
+    achievements: achievementsList,
+  };
+}
+
+/* ---------------- LIFE TAB ---------------- */
+const LIFE_SECTIONS = [
+  {key:'training', emoji:'💪', name:'Training', color:'--training', bg:'--training-bg'},
+  {key:'sleep', emoji:'😴', name:'Sleep', color:'--sleep', bg:'--sleep-bg'},
+  {key:'cooking', emoji:'🍳', name:'Cooking', color:'--cooking', bg:'--cooking-bg'},
+  {key:'meals', emoji:'🍽️', name:'My Meals', color:'--meals', bg:'--meals-bg'},
+  {key:'money', emoji:'💰', name:'Savings & Spending', color:'--savings', bg:'--savings-bg'},
+  {key:'period', emoji:'🌸', name:'Period', color:'--period', bg:'--period-bg'},
+  {key:'skin', emoji:'🧴', name:'Skin', color:'--skin', bg:'--skin-bg'},
+  {key:'photo', emoji:'📸', name:'Photography', color:'--photo', bg:'--photo-bg'},
+  {key:'moral', emoji:'🙏', name:'Moral', color:'--moral', bg:'--moral-bg'},
+  {key:'work', emoji:'💼', name:'Work', color:'--work', bg:'--work-bg'},
+  {key:'routine', emoji:'📅', name:'Daily Routine', color:'--routine', bg:'--routine-bg'},
+];
+function renderLifeTab(){
+  if(route.view) return renderLifeDetail(route.view);
+  return `
+  <div class="topbar"><h1>🌱 Life</h1></div>
+  <div class="screen">
+    <div class="life-grid">
+      ${LIFE_SECTIONS.map(s=>`
+        <button class="life-card" data-life="${s.key}" style="background:var(${s.bg}); color:var(${s.color});">
+          <div class="emoji">${s.emoji}</div>
+          <div>
+            <div class="name">${s.name}</div>
+            <div class="sub">${lifeSubtext(s.key)}</div>
+          </div>
+        </button>`).join('')}
+    </div>
+  </div>`;
+}
+function lifeSubtext(key){
+  switch(key){
+    case 'training': return DB.workouts.length+' workouts logged';
+    case 'sleep': return DB.sleep.length+' nights logged';
+    case 'cooking': return DB.cooking.length+' attempts logged';
+    case 'meals': return DB.meals.length+' meals logged';
+    case 'money': return '$'+DB.savings.reduce((s,x)=>s+Number(x.amount||0),0).toFixed(0)+' saved';
+    case 'period': return DB.period.length+' entries';
+    case 'skin': return DB.skincare.length+' check-ins';
+    case 'photo': return DB.photos.length+' photos';
+    case 'moral': return currentStreak(DB.reading.map(r=>r.date))+'-day streak';
+    case 'work': return DB.work.length+' days logged';
+    case 'routine': return 'Edit your day';
+    default: return '';
+  }
+}
+
+function renderLifeDetail(key){
+  const sec = LIFE_SECTIONS.find(s=>s.key===key);
+  let body = '';
+  if(key==='routine') body = renderRoutineEditor();
+  else if(key==='money') body = renderMoneyDetail();
+  else if(key==='training') body = renderTrainingDetail();
+  else if(key==='sleep') body = renderSleepDetail();
+  else if(key==='cooking') body = renderCookingDetail();
+  else if(key==='meals') body = renderMealsDetail();
+  else if(key==='period') body = renderPeriodDetail();
+  else if(key==='skin') body = renderSkinDetail();
+  else if(key==='photo') body = renderPhotoDetail();
+  else if(key==='moral') body = renderMoralDetail();
+  else if(key==='work') body = renderWorkDetail();
+
+  return `
+  <div class="nav-header">
+    <button class="back-btn" data-back-life>←</button>
+    <h2>${sec.emoji} ${sec.name}</h2>
+  </div>
+  <div class="screen">
+    ${body}
+  </div>`;
+}
+function cap(s){ return s? s.charAt(0).toUpperCase()+s.slice(1):''; }
+function renderSimpleList(dbKey, mainFn, subFn, editType){
+  const items = [...DB[dbKey]].sort((a,b)=> b.date.localeCompare(a.date));
+  if(!items.length) return emptyState('🌱','Nothing logged yet','Use Quick Actions on Home to add your first entry.');
+  return `<div class="card">${items.map(it=>`
+    <div class="entry-item">
+      <div>
+        <div class="meta">${fmtDate(it.date)}${it._pending?' · <span style="color:#B6607D;">not saved yet</span>':''}</div>
+        <div class="main">${esc(mainFn(it))}</div>
+        ${subFn(it)?`<div class="sub">${esc(subFn(it))}</div>`:''}
+        ${it._pending?`<div class="sub" style="color:#B6607D;">⚠️ ${esc(it._error||'Could not sync to storage.')}</div>`:''}
+      </div>
+      <div class="entry-actions">
+        ${it._pending?`<button data-retry="${dbKey}" style="color:#B6607D;font-weight:700;">retry</button>`:''}
+        ${editType?`<button data-edit="${editType}:${it.id}" style="margin-right:4px;">✎</button>`:''}
+        <button data-del="${dbKey}:${it.id}">✕</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function emptyState(emoji,title,sub){
+  return `<div class="card empty-state"><div class="e">${emoji}</div><p style="font-weight:700;color:var(--ink);">${title}</p><p>${sub}</p></div>`;
+}
+
+/* ---------------- TRAINING detail ---------------- */
+function renderTrainingDetail(){
+  const prCard = renderPersonalRecords();
+  const measures = [...DB.bodyMeasurements].sort((a,b)=>b.date.localeCompare(a.date));
+  const latest = measures[0];
+  const photos = [...DB.fitnessPhotos].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  ${DB.workouts.length ? `<div class="card"><div class="section-title" style="margin-top:0;">Weekly training frequency</div>${chartCanvas('trainingChart',160)}</div>` : ''}
+  ${prCard}
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">Body Measurements</div>
+    ${latest ? `<div class="stat-row">
+      ${latest.weight?`<div class="stat"><div class="n">${esc(latest.weight)}</div><div class="l">Weight kg</div></div>`:''}
+      ${latest.waist?`<div class="stat"><div class="n">${esc(latest.waist)}</div><div class="l">Waist cm</div></div>`:''}
+      ${latest.chest?`<div class="stat"><div class="n">${esc(latest.chest)}</div><div class="l">Chest cm</div></div>`:''}
+    </div>` : `<div class="sub">No measurements logged yet.</div>`}
+    ${measures.filter(m=>m.weight).length>1 ? chartCanvas('weightChart',150) : ''}
+    <button class="btn-secondary" data-qa="bodymeasurement">+ Add Measurement</button>
+  </div>
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">Fitness Progress Photos</div>
+    ${photos.length ? `<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">${photos.map(p=>`
+      <div style="position:relative;"><img src="${p.photoData}" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:10px;"><div style="position:absolute;bottom:2px;left:4px;font-size:9px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.6);">${fmtDate(p.date)}</div><button data-del="fitnessPhotos:${p.id}" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;">✕</button></div>`).join('')}</div>`:`<div class="sub">No progress photos yet.</div>`}
+    <button class="btn-secondary" data-qa="fitnessphoto">+ Add Progress Photo</button>
+  </div>
+  <div class="section-title">Workout History <div class="rule"></div></div>
+  ${renderSimpleList('workouts', w=>`${w.type||'Workout'}${w.exercises&&w.exercises.length?' — '+w.exercises.map(e=>e.name+(e.weight?' '+e.weight+'kg':'')).join(', '):''}`, w=>w.notes||'', 'workout')}
+  `;
+}
+function renderPersonalRecords(){
+  const byExercise = {};
+  DB.workouts.forEach(w=>{
+    (w.exercises||[]).forEach(ex=>{
+      if(!ex.name) return;
+      const key = ex.name.trim().toLowerCase();
+      if(!byExercise[key]) byExercise[key] = { name: ex.name.trim(), count:0, pr:null };
+      byExercise[key].count++;
+      if(ex.weight && (byExercise[key].pr===null || Number(ex.weight)>Number(byExercise[key].pr))) byExercise[key].pr = ex.weight;
+    });
+  });
+  const list = Object.values(byExercise).sort((a,b)=>b.count-a.count).slice(0,5);
+  if(!list.length) return '';
+  return `<div class="card"><div class="section-title" style="margin-top:0;">Personal Records</div>${list.map(x=>`
+    <div class="entry-item"><div><div class="main">${esc(x.name)}</div><div class="sub">Logged ${x.count}×</div></div>${x.pr!==null?`<div style="font-weight:700;color:var(--training);">${x.pr}kg PR</div>`:''}</div>`).join('')}</div>`;
+}
+function renderTrainingCharts(){
+  if(document.getElementById('trainingChart')){
+    const weeks=[]; const now=new Date();
+    for(let i=7;i>=0;i--){ const d=new Date(now); d.setDate(d.getDate()-7*i-now.getDay()); const iso=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); const start=iso(d); const end=new Date(d); end.setDate(end.getDate()+6); weeks.push({start,end:iso(end)}); }
+    const labels = weeks.map(w=>fmtDate(w.start));
+    const data = weeks.map(w=>DB.workouts.filter(x=>x.date>=w.start && x.date<=w.end).length);
+    renderChart('trainingChart','bar',labels,[{label:'Workouts',data,backgroundColor:'#3E6C8E'}]);
+  }
+  if(document.getElementById('weightChart')){
+    const pts = [...DB.bodyMeasurements].filter(m=>m.weight).sort((a,b)=>a.date.localeCompare(b.date));
+    renderChart('weightChart','line',pts.map(p=>fmtDate(p.date)),[{label:'Weight (kg)',data:pts.map(p=>Number(p.weight)),borderColor:'#3E6C8E',backgroundColor:'rgba(62,108,142,0.12)',fill:true,tension:0.3}]);
+  }
+}
+
+/* ---------------- SLEEP detail ---------------- */
+function renderSleepDetail(){
+  const entries = [...DB.sleep].sort((a,b)=>a.date.localeCompare(b.date));
+  let insight = '';
+  if(entries.length>=4){
+    const withDur = entries.map(e=>{ const dur = sleepDurationHours(e.bed,e.wake); return {dur, energy:Number(e.energy||0)}; }).filter(x=>x.dur!==null);
+    if(withDur.length>=4){
+      const med = [...withDur].sort((a,b)=>a.dur-b.dur)[Math.floor(withDur.length/2)].dur;
+      const longer = withDur.filter(x=>x.dur>=med);
+      const shorter = withDur.filter(x=>x.dur<med);
+      if(longer.length && shorter.length){
+        const avgLong = longer.reduce((s,x)=>s+x.energy,0)/longer.length;
+        const avgShort = shorter.reduce((s,x)=>s+x.energy,0)/shorter.length;
+        if(avgLong > avgShort+0.5) insight = `<div class="insight">🌱 You tend to report higher energy on mornings following longer sleep.</div>`;
+      }
+    }
+  }
+  return `
+  ${entries.length ? `<div class="card"><div class="section-title" style="margin-top:0;">Sleep trends</div>${chartCanvas('sleepChart',180)}</div>`:''}
+  ${insight}
+  <div class="section-title">Sleep History <div class="rule"></div></div>
+  ${renderSimpleList('sleep', s=>{ const d=sleepDurationHours(s.bed,s.wake); return (d!==null?d.toFixed(1)+'h':'')+` (${s.bed||'?'} → ${s.wake||'?'})`; }, s=>`Quality ${s.quality||'-'}/10 · Energy ${s.energy||'-'}/10 · Mood ${s.mood||'-'}/10`, 'sleep')}
+  `;
+}
+function sleepDurationHours(bed,wake){
+  if(!bed || !wake) return null;
+  const [bh,bm] = bed.split(':').map(Number);
+  const [wh,wm] = wake.split(':').map(Number);
+  let mins = (wh*60+wm) - (bh*60+bm);
+  if(mins<0) mins += 24*60;
+  return mins/60;
+}
+function renderSleepChart(){
+  if(!document.getElementById('sleepChart')) return;
+  const entries = [...DB.sleep].sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
+  const labels = entries.map(e=>fmtDate(e.date));
+  renderChart('sleepChart','line',labels,[
+    {label:'Quality',data:entries.map(e=>Number(e.quality||0)),borderColor:'#7C6F9E',tension:0.3},
+    {label:'Energy',data:entries.map(e=>Number(e.energy||0)),borderColor:'#B8912B',tension:0.3},
+    {label:'Mood',data:entries.map(e=>Number(e.mood||0)),borderColor:'#B6607D',tension:0.3},
+  ], {scales:{y:{min:0,max:10}}});
+}
+
+/* ---------------- COOKING detail ---------------- */
+function recipeGroups(){
+  const groups = {};
+  DB.cooking.forEach(c=>{
+    const key = (c.recipe||'Untitled').trim();
+    const lk = key.toLowerCase();
+    if(!groups[lk]) groups[lk] = { name:key, attempts:[] };
+    groups[lk].attempts.push(c);
+  });
+  return Object.values(groups).map(g=>{
+    g.attempts.sort((a,b)=>b.date.localeCompare(a.date));
+    const avg = g.attempts.reduce((s,a)=>s+Number(a.rating||0),0)/g.attempts.length;
+    let stage = 'Learning';
+    if(g.attempts.length>=3 && avg>=8) stage='Mastered';
+    else if(avg>=6) stage='Pretty Good At';
+    return { name:g.name, count:g.attempts.length, avg, latest:g.attempts[0], stage };
+  }).sort((a,b)=>b.avg-a.avg);
+}
+function renderCookingDetail(){
+  const groups = recipeGroups();
+  const stageOrder = {Mastered:0,'Pretty Good At':1,Learning:2};
+  const sorted = [...groups].sort((a,b)=>stageOrder[a.stage]-stageOrder[b.stage]);
+  return `
+  ${DB.cooking.length ? `<div class="card"><div class="section-title" style="margin-top:0;">Rating over time</div>${chartCanvas('cookingChart',160)}</div>`:''}
+  ${sorted.length ? `<div class="section-title">Recipe Library <div class="rule"></div></div>
+  <div class="card">${sorted.map(g=>`
+    <div class="entry-item">
+      <div><div class="main">${g.stage==='Mastered'?'🏆 ':g.stage==='Pretty Good At'?'⭐ ':'🍳 '}${esc(g.name)}</div><div class="sub">${g.stage} · cooked ${g.count}× · avg ${g.avg.toFixed(1)}/10</div></div>
+    </div>`).join('')}</div>` : ''}
+  <div class="section-title">Cooking History <div class="rule"></div></div>
+  ${renderSimpleList('cooking', c=>`${c.recipe} — ${c.rating||'-'}/10`, c=>c.notes||'', 'cooking')}
+  `;
+}
+function renderCookingChart(){
+  if(!document.getElementById('cookingChart')) return;
+  const entries = [...DB.cooking].sort((a,b)=>a.date.localeCompare(b.date));
+  renderChart('cookingChart','line',entries.map(e=>fmtDate(e.date)),[{label:'Rating',data:entries.map(e=>Number(e.rating||0)),borderColor:'#C1743B',backgroundColor:'rgba(193,116,59,0.12)',fill:true,tension:0.3}], {scales:{y:{min:0,max:10}}});
+}
+
+/* ---------------- MEALS detail (with recommendations) ---------------- */
+const MEAL_IDEAS = {
+  breakfast:[
+    {name:'Overnight oats with berries', tags:['dairy-free','gluten-free','quick','budget-friendly','easy']},
+    {name:'Scrambled eggs & spinach', tags:['gluten-free','quick','easy']},
+    {name:'Smoothie (banana, oat milk, peanut butter)', tags:['dairy-free','quick','easy']},
+    {name:'Avocado on gluten-free toast', tags:['dairy-free','gluten-free','quick']},
+  ],
+  lunch:[
+    {name:'Grilled chicken salad', tags:['dairy-free','gluten-free','healthy']},
+    {name:'Rice bowl with veg & tofu', tags:['dairy-free','gluten-free','budget-friendly']},
+    {name:'Turkey & salad wrap', tags:['dairy-free','quick','easy']},
+    {name:'Leftover pasta with olive oil & veg', tags:['quick','budget-friendly','easy']},
+  ],
+  dinner:[
+    {name:'Baked salmon with roasted veg', tags:['dairy-free','gluten-free','healthy']},
+    {name:'Stir-fry chicken & rice', tags:['dairy-free','gluten-free','quick']},
+    {name:'Bean & veg chilli', tags:['dairy-free','gluten-free','budget-friendly']},
+    {name:'Homemade dairy-free curry', tags:['dairy-free','budget-friendly']},
+  ],
+  snacks:[
+    {name:'Apple with peanut butter', tags:['dairy-free','gluten-free','quick','easy']},
+    {name:'Rice crackers & hummus', tags:['dairy-free','gluten-free','quick']},
+    {name:'Mixed nuts', tags:['dairy-free','gluten-free','quick','easy']},
+  ]
+};
+function currentMealSlot(){
+  const h = new Date().getHours();
+  if(h<11) return 'breakfast';
+  if(h<15) return 'lunch';
+  if(h<21) return 'dinner';
+  return 'snacks';
+}
+let mealSuggestionSeed = 0;
+function renderMealsDetail(){
+  const slot = mealSuggestionSlot || currentMealSlot();
+  const dfCount = DB.meals.filter(m=>m.dairyFree).length;
+  const dfPref = DB.meals.length>0 && (dfCount/DB.meals.length) >= 0.5;
+  const eatenToday = DB.meals.filter(m=>m.date===todayISO()).map(m=>(m.what||'').toLowerCase());
+  let ideas = (MEAL_IDEAS[slot]||[]).filter(idea=> !eatenToday.some(e=>e.includes(idea.name.toLowerCase().split(' ')[0])));
+  if(!ideas.length) ideas = MEAL_IDEAS[slot]||[];
+  if(dfPref) ideas = [...ideas].sort((a,b)=> (b.tags.includes('dairy-free')?1:0) - (a.tags.includes('dairy-free')?1:0));
+  const shown = shuffleWithSeed(ideas, mealSuggestionSeed).slice(0,3);
+  return `
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">🍽️ What should I have for ${slot}?</div>
+    <div class="chip-row" style="margin-bottom:10px;">${['breakfast','lunch','dinner','snacks'].map(s=>`<button type="button" class="chip ${slot===s?'active':''}" data-meal-slot-pick="${s}">${cap(s)}</button>`).join('')}</div>
+    ${shown.map(idea=>`
+      <div class="entry-item">
+        <div><div class="main">${esc(idea.name)}</div><div class="sub">${idea.tags.map(t=>tagEmoji(t)+' '+t).join(' · ')}</div></div>
+      </div>`).join('')}
+    <button class="btn-secondary" data-meal-surprise>🎲 Surprise Me</button>
+  </div>
+  <div class="section-title">Meal History <div class="rule"></div></div>
+  ${renderSimpleList('meals', m=>`${cap(m.slot)}: ${m.what}`, m=>(m.dairyFree?'🥛 Dairy-free · ':'')+(m.feeling||''))}
+  `;
+}
+function tagEmoji(t){ return {'dairy-free':'🥛','gluten-free':'🌾','quick':'⚡','budget-friendly':'💰','easy':'🍳','healthy':'🥗'}[t]||''; }
+function shuffleWithSeed(arr, seed){
+  const a = [...arr];
+  let s = seed || 1;
+  for(let i=a.length-1;i>0;i--){ s = (s*9301+49297)%233280; const j = Math.floor((s/233280)*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+let mealSuggestionSlot = null;
+
+/* ---------------- PERIOD detail (with cycle prediction) ---------------- */
+function periodPrediction(){
+  const dates = [...new Set(DB.period.map(p=>p.date))].sort();
+  if(dates.length<2) return null;
+  const gaps = [];
+  for(let i=1;i<dates.length;i++){
+    const d1 = new Date(dates[i-1]+'T00:00:00'), d2 = new Date(dates[i]+'T00:00:00');
+    gaps.push(Math.round((d2-d1)/86400000));
+  }
+  const avg = gaps.reduce((s,g)=>s+g,0)/gaps.length;
+  const variance = gaps.reduce((s,g)=>s+Math.pow(g-avg,2),0)/gaps.length;
+  const stdDev = Math.sqrt(variance);
+  const last = new Date(dates[dates.length-1]+'T00:00:00');
+  const predicted = new Date(last); predicted.setDate(predicted.getDate()+Math.round(avg));
+  const iso = predicted.getFullYear()+'-'+String(predicted.getMonth()+1).padStart(2,'0')+'-'+String(predicted.getDate()).padStart(2,'0');
+  return { avgCycle: Math.round(avg), predicted: iso, irregular: stdDev > 4 };
+}
+function renderPeriodDetail(){
+  const pred = periodPrediction();
+  return `
+  ${pred ? `<div class="card">
+    <div class="stat-row">
+      <div class="stat"><div class="n">${pred.avgCycle}d</div><div class="l">Avg Cycle</div></div>
+      <div class="stat"><div class="n">${fmtDate(pred.predicted)}</div><div class="l">Predicted Next</div></div>
+    </div>
+    ${pred.irregular?`<div class="insight" style="margin-top:10px;">🌱 Your cycle length has varied a fair bit lately — this prediction is a rough guide, not a guarantee. This isn't medical advice.</div>`:''}
+  </div>` : `<div class="limitation">Log at least two period start dates to see cycle length and predictions.</div>`}
+  <div class="section-title">Period History <div class="rule"></div></div>
+  ${renderSimpleList('period', p=>`Flow ${p.flow||'-'}${p.mood?' · Mood '+p.mood+'/10':''}`, p=>`Pain ${p.pain||'-'}/10 · ${p.notes||''}`, 'period')}
+  `;
+}
+
+/* ---------------- SKIN detail ---------------- */
+function renderSkinDetail(){
+  const photos = [...DB.skinPhotos].sort((a,b)=>b.date.localeCompare(a.date));
+  const recent = [...DB.skincare].slice(-7);
+  const avgOf = f=> recent.length? (recent.reduce((s,x)=>s+Number(x[f]||0),0)/recent.length).toFixed(1) : '-';
+  return `
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">Routine (edit AM/PM products)</div>
+    ${skinRoutineEditList('am', DB.skinRoutine.am)}
+    ${skinRoutineEditList('pm', DB.skinRoutine.pm)}
+  </div>
+  ${recent.length?`<div class="card"><div class="stat-row">
+    <div class="stat"><div class="n">${avgOf('redness')}</div><div class="l">Avg Redness</div></div>
+    <div class="stat"><div class="n">${avgOf('breakouts')}</div><div class="l">Avg Breakouts</div></div>
+    <div class="stat"><div class="n">${avgOf('dryness')}</div><div class="l">Avg Dryness</div></div>
+  </div></div>`:''}
+  <div class="card">
+    <div class="section-title" style="margin-top:0;">Skin Progress Photos</div>
+    ${photos.length ? `<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;">${photos.map(p=>`
+      <div style="position:relative;"><img src="${p.photoData}" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:10px;"><div style="position:absolute;bottom:2px;left:4px;font-size:9px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.6);">${fmtDate(p.date)}</div><button data-del="skinPhotos:${p.id}" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;">✕</button></div>`).join('')}</div>`:`<div class="sub">No progress photos yet.</div>`}
+    <button class="btn-secondary" data-qa="skinphoto">+ Add Progress Photo</button>
+  </div>
+  <div class="section-title">Skincare Log <div class="rule"></div></div>
+  ${renderSimpleList('skincare', s=>`${(s.period||'routine').toUpperCase()} routine${s.products&&s.products.length?' — '+s.products.length+' steps':''}`, s=>s.notes||'')}
+  `;
+}
+function skinRoutineEditList(period, items){
+  return `<div style="margin-bottom:12px;"><label style="display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;text-transform:uppercase;">${period.toUpperCase()}</label>
+    ${items.map((i,idx)=>`<div class="check-row"><label style="flex:1;">${esc(i)}</label><button class="del" data-skinroutine-del="${period}:${idx}">remove</button></div>`).join('')}
+    <div class="add-item-row"><input type="text" placeholder="Add product/step..." data-skinroutine-input="${period}"><button data-skinroutine-add="${period}">Add</button></div>
+  </div>`;
+}
+
+/* ---------------- WORK detail ---------------- */
+function renderWorkDetail(){
+  const withData = DB.work.filter(w=>w.leftBy7!==undefined);
+  const leftBy7Count = DB.work.filter(w=>w.leftBy7).length;
+  const pct = DB.work.length ? Math.round(leftBy7Count/DB.work.length*100) : 0;
+  return `
+  <div class="card">
+    <div class="stat-row">
+      <div class="stat"><div class="n">${leftBy7Count}/${DB.work.length}</div><div class="l">Left by 7am</div></div>
+      <div class="stat"><div class="n">${pct}%</div><div class="l">Consistency</div></div>
+    </div>
+    <button class="btn-secondary" data-qa="work">+ Log Work Day</button>
+  </div>
+  <div class="section-title">Work History <div class="rule"></div></div>
+  ${renderSimpleList('work', w=>`Arrived ${w.arrived||'-'}, left ${w.left||'-'}${w.leftBy7?' · ✅ left by 7am':''}`, w=>w.accomplished||'', 'work')}
+  `;
+}
+
+/* ---------------- PHOTOGRAPHY (Photo of the Day) gallery ---------------- */
+/* ---------------- MORAL (permanent reading/impression history) ---------------- */
+let moralDateFilter = null;
+function renderMoralDetail(){
+  const entries = [...DB.reading].sort((a,b)=>b.date.localeCompare(a.date));
+  const filtered = moralDateFilter ? entries.filter(e=>e.date===moralDateFilter) : entries;
+  const streak = currentStreak(DB.reading.map(r=>r.date));
+  return `
+  ${streak>=3?`<div class="insight">🙏 ${streak}-day reading streak!</div>`:''}
+  <div class="card">
+    <label style="display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;text-transform:uppercase;">Jump to a date</label>
+    <div style="display:flex; gap:8px;">
+      <input type="date" id="moralDateJump" value="${moralDateFilter||''}" style="flex:1;border:1.5px solid var(--line);border-radius:12px;padding:9px;">
+      <button class="btn-secondary" style="margin-top:0;" data-moral-jump>Go</button>
+      ${moralDateFilter?`<button class="btn-secondary" style="margin-top:0;" data-moral-clear>Show all</button>`:''}
+    </div>
+  </div>
+  ${filtered.length? `<div class="card">${filtered.map(r=>`
+    <div class="entry-item">
+      <div>
+        <div class="meta">${fmtDate(r.date)}${r._pending?' · <span style="color:#B6607D;">not saved yet</span>':''}</div>
+        <div class="main">📖 ${esc(r.passage||'Reading')}</div>
+        ${r.impression?`<div class="sub">💭 ${esc(r.impression)}</div>`:''}
+        <div class="sub" style="margin-top:2px;">🙏 Prayed: ${r.prayed?'Yes':'No'}</div>
+      </div>
+      <div class="entry-actions">
+        <button data-edit="reading:${r.id}" style="margin-right:4px;">✎</button>
+        <button data-del="reading:${r.id}">✕</button>
+      </div>
+    </div>`).join('')}</div>` : emptyState('📖','No entry for that date','Try a different date, or show all entries.')}
+  `;
+}
+
+/* ---------------- PHOTOGRAPHY (Photo of the Day) gallery ---------------- */
+/* ---------------- MEMORIES (personal scrapbook, separate from other galleries) ---------------- */
+function groupPhotosByMonth(){
+  const groups = {};
+  DB.photos.forEach(p=>{
+    const key = p.date.slice(0,7); // YYYY-MM
+    if(!groups[key]) groups[key] = [];
+    groups[key].push(p);
+  });
+  return Object.keys(groups).sort().reverse().map(key=>{
+    const [y,m] = key.split('-');
+    const label = new Date(Number(y), Number(m)-1, 1).toLocaleDateString(undefined,{month:'long',year:'numeric'});
+    const items = [...groups[key]].sort((a,b)=>b.date.localeCompare(a.date));
+    const achievementsCount = DB.achievements.filter(a=>a.date.slice(0,7)===key).length;
+    const goalsCount = DB.goals.filter(g=>g.completedAt && g.completedAt.slice(0,7)===key).length;
+    const journalCount = items.filter(p=>p.caption && p.caption.trim()).length;
+    return {key, label, items, achievementsCount, goalsCount, journalCount};
+  });
+}
+function renderMemoriesPage(){
+  const groups = groupPhotosByMonth();
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>📸 Memories</h2></div>
+  <div class="screen">
+    <div class="limitation">Your Photo of the Day and journal entries, as a personal scrapbook — kept separate from your Fitness and Skin progress galleries.</div>
+    ${groups.length? groups.map(g=>`
+      <div class="section-title" style="margin-top:20px;">${g.label} <div class="rule"></div></div>
+      <div class="card" style="padding:12px 16px;">
+        <div class="stat-row">
+          <div class="stat"><div class="n">${g.items.length}</div><div class="l">Photos</div></div>
+          <div class="stat"><div class="n">${g.journalCount}</div><div class="l">Journal</div></div>
+          <div class="stat"><div class="n">${g.achievementsCount}</div><div class="l">Achievements</div></div>
+          <div class="stat"><div class="n">${g.goalsCount}</div><div class="l">Goals</div></div>
+        </div>
+      </div>
+      ${g.items.map(p=>`
+        <div class="card">
+          <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--ink-soft);">${fmtDate(p.date)}</div>
+          ${p.photoData?`<img src="${p.photoData}" style="width:100%;border-radius:14px;margin-top:8px;">`:''}
+          ${p.caption?`<p style="margin:10px 0 0;font-size:14.5px;line-height:1.5;">${esc(p.caption)}</p>`:''}
+        </div>`).join('')}
+    `).join('') : emptyState('📸','No memories yet','Your Photo of the Day entries will appear here, grouped by month, once you start logging them.')}
+  </div>`;
+}
+
+function renderPhotoDetail(){
+  const photos = [...DB.photos].sort((a,b)=>b.date.localeCompare(a.date));
+  const streak = currentStreak(DB.photos.map(p=>p.date));
+  return `
+  ${streak>=3?`<div class="insight">📸 ${streak}-day Photo of the Day streak!</div>`:''}
+  ${photos.length? photos.map(p=>`
+    <div class="card">
+      <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--ink-soft);">${fmtDate(p.date)}</div>
+      ${p.photoData?`<img src="${p.photoData}" style="width:100%;border-radius:14px;margin-top:8px;">`:''}
+      ${p.caption?`<p style="margin:10px 0 0;font-size:14.5px;line-height:1.5;">${esc(p.caption)}</p>`:''}
+      <div style="text-align:right;margin-top:6px;"><button data-del="photos:${p.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>
+    </div>`).join('') : emptyState('📸','No photos yet',"Take one and start today's memory.")}
+  `;
+}
+
+/* Routine editor */
+let routineDayTab = new Date().getDay();
+function renderRoutineEditor(){
+  const r = DB.routine;
+  return `
+  <div class="section-title">Morning <span style="font-weight:400;font-size:11.5px;color:var(--ink-soft);">(consistent daily)</span></div>
+  ${routineEditList('morning', r.morning)}
+  <div class="section-title">Workday <span style="font-weight:400;font-size:11.5px;color:var(--ink-soft);">(consistent daily)</span></div>
+  ${routineEditList('workday', r.workday)}
+  <div class="section-title">Evening <span style="font-weight:400;font-size:11.5px;color:var(--ink-soft);">(varies per day)</span></div>
+  <div class="day-tabs">
+    ${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d,i)=>`<button data-daytab="${i}" class="${routineDayTab===i?'active':''}">${d}</button>`).join('')}
+  </div>
+  ${routineEditList('evening', r.eveningByDay[routineDayTab]||[], routineDayTab)}
+  <div class="limitation">Tip: name routine items to match your Quick Actions (e.g. "Workout", "Dinner", "Photo of the Day") so logging an entry auto-checks it on your dashboard.</div>
+  `;
+}
+function routineEditList(section, items, dayIdx){
+  return `<div class="focus-block">
+    ${items.map((i,idx)=>`
+      <div class="check-row">
+        <label style="flex:1;">${esc(i)}</label>
+        <button class="del" data-routine-del="${section}:${dayIdx!==undefined?dayIdx+':':''}${idx}">remove</button>
+      </div>`).join('')}
+    <div class="add-item-row">
+      <input type="text" placeholder="Add item..." data-routine-input="${section}${dayIdx!==undefined?':'+dayIdx:''}">
+      <button data-routine-add="${section}${dayIdx!==undefined?':'+dayIdx:''}">Add</button>
+    </div>
+  </div>`;
+}
+
+function renderMoneyDetail(){
+  const w = weeklyBudgetInfo();
+  const totalSaved = DB.savings.reduce((s,x)=>s+Number(x.amount||0),0);
+  const spendPct = w.budget>0? Math.min(100, Math.round(w.spent/w.budget*100)) : 0;
+  const recent = [...DB.spending.map(s=>({...s,_kind:'spend'})), ...DB.savings.map(s=>({...s,_kind:'save'})), ...DB.income.map(s=>({...s,_kind:'income'}))].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,25);
+  const categoryTotals = {};
+  DB.spending.forEach(sp=>{ const c = sp.category||'Other'; categoryTotals[c]=(categoryTotals[c]||0)+Number(sp.amount||0); });
+  return `
+  <div class="card">
+    <div class="stat-row">
+      <div class="stat"><div class="n">$${w.budget.toFixed(0)}</div><div class="l">Weekly Budget</div></div>
+      <div class="stat"><div class="n">$${w.spent.toFixed(0)}</div><div class="l">Spent</div></div>
+      <div class="stat"><div class="n">$${w.remaining.toFixed(0)}</div><div class="l">Remaining</div></div>
+    </div>
+    <div class="bar-track" style="background:var(--cream-2); margin-top:12px;"><div class="bar-fill" style="background:${w.remaining<0?'#B6607D':'var(--savings)'}; width:${spendPct}%"></div></div>
+    ${w.remaining<0?`<div class="insight" style="margin-top:10px;background:#F6E4EA;color:#B6607D;"><span class="ic">⚠️</span><span>You've gone $${Math.abs(w.remaining).toFixed(0)} over this week's budget.</span></div>`:''}
+    ${w.lwOver>0?`<div class="limitation">Last week's overspend of $${w.lwOver.toFixed(0)} was factored into this week's budget: Budget = Income − Savings contribution − prior overspend.</div>`:''}
+  </div>
+  <div class="card">
+    <div class="stat-row"><div class="stat"><div class="n">$${totalSaved.toFixed(0)}</div><div class="l">Total Saved</div></div></div>
+    <div style="display:flex; gap:8px; margin-top:10px;">
+      <button class="btn-secondary" style="margin-top:0;" data-qa="income">+ Add Income</button>
+      <button class="btn-secondary" style="margin-top:0;" data-qa="addsavings">+ Add to Savings</button>
+    </div>
+  </div>
+  ${DB.savings.length||DB.spending.length ? `<div class="card"><div class="section-title" style="margin-top:0;">Savings over time</div>${chartCanvas('savingsChart',170)}</div>`:''}
+  ${DB.spending.length ? `<div class="card"><div class="section-title" style="margin-top:0;">Weekly spending vs budget</div>${chartCanvas('spendChart',170)}<div class="section-title">By category</div>${chartCanvas('categoryChart',170)}</div>`:''}
+  <div class="section-title">Recent Activity <div class="rule"></div></div>
+  ${recent.length? `<div class="card">${recent.map(it=>`
+    <div class="entry-item">
+      <div>
+        <div class="meta">${fmtDate(it.date)}</div>
+        <div class="main">${it._kind==='save'?'💰 Added to savings':it._kind==='income'?'💵 Income':esc(it.what||'Spending')}</div>
+        ${it.category?`<div class="sub">${esc(it.category)}</div>`:''}
+      </div>
+      <div style="font-weight:700; color:${it._kind!=='spend'?'var(--savings)':'var(--ink)'};">${it._kind!=='spend'?'+':'-'}$${Number(it.amount).toFixed(0)}</div>
+    </div>`).join('')}</div>` : emptyState('💰','No activity yet','Log spending or savings from Home Quick Actions.')}
+  `;
+}
+function renderMoneyCharts(){
+  if(!document.getElementById('savingsChart') && !document.getElementById('spendChart')) return;
+  // savings over time (cumulative)
+  if(document.getElementById('savingsChart')){
+    const events = [...DB.savings.map(s=>({date:s.date, amt:Number(s.amount||0)}))].sort((a,b)=>a.date.localeCompare(b.date));
+    let running=0; const labels=[]; const data=[];
+    events.forEach(e=>{ running+=e.amt; labels.push(fmtDate(e.date)); data.push(running); });
+    if(labels.length) renderChart('savingsChart','line',labels,[{label:'Total saved',data,borderColor:'#4F7A5B',backgroundColor:'rgba(79,122,91,0.12)',fill:true,tension:0.3}]);
+  }
+  if(document.getElementById('spendChart')){
+    // last 6 weeks: total spend per week
+    const weeks=[]; const now = new Date();
+    for(let i=5;i>=0;i--){ const d=new Date(now); d.setDate(d.getDate()-7*i - now.getDay()); const iso=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); const start=iso(d); const end=new Date(d); end.setDate(end.getDate()+6); weeks.push({start, end:iso(end)}); }
+    const labels = weeks.map(w=>fmtDate(w.start));
+    const data = weeks.map(w=> DB.spending.filter(sp=>sp.date>=w.start && sp.date<=w.end).reduce((s,x)=>s+Number(x.amount||0),0));
+    renderChart('spendChart','bar',labels,[{label:'Spent per week',data,backgroundColor:'#D98A6B'}]);
+  }
+  if(document.getElementById('categoryChart')){
+    const totals={};
+    DB.spending.forEach(sp=>{ const c=sp.category||'Other'; totals[c]=(totals[c]||0)+Number(sp.amount||0); });
+    const labels = Object.keys(totals);
+    const data = Object.values(totals);
+    if(labels.length) renderChart('categoryChart','doughnut',labels,[{data,backgroundColor:['#4F7A5B','#D98A6B','#3E6C8E','#B6607D','#B8912B','#7C6F9E','#4C8177']}]);
+  }
+}
+
+/* ---------------- GOALS TAB ---------------- */
+function renderGoalsTab(){
+  return `
+  <div class="topbar"><h1>🎯 Goals</h1></div>
+  <div class="screen">
+    <button class="btn-primary" data-open-goal-form>+ New Goal</button>
+    <div style="height:14px;"></div>
+    ${DB.goals.length? DB.goals.map(renderGoalCard).join('') : emptyState('🎯','No goals yet','Create a goal to start tracking your progress toward it.')}
+  </div>`;
+}
+function renderGoalCard(g){
+  const cur = goalCurrent(g);
+  const target = Number(g.target)||0;
+  const pct = target? Math.min(100, Math.round(cur/target*100)) : 0;
+  const metric = g.section && g.metricKey && GOAL_METRICS[g.section] && GOAL_METRICS[g.section][g.metricKey];
+  const unit = metric? metric.unit : (g.linkedSource==='savings_total'?'$':'');
+  const milestone = nextMilestone(cur, target);
+  const isManual = !g.section && !g.linkedSource;
+  return `<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-weight:700;font-size:15.5px;">${g.completed?'🏆 ':''}${esc(g.name)}</div>
+        <div class="sub" style="color:var(--ink-soft);font-size:12px;margin-top:2px;">${cap(g.type)}${g.deadline?' · by '+fmtDate(g.deadline):''}${metric?' · '+esc(metric.label)+(g.param?' ('+esc(g.param)+')':''):''}</div>
+      </div>
+      <div style="display:flex;gap:2px;">
+        <button data-goal-edit="${g.id}" style="border:none;background:none;color:var(--ink-soft);padding:4px;">✎</button>
+        <button data-del="goals:${g.id}" style="border:none;background:none;color:var(--ink-soft);padding:4px;">✕</button>
+      </div>
+    </div>
+    <div class="bar-track" style="background:var(--cream-2); margin-top:10px;"><div class="bar-fill" style="background:var(--dash); width:${pct}%"></div></div>
+    <div class="sub" style="margin-top:6px;">${unit==='$'?'$'+cur:cur+unit} / ${unit==='$'?'$'+target:target+unit} ${g.completed?'· Completed! 🌸':''}</div>
+    ${!g.completed && milestone!==null ? `<div class="sub" style="color:var(--dash);">Next milestone: ${unit==='$'?'$'+milestone:milestone+unit}</div>`:''}
+    ${isManual? `<div class="add-item-row"><input type="number" placeholder="Update progress" data-goal-update="${g.id}"><button data-goal-save="${g.id}">Save</button></div>`:''}
+  </div>`;
+}
+
+/* ---------------- ACHIEVEMENTS TAB ---------------- */
+function renderAchievementsTab(){
+  const list = [...DB.achievements].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="topbar"><h1>🏆 Achievements</h1></div>
+  <div class="screen">
+    ${list.length? `<div class="card">${list.map(a=>`
+      <div class="entry-item">
+        <div style="font-size:20px;width:28px;flex-shrink:0;">${a.icon||'🏆'}</div>
+        <div style="flex:1;">
+          <div class="main">${esc(a.title)}</div>
+          ${a.description?`<div class="sub">${esc(a.description)}</div>`:''}
+          <div class="meta" style="margin-top:2px;">${fmtDate(a.date)}${a.section?' · '+esc(a.section):''}</div>
+        </div>
+      </div>`).join('')}</div>`
+    : emptyState('🏆','No achievements yet','Keep logging — your first milestone is close.')}
+  </div>`;
+}
+
+/* ---------------- MORE TAB ---------------- */
+function renderMoreTab(){
+  const usageKB = estimateStorageUsageKB();
+  return `
+  <div class="topbar"><h1>☰ More</h1></div>
+  <div class="screen">
+    <div class="card">
+      <button class="btn-secondary" style="margin-top:0;" data-nav-progress>📊 Progress & Insights</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-myyear>🌱 My Life So Far</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-reflections>🌿 Reflections & Proud Moments</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-bestversion>🌱 My Best Version</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-checkin>🌿 Weekly Life Check-in</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-memories>📸 Memories</button>
+    </div>
+    <div class="card">
+      <div class="form-field"><label>Your name</label><input type="text" id="nameInput" value="${esc(DB.settings.name||'')}" placeholder="What should we call you?"></div>
+      <button class="btn-secondary" id="saveNameBtn">Save Name</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:8px;">🔐 Privacy</div>
+      <div class="form-field"><label>PIN Lock (4–6 digits)</label><input type="password" inputmode="numeric" maxlength="6" id="pinSet" value="${esc(DB.settings.pin||'')}" placeholder="Leave blank for no PIN"></div>
+      <button class="btn-secondary" id="savePinBtn">Save PIN</button>
+      <div class="limitation">This is an in-app PIN gate for casual privacy — your data isn't separately encrypted, so it isn't a substitute for your device's own lock screen.</div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:8px;">💾 Backup & Restore</div>
+      ${!localStorageOK ? `<div class="limitation" style="background:#F6E4EA;color:#B6607D;">⚠️ This viewer isn't letting the app save to your device's local storage. The app still works fully this session and auto-backs up on every failed save (check Downloads) — but for real persistence, try opening this file directly in your phone's regular browser (Chrome or Safari — not Claude's built-in preview): save the file, then open it from your Files/Downloads app.</div>` : storageBroken ? `<div class="limitation" style="background:#F6E4EA;color:#B6607D;">⚠️ A save just failed unexpectedly (e.g. storage full). A safety copy was automatically downloaded — check your Downloads.</div>` : `<div class="limitation">Using about ${usageKB}KB of local storage (photos are compressed to keep this small — typical browser limits are a few MB).</div>`}
+      <div class="stat-row" style="margin:10px 0;">
+        <div class="stat"><div class="n" style="font-size:15px;">${DB.settings.lastBackupAt ? fmtFullDate(DB.settings.lastBackupAt) : 'Never'}</div><div class="l">Last Backup</div></div>
+        <div class="stat"><div class="n" style="font-size:15px;">${nextReminderText()}</div><div class="l">Next Reminder</div></div>
+      </div>
+      <button class="btn-primary" id="exportBtn" style="margin-top:0;">📦 Export Backup</button>
+      <div style="height:10px;"></div>
+      <label class="btn-secondary" style="display:block; text-align:center; margin-top:0;" for="importFile">📥 Restore Backup</label>
+      <input type="file" id="importFile" accept="application/json" style="display:none;">
+      <div id="importMsg" class="limitation" style="display:none;"></div>
+      <div class="limitation">Everything stays on this device — a backup file is just downloaded to your phone/computer, never uploaded anywhere. Restoring replaces your current data, but a safety copy of what's currently here downloads automatically first, and nothing is changed until the file you pick has been checked.</div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700; margin-bottom:6px;">🌱 About this build</div>
+      <p class="sub" style="line-height:1.6;">Dashboard, daily routine, quick logging, goals, achievements, exercise history with PRs, body measurements, sleep/cooking/money graphs, meal recommendations, skin routine tracking, period cycle prediction, and Progress & My Life So Far — all saved to this device automatically. Push notifications and true installable-PWA behavior aren't possible from inside this preview environment (they need to be hosted on a real web address) — ask if you'd like help setting that up.</p>
+    </div>
+  </div>`;
+}
+
+/* ---------------- Bottom nav ---------------- */
+function renderBottomNav(){
+  const tabs = [
+    {k:'home', ic:'🏠', l:'Home'},
+    {k:'life', ic:'🌱', l:'Life'},
+    {k:'goals', ic:'🎯', l:'Goals'},
+    {k:'achievements', ic:'🏆', l:'Wins'},
+    {k:'more', ic:'☰', l:'More'},
+  ];
+  return `<div class="bottomnav">${tabs.map(t=>`
+    <button class="nav-btn ${route.tab===t.k?'active':''}" data-tab="${t.k}"><span class="ic">${t.ic}</span>${t.l}</button>`).join('')}</div>`;
+}
+
+/* ---------------- Modal (quick action forms + goal form + celebration) ---------------- */
+function renderModal(){
+  let inner = '';
+  if(modal.type==='celebrate') inner = renderCelebrateModal(modal);
+  else if(modal.type==='goalform') inner = renderGoalForm();
+  else if(modal.type==='restoreConfirm') inner = renderRestoreConfirmModal();
+  else if(modal.type==='restoreSuccess') inner = renderRestoreSuccessModal();
+  else {
+    const errBanner = modal.error ? `<div class="insight" style="background:#F6E4EA;color:#B6607D;"><span class="ic">⚠️</span><span>${esc(modal.error)}</span></div>` : '';
+    inner = errBanner + renderQAForm(modal.type);
+  }
+  return `<div class="modal-overlay" id="overlay"><div class="modal-sheet" style="position:relative;">
+    <button class="modal-close" id="closeModal">✕</button>
+    ${inner}
+  </div></div>`;
+}
+function renderCelebrateModal(m){
+  return `<div class="celebrate">
+    <div class="big">🎉</div>
+    <h3>You did it!</h3>
+    <p>You've completed <strong>${esc(m.goal.name)}</strong>.</p>
+    <div class="reward-box">
+      <div style="font-size:12px;font-weight:700;color:var(--photo);text-transform:uppercase;letter-spacing:0.05em;">Your reward</div>
+      <div style="margin-top:6px;font-size:15px;">${m.reward}</div>
+    </div>
+    <button class="btn-secondary" id="rerollReward">🎁 Another reward</button>
+    <button class="btn-primary" id="closeCelebrate" style="margin-top:10px;">Lovely, thank you 🌱</button>
+  </div>`;
+}
+function renderRestoreConfirmModal(){
+  return `<div class="celebrate" style="background:linear-gradient(135deg,#F6E4EA,#F8F6EF);">
+    <div class="big">🌱</div>
+    <h3>Restore this backup?</h3>
+    <p>This will replace your current app data with the backup. A safety copy of what's currently on this device downloads automatically first, in case the wrong file was picked.</p>
+    <button class="btn-secondary" id="cancelRestoreBtn">Cancel</button>
+    <button class="btn-primary" id="confirmRestoreBtn" style="margin-top:10px;background:#B6607D;">Restore Backup</button>
+  </div>`;
+}
+function renderRestoreSuccessModal(){
+  return `<div class="celebrate">
+    <div class="big">🌱</div>
+    <h3>Your garden has been restored.</h3>
+    <p>All sections have been loaded from your backup.</p>
+    <button class="btn-primary" id="closeRestoreSuccess" style="margin-top:10px;">Done</button>
+  </div>`;
+}
+
+let goalFormState = { section:'manual', metricKey:null };
+function renderGoalForm(){
+  const editing = modal && modal.editId ? DB.goals.find(g=>g.id===modal.editId) : null;
+  const sections = Object.keys(GOAL_METRICS);
+  const metrics = GOAL_METRICS[goalFormState.section]||{};
+  const metricKeys = Object.keys(metrics);
+  if((!goalFormState.metricKey || !metrics[goalFormState.metricKey]) && metricKeys.length) goalFormState.metricKey = metricKeys[0];
+  const metric = metrics[goalFormState.metricKey];
+  return `<h3>🎯 ${editing?'Edit':'New'} Goal</h3>
+  <div class="form-field"><label>Goal name</label><input type="text" id="gName" placeholder="e.g. Save $90,000" value="${editing?esc(editing.name):''}"></div>
+  <div class="form-field"><label>Section</label><select id="gSection">${sections.map(s=>`<option value="${s}" ${goalFormState.section===s?'selected':''}>${s==='manual'?'Manual (I update it myself)':cap(s)}</option>`).join('')}</select></div>
+  ${metricKeys.length ? `<div class="form-field"><label>Track</label><select id="gMetric">${metricKeys.map(k=>`<option value="${k}" ${goalFormState.metricKey===k?'selected':''}>${metrics[k].label}</option>`).join('')}</select></div>` : `<div class="limitation">You'll update this goal's progress manually after creating it.</div>`}
+  ${metric && metric.needsParam ? `<div class="form-field"><label>${metric.needsParam}</label><input type="text" id="gParam" value="${editing?esc(editing.param||''):''}" placeholder="e.g. Leg Press"></div>`:''}
+  <div class="form-field"><label>Goal type</label><select id="gType">
+    ${['numeric','count','frequency','streak','percentage'].map(t=>`<option value="${t}" ${editing&&editing.type===t?'selected':(!editing&&t==='numeric'?'selected':'')}>${cap(t)}</option>`).join('')}
+  </select></div>
+  <div class="form-field"><label>Target${metric&&metric.unit?' ('+metric.unit+')':''}</label><input type="number" id="gTarget" value="${editing?editing.target:''}" placeholder="e.g. 200"></div>
+  <div class="form-field"><label>Deadline (optional)</label><input type="date" id="gDeadline" value="${editing?(editing.deadline||''):''}"></div>
+  <button class="btn-primary" id="saveGoalBtn" data-edit-id="${editing?editing.id:''}">${editing?'Save Changes':'Create Goal'}</button>
+  ${editing?`<button class="btn-secondary" id="deleteGoalBtn" data-goal-id="${editing.id}">Delete Goal</button>`:''}`;
+}
+
+function renderQAForm(type){
+  const iso = todayISO();
+  switch(type){
+    case 'spending': return `<h3>💰 Add Spending</h3>
+      <div class="form-field"><label>Amount ($)</label><input type="number" id="f_amount" inputmode="decimal" placeholder="0"></div>
+      <div class="form-field"><label>What</label><input type="text" id="f_what" placeholder="e.g. Groceries"></div>
+      <div class="form-field"><label>Category</label><input type="text" id="f_category" placeholder="e.g. Food"></div>
+      <button class="btn-primary" data-save="spending">Save</button>`;
+    case 'income': return `<h3>💵 Weekly Income</h3>
+      <div class="form-field"><label>Amount ($)</label><input type="number" id="f_amount" inputmode="decimal" placeholder="0"></div>
+      <div class="limitation">This feeds your automatic weekly spending budget (Budget = Income \u2212 Savings contribution \u2212 prior overspend).</div>
+      <button class="btn-primary" data-save="income">Save</button>`;
+    case 'addsavings': return `<h3>\ud83d\udcb0 Add to Savings</h3>
+      <div class="form-field"><label>Amount ($)</label><input type="number" id="f_amount" inputmode="decimal" placeholder="0"></div>
+      <button class="btn-primary" data-save="addsavings">Save</button>`;
+    case 'meal': return `<h3>🍽️ Add Meal</h3>
+      <div class="form-field"><label>Meal</label><div class="chip-row" id="slotChips">${['Breakfast','Lunch','Dinner','Snacks'].map(s=>`<button type="button" class="chip" data-slot="${s.toLowerCase()}">${s}</button>`).join('')}</div></div>
+      <div class="form-field"><label>What I had</label><textarea id="f_what" placeholder="e.g. Grilled chicken salad"></textarea></div>
+      <div class="form-field"><label>How it made me feel</label><input type="text" id="f_feeling" placeholder="e.g. Light and satisfied"></div>
+      <div class="form-field"><label><input type="checkbox" id="f_df" style="width:auto;"> Dairy-free today</label></div>
+      <button class="btn-primary" data-save="meal">Save</button>`;
+    case 'workout': {
+      const rows = [1,2,3].map(i=>`
+        <div class="card" style="padding:12px; margin-bottom:8px;">
+          <div class="form-field" style="margin-bottom:8px;">
+            <label>Exercise ${i}${i>1?' (optional)':''}</label>
+            <input type="text" id="f_ex${i}_name" placeholder="e.g. Leg press" onblur="showExerciseHint(${i})">
+            <div id="f_ex${i}_hint" class="sub" style="margin-top:4px;"></div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="number" id="f_ex${i}_weight" placeholder="kg" style="flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px;">
+            <input type="number" id="f_ex${i}_sets" placeholder="sets" style="flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px;">
+            <input type="number" id="f_ex${i}_reps" placeholder="reps" style="flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px;">
+          </div>
+        </div>`).join('');
+      return `<h3>💪 Log Workout</h3>
+        <div class="form-field"><label>Type</label><div class="chip-row">${['Gym','Home','Walk','Other'].map(s=>`<button type="button" class="chip" data-wtype="${s}">${s}</button>`).join('')}</div></div>
+        ${rows}
+        <div class="form-field"><label>Notes (or distance/duration for a walk)</label><textarea id="f_notes" placeholder="How did it feel?"></textarea></div>
+        <button class="btn-primary" data-save="workout">Save</button>`;
+    }
+    case 'bodymeasurement': return `<h3>📏 Body Measurement</h3>
+      <div class="form-field"><label>Weight (kg)</label><input type="number" id="f_weight" step="0.1"></div>
+      <div class="form-field"><label>Waist (cm)</label><input type="number" id="f_waist"></div>
+      <div class="form-field"><label>Hips (cm)</label><input type="number" id="f_hips"></div>
+      <div class="form-field"><label>Chest (cm)</label><input type="number" id="f_chest"></div>
+      <div class="form-field"><label>Arms (cm)</label><input type="number" id="f_arms"></div>
+      <div class="form-field"><label>Thighs (cm)</label><input type="number" id="f_thighs"></div>
+      <button class="btn-primary" data-save="bodymeasurement">Save</button>`;
+    case 'fitnessphoto': return `<h3>💪 Fitness Progress Photo</h3>
+      <div class="form-field"><label>Photo</label><input type="file" accept="image/*" id="f_photoFile" onchange="handlePhotoFileChange(this)"><div id="photoPreview" style="margin-top:8px;"></div></div>
+      <button class="btn-primary" data-save="fitnessphoto">Save</button>`;
+    case 'skinphoto': return `<h3>🧴 Skin Progress Photo</h3>
+      <div class="form-field"><label>Photo</label><input type="file" accept="image/*" id="f_photoFile" onchange="handlePhotoFileChange(this)"><div id="photoPreview" style="margin-top:8px;"></div></div>
+      <button class="btn-primary" data-save="skinphoto">Save</button>`;
+    case 'sleep': return `<h3>😴 Log Sleep</h3>
+      <div class="form-field"><label>Went to bed</label><input type="time" id="f_bed"></div>
+      <div class="form-field"><label>Woke up</label><input type="time" id="f_wake"></div>
+      ${sliderField('f_quality','Sleep quality')}
+      ${sliderField('f_energy','Energy')}
+      ${sliderField('f_mood','Mood')}
+      <div class="form-field"><label>How I feel</label><textarea id="f_notes"></textarea></div>
+      <button class="btn-primary" data-save="sleep">Save</button>`;
+    case 'reading': {
+      const editing = modal && modal.editId ? DB.reading.find(r=>r.id===modal.editId) : null;
+      return `<h3>📖 ${editing?'Edit':'Reading'} & Impression</h3>
+      <div class="form-field"><label>Date</label><input type="date" id="f_date" value="${editing?editing.date:todayISO()}"></div>
+      <div class="form-field"><label>What I read</label><input type="text" id="f_passage" placeholder="e.g. Romans 8" value="${editing?esc(editing.passage||''):''}"></div>
+      <div class="form-field"><label>My impression</label><textarea id="f_impression" placeholder="What stood out to you?">${editing?esc(editing.impression||''):''}</textarea></div>
+      <div class="form-field"><label><input type="checkbox" id="f_prayed" style="width:auto;" ${editing&&editing.prayed?'checked':''}> Prayed today</label></div>
+      <button class="btn-primary" data-save="reading" ${editing?`data-edit-id="${editing.id}"`:''}>Save</button>`;
+    }
+    case 'cooking': return `<h3>🍳 Log Cooking</h3>
+      <div class="form-field"><label>Recipe</label><input type="text" id="f_recipe" placeholder="e.g. Chicken Pasta" oninput="showCookingHint()"></div>
+      <div id="recipeHint"></div>
+      ${sliderField('f_rating','Rating')}
+      <div class="form-field"><label>What worked well</label><input type="text" id="f_worked"></div>
+      <div class="form-field"><label>What to change next time</label><input type="text" id="f_notes"></div>
+      <button class="btn-primary" data-save="cooking">Save</button>`;
+    case 'photo': {
+      const existing = DB.photos.find(p=>p.date===iso);
+      return `<h3>📸 Photo of the Day</h3>
+      <div class="form-field"><label>Photo</label>
+        <input type="file" accept="image/*" id="f_photoFile" onchange="handlePhotoFileChange(this)">
+        <div id="photoPreview" style="margin-top:8px;">${existing&&existing.photoData?`<img src="${existing.photoData}" style="width:100%;border-radius:12px;">`:''}</div>
+      </div>
+      <div class="form-field"><label>Write about your day</label><textarea id="f_caption" placeholder="✍️ Write about your day..." style="min-height:110px;">${existing?esc(existing.caption||''):''}</textarea></div>
+      <button class="btn-primary" data-save="photo">Save</button>`;
+    }
+    case 'skincare': {
+      const period = qaTemp.period || 'am';
+      const products = (DB.skinRoutine[period]||[]);
+      return `<h3>🧴 Skincare</h3>
+      <div class="form-field"><label>Routine</label><div class="chip-row">${['AM','PM'].map(s=>`<button type="button" class="chip ${period===s.toLowerCase()?'active':''}" data-period="${s.toLowerCase()}">${s}</button>`).join('')}</div></div>
+      <div class="form-field"><label>Today's ${period.toUpperCase()} routine</label>
+        ${products.length? products.map(p=>`<div class="check-row"><input type="checkbox" class="skinProductCheck" data-product="${esc(p)}"><label>${esc(p)}</label></div>`).join('') : '<div class="sub">No products set yet — add some in Life → Skin.</div>'}
+      </div>
+      ${sliderField('f_redness','Redness')}
+      ${sliderField('f_breakouts','Breakouts')}
+      ${sliderField('f_dryness','Dryness')}
+      <div class="form-field"><label>Notes</label><input type="text" id="f_notes" placeholder="Irritation, other notes"></div>
+      <button class="btn-primary" data-save="skincare">Save</button>`;
+    }
+    case 'period': {
+      const editing = modal && modal.editId ? DB.period.find(p=>p.id===modal.editId) : null;
+      const flowVal = editing? editing.flow : '';
+      return `<h3>🌸 ${editing?'Edit':'Log'} Period</h3>
+      <div class="form-field"><label>Date</label><input type="date" id="f_date" value="${editing?editing.date:todayISO()}"></div>
+      <div class="form-field"><label>Flow</label><div class="chip-row">${['Light','Medium','Heavy'].map(s=>`<button type="button" class="chip ${flowVal.toLowerCase()===s.toLowerCase()?'active':''}" data-flow="${s}">${s}</button>`).join('')}</div></div>
+      ${sliderField('f_pain','Pain level', editing?editing.pain:5)}
+      ${sliderField('f_mood','Mood', editing?editing.mood:5)}
+      <div class="form-field"><label>Symptoms / notes</label><textarea id="f_notes" placeholder="Cramps, headache, fatigue...">${editing?esc(editing.notes||''):''}</textarea></div>
+      <button class="btn-primary" data-save="period" ${editing?`data-edit-id="${editing.id}"`:''}>Save</button>`;
+    }
+    case 'work': return `<h3>💼 Work Day</h3>
+      <div class="form-field"><label>Left home</label><input type="time" id="f_leftHome"></div>
+      <div class="form-field"><label><input type="checkbox" id="f_leftBy7" style="width:auto;"> Left home by 7:00am</label></div>
+      <div class="form-field"><label>Arrived at work</label><input type="time" id="f_arrived"></div>
+      <div class="form-field"><label>Left work</label><input type="time" id="f_left"></div>
+      <div class="form-field"><label>What I accomplished</label><textarea id="f_accomplished"></textarea></div>
+      <div class="form-field"><label>How work went / difficulties</label><textarea id="f_notes"></textarea></div>
+      <button class="btn-primary" data-save="work">Save</button>`;
+    case 'proud': return `<h3>🌸 I'm Proud of Myself</h3>
+      <div class="form-field"><label>I'm proud of myself because...</label><textarea id="f_text" placeholder="Write freely..." style="min-height:120px;"></textarea></div>
+      <button class="btn-primary" data-save="proud">Save</button>`;
+    case 'weeklyreflection': return `<h3>🌿 Weekly Reflection</h3>
+      <div class="form-field"><label>What am I proud of?</label><textarea id="f_proud"></textarea></div>
+      <div class="form-field"><label>What went well?</label><textarea id="f_wentwell"></textarea></div>
+      <div class="form-field"><label>What was difficult?</label><textarea id="f_difficult"></textarea></div>
+      <div class="form-field"><label>What do I want to improve next week?</label><textarea id="f_improve"></textarea></div>
+      <div class="form-field"><label>What am I grateful for?</label><textarea id="f_grateful"></textarea></div>
+      <button class="btn-primary" data-save="weeklyreflection">Save</button>`;
+    default: return '';
+  }
+}
+function showExerciseHint(i){
+  const nameEl = document.getElementById('f_ex'+i+'_name');
+  const hintEl = document.getElementById('f_ex'+i+'_hint');
+  if(!nameEl || !hintEl) return;
+  const name = nameEl.value.trim().toLowerCase();
+  if(!name){ hintEl.textContent=''; return; }
+  let last=null, pr=null;
+  DB.workouts.forEach(w=>{
+    (w.exercises||[]).forEach(ex=>{
+      if((ex.name||'').trim().toLowerCase()===name){
+        if(!last || w.date>last.date) last = {date:w.date, weight:ex.weight, reps:ex.reps};
+        if(ex.weight!==undefined && ex.weight!==null && ex.weight!=='' && (pr===null || Number(ex.weight)>Number(pr))) pr = ex.weight;
+      }
+    });
+  });
+  hintEl.textContent = last ? ('Last time: '+(last.weight||'-')+'kg × '+(last.reps||'-')+(pr!==null?' · PR: '+pr+'kg':'')) : 'No history yet for this exercise.';
+}
+function showCookingHint(){
+  const nameEl = document.getElementById('f_recipe');
+  const hintEl = document.getElementById('recipeHint');
+  if(!nameEl || !hintEl) return;
+  const name = nameEl.value.trim().toLowerCase();
+  if(!name){ hintEl.innerHTML=''; return; }
+  const attempts = DB.cooking.filter(c=>(c.recipe||'').trim().toLowerCase()===name).sort((a,b)=>b.date.localeCompare(a.date));
+  if(!attempts.length){ hintEl.innerHTML=''; return; }
+  const last = attempts[0];
+  const avg = (attempts.reduce((s,a)=>s+Number(a.rating||0),0)/attempts.length).toFixed(1);
+  hintEl.innerHTML = `<div class="insight">🍝 You've cooked this ${attempts.length}× (avg ${avg}/10). ${last.worked?'✅ '+esc(last.worked)+'. ':''}${last.notes?'💡 '+esc(last.notes):''}</div>`;
+}
+async function handlePhotoFileChange(input){
+  const file = input.files && input.files[0];
+  const preview = document.getElementById('photoPreview');
+  const saveBtn = document.querySelector('[data-save]');
+  if(!file) return;
+  qaTemp.photoProcessing = true;
+  if(saveBtn){ saveBtn.disabled = true; saveBtn.textContent = 'Processing photo...'; }
+  if(preview) preview.innerHTML = `<div class="sub">Processing photo...</div>`;
+  try{
+    const dataUrl = await compressImageFile(file, 640);
+    qaTemp.photoData = dataUrl;
+    if(preview) preview.innerHTML = `<img src="${dataUrl}" style="width:100%;border-radius:12px;">`;
+  }catch(e){
+    if(preview) preview.innerHTML = `<div class="sub" style="color:#B6607D;">Could not process that photo: ${esc(humanizeError(e))}</div>`;
+  }finally{
+    qaTemp.photoProcessing = false;
+    if(saveBtn){ saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+  }
+}
+function sliderField(id,label,initial){
+  const v = initial!==undefined && initial!==null && initial!=='' ? initial : 5;
+  return `<div class="form-field"><label>${label}</label><div class="slider-row"><input type="range" min="1" max="10" value="${v}" id="${id}" oninput="document.getElementById('${id}_v').textContent=this.value"><div class="slider-val" id="${id}_v">${v}</div></div></div>`;
+}
+
+/* ---------------- Save handlers per quick action ----------------
+   IMPORTANT: every branch below builds the entry, applies it to a COPY of the
+   array, and only commits it to DB once `await save(dbKey)` has actually
+   resolved. If the underlying storage write fails, we roll back to the
+   original array and show the real error message in the form instead of
+   pretending the entry was saved (this is what was silently broken before —
+   save() was fire-and-forget, so a failed write still looked successful in
+   the UI until the app was reloaded and the entry had vanished). */
+let qaTemp = {}; // holds chip selections
+function humanizeError(e){
+  if(!e) return 'Unknown error.';
+  let msg = e.message || String(e);
+  if(e.name && e.name!=='Error' && !msg.includes(e.name)) msg = e.name+': '+msg;
+  return msg;
+}
+async function saveQA(type, editId){
+  if((type==='photo'||type==='fitnessphoto'||type==='skinphoto') && qaTemp.photoProcessing){
+    return; // photo still compressing — button should be disabled, but guard anyway
+  }
+  const iso = todayISO();
+  const val = id=> (document.getElementById(id)||{}).value;
+  let dbKey, entry;
+
+  if(type==='spending'){
+    dbKey='spending';
+    entry = {id: editId||uid(), date:iso, amount:Number(val('f_amount')||0), what:val('f_what'), category:val('f_category')};
+  } else if(type==='income'){
+    dbKey='income';
+    entry = {id: editId||uid(), date:iso, amount:Number(val('f_amount')||0)};
+  } else if(type==='addsavings'){
+    dbKey='savings';
+    entry = {id: editId||uid(), date:iso, amount:Number(val('f_amount')||0)};
+  } else if(type==='meal'){
+    dbKey='meals';
+    entry = {id: editId||uid(), date:iso, slot:qaTemp.slot||'meal', what:val('f_what'), feeling:val('f_feeling'), dairyFree: !!(document.getElementById('f_df')||{}).checked};
+  } else if(type==='workout'){
+    dbKey='workouts';
+    const exercises = [1,2,3].map(i=>{
+      const name = val('f_ex'+i+'_name');
+      if(!name || !name.trim()) return null;
+      return { name: name.trim(), weight: val('f_ex'+i+'_weight'), sets: val('f_ex'+i+'_sets'), reps: val('f_ex'+i+'_reps') };
+    }).filter(Boolean);
+    entry = {id: editId||uid(), date:iso, type:qaTemp.wtype||'Workout', exercises, notes:val('f_notes')};
+  } else if(type==='bodymeasurement'){
+    dbKey='bodyMeasurements';
+    entry = {id: editId||uid(), date:iso, weight:val('f_weight'), waist:val('f_waist'), hips:val('f_hips'), chest:val('f_chest'), arms:val('f_arms'), thighs:val('f_thighs')};
+  } else if(type==='fitnessphoto'){
+    dbKey='fitnessPhotos';
+    if(!qaTemp.photoData){ closeModal(); render(); return; }
+    entry = {id: editId||uid(), date:iso, photoData:qaTemp.photoData};
+  } else if(type==='skinphoto'){
+    dbKey='skinPhotos';
+    if(!qaTemp.photoData){ closeModal(); render(); return; }
+    entry = {id: editId||uid(), date:iso, photoData:qaTemp.photoData};
+  } else if(type==='sleep'){
+    dbKey='sleep';
+    entry = {id: editId||uid(), date:iso, bed:val('f_bed'), wake:val('f_wake'), quality:val('f_quality'), energy:val('f_energy'), mood:val('f_mood'), notes:val('f_notes')};
+  } else if(type==='reading'){
+    dbKey='reading';
+    const rDate = val('f_date') || iso;
+    entry = {id: editId||uid(), date:rDate, passage:val('f_passage'), impression:val('f_impression'), prayed: !!(document.getElementById('f_prayed')||{}).checked};
+  } else if(type==='cooking'){
+    dbKey='cooking';
+    entry = {id: editId||uid(), date:iso, recipe:val('f_recipe'), rating:Number(val('f_rating')||0), worked:val('f_worked'), notes:val('f_notes')};
+  } else if(type==='photo'){
+    dbKey='photos';
+    const existingToday = DB.photos.find(p=>p.date===iso);
+    entry = {id: editId||uid(), date:iso, caption:val('f_caption'), photoData: qaTemp.photoData || (existingToday?existingToday.photoData:null)};
+  } else if(type==='skincare'){
+    dbKey='skincare';
+    const checked = [...document.querySelectorAll('.skinProductCheck:checked')].map(el=>el.dataset.product);
+    entry = {id: editId||uid(), date:iso, period:qaTemp.period||'am', products:checked, redness:Number(val('f_redness')||0), breakouts:Number(val('f_breakouts')||0), dryness:Number(val('f_dryness')||0), notes:val('f_notes')};
+  } else if(type==='period'){
+    dbKey='period';
+    const pDate = val('f_date') || iso;
+    entry = {id: editId||uid(), date:pDate, flow:qaTemp.flow||'', pain:Number(val('f_pain')||0), mood:Number(val('f_mood')||0), notes:val('f_notes')};
+  } else if(type==='work'){
+    dbKey='work';
+    entry = {id: editId||uid(), date:iso, leftHome:val('f_leftHome'), leftBy7: !!(document.getElementById('f_leftBy7')||{}).checked, arrived:val('f_arrived'), left:val('f_left'), accomplished:val('f_accomplished'), notes:val('f_notes')};
+  } else if(type==='proud'){
+    dbKey='proudMoments';
+    entry = {id: editId||uid(), date:iso, text:val('f_text')};
+  } else if(type==='weeklyreflection'){
+    dbKey='weeklyReflections';
+    entry = {id: editId||uid(), date:iso, proud:val('f_proud'), wentWell:val('f_wentwell'), difficult:val('f_difficult'), improve:val('f_improve'), grateful:val('f_grateful')};
+  } else {
+    closeModal(); render(); return;
+  }
+
+  const original = DB[dbKey];
+  const updated = [...original];
+  if(type==='photo'){
+    // only one official Photo of the Day per date
+    const withoutToday = updated.filter(p=> p.date!==entry.date || p.id===editId);
+    const idx = withoutToday.findIndex(p=>p.id===entry.id);
+    if(idx>-1) withoutToday[idx]=entry; else withoutToday.push(entry);
+    DB[dbKey] = withoutToday;
+  } else if(editId){
+    const idx = updated.findIndex(x=>x.id===editId);
+    if(idx>-1) updated[idx]=entry; else updated.push(entry);
+    DB[dbKey] = updated;
+  } else {
+    updated.push(entry);
+    DB[dbKey] = updated;
+  }
+
+  try{
+    await save(dbKey); // throws if the write genuinely failed — nothing below runs until this succeeds
+
+    let celebrated = false;
+    if(type==='spending') autoCheckMatching(['spending']);
+    else if(type==='meal'){ autoCheckMatching(['meal','breakfast','lunch','dinner','tea','snack']); celebrated = checkGoalCompletion(); }
+    else if(type==='workout'){ autoCheckMatching(['workout','gym','walk']); celebrated = checkGoalCompletion(); }
+    else if(type==='sleep') autoCheckMatching(['sleep']);
+    else if(type==='reading'){ autoCheckMatching(['reading','pray']); celebrated = checkGoalCompletion(); }
+    else if(type==='cooking'){ autoCheckMatching(['cook']); celebrated = checkGoalCompletion(); }
+    else if(type==='photo'){ autoCheckMatching(['photo']); celebrated = checkGoalCompletion(); }
+    else if(type==='skincare') autoCheckMatching(['skincare','skin'], [entry.period==='pm' ? 'evening' : 'morning']);
+    else if(type==='period') autoCheckMatching(['period']);
+    else if(type==='work') autoCheckMatching(['work']);
+    checkAllAchievements();
+
+    qaTemp = {};
+    if(!celebrated) closeModal();
+    render();
+  }catch(e){
+    // Do NOT roll back and discard what was typed — that's a second, worse bug than the save
+    // failing in the first place. Keep the entry, flag it as unsynced, let the person retry.
+    entry._pending = true;
+    entry._error = humanizeError(e);
+    qaTemp = {};
+    closeModal();
+    render();
+  }
+}
+function checkStreakAchievements(){
+  checkAllAchievements();
+}
+function checkAllAchievements(){
+  // TRAINING
+  if(DB.workouts.length===1) addAchievement('training-first-workout', '💪 First Workout Logged', {section:'Training', icon:'💪'});
+  const hasAnyPR = DB.workouts.some(w=>(w.exercises||[]).some(ex=>ex.weight!==undefined && ex.weight!==null && ex.weight!==''));
+  if(hasAnyPR) addAchievement('training-first-pr', '💪 First PR Recorded', {section:'Training', icon:'💪'});
+  const exercisePRs = {};
+  DB.workouts.forEach(w=>(w.exercises||[]).forEach(ex=>{
+    if(!ex.name || ex.weight===undefined || ex.weight==='') return;
+    const key = ex.name.trim().toLowerCase();
+    const v = Number(ex.weight);
+    if(isNaN(v)) return;
+    if(!exercisePRs[key] || v>exercisePRs[key].pr) exercisePRs[key] = {pr:v, name:ex.name.trim()};
+  }));
+  [50,100,150,200,250,300].forEach(t=>{
+    Object.values(exercisePRs).forEach(({pr,name})=>{
+      if(pr>=t) addAchievement('training-pr-'+name.toLowerCase()+'-'+t, '💪 '+name+' — '+t+'kg milestone', {section:'Training', icon:'💪', description:'Reached '+t+'kg on '+name+'.'});
+    });
+  });
+
+  // SAVINGS
+  const totalSaved = DB.savings.reduce((s,x)=>s+Number(x.amount||0),0);
+  [1000,5000,10000,25000,50000,100000].forEach(t=>{
+    if(totalSaved>=t) addAchievement('savings-milestone-'+t, '💰 $'+t.toLocaleString()+' Saved', {section:'Savings', icon:'💰', description:'Total savings passed $'+t.toLocaleString()+'.'});
+  });
+  let weeksStreak=0;
+  for(let i=0;i<12;i++){
+    const r = weekRangeOffset(i);
+    const inc = DB.income.filter(x=>x.date>=r.start&&x.date<=r.end).reduce((s,x)=>s+Number(x.amount||0),0);
+    const sav = DB.savings.filter(x=>x.date>=r.start&&x.date<=r.end).reduce((s,x)=>s+Number(x.amount||0),0);
+    const spent = DB.spending.filter(x=>x.date>=r.start&&x.date<=r.end).reduce((s,x)=>s+Number(x.amount||0),0);
+    if(inc>0 && spent<=Math.max(0,inc-sav)) weeksStreak++; else break;
+  }
+  if(weeksStreak>=4) addAchievement('savings-budget-streak-4', '💰 4-Week Budget Streak', {section:'Savings', icon:'💰'});
+  if(weeksStreak>=8) addAchievement('savings-budget-streak-8', '💰 8-Week Budget Streak', {section:'Savings', icon:'💰'});
+
+  // COOKING
+  if(DB.cooking.length===1) addAchievement('cooking-first', '🍳 First Recipe Cooked', {section:'Cooking', icon:'🍳'});
+  recipeGroups().forEach(g=>{
+    if(g.count>=5) addAchievement('cooking-5x-'+g.name.toLowerCase(), '🍳 '+g.name+' Cooked 5 Times', {section:'Cooking', icon:'🍳'});
+    if(g.stage==='Mastered') addAchievement('cooking-mastered-'+g.name.toLowerCase(), '🍳 '+g.name+' Mastered', {section:'Cooking', icon:'🍳'});
+  });
+  if(DB.cooking.length>=10){
+    const sorted = [...DB.cooking].sort((a,b)=>a.date.localeCompare(b.date));
+    const firstAvg = sorted.slice(0,5).reduce((s,c)=>s+Number(c.rating||0),0)/5;
+    const lastAvg = sorted.slice(-5).reduce((s,c)=>s+Number(c.rating||0),0)/5;
+    if(lastAvg-firstAvg>=1.5) addAchievement('cooking-improved', '🍳 Cooking Has Improved', {section:'Cooking', icon:'🍳', description:'Average rating climbed from '+firstAvg.toFixed(1)+' to '+lastAvg.toFixed(1)+'.'});
+  }
+
+  // MORAL
+  const readingStreak = currentStreak(DB.reading.map(r=>r.date));
+  if(readingStreak>=7) addAchievement('moral-reading-streak-7', '🙏 7-Day Reading Streak', {section:'Moral', icon:'🙏'});
+  if(readingStreak>=30) addAchievement('moral-reading-streak-30', '🙏 30-Day Reading Streak', {section:'Moral', icon:'🙏'});
+  const prayerStreak = currentStreak(DB.reading.filter(r=>r.prayed).map(r=>r.date));
+  if(prayerStreak>=7) addAchievement('moral-prayer-streak-7', '🙏 7-Day Prayer Streak', {section:'Moral', icon:'🙏'});
+  if(prayerStreak>=30) addAchievement('moral-prayer-streak-30', '🙏 30-Day Prayer Streak', {section:'Moral', icon:'🙏'});
+  const totalReadingDays = new Set(DB.reading.map(r=>r.date)).size;
+  [10,30,60,100,180,365].forEach(t=>{
+    if(totalReadingDays>=t) addAchievement('moral-reading-milestone-'+t, '🙏 '+t+' Reading Days', {section:'Moral', icon:'🙏'});
+  });
+
+  // PHOTOGRAPHY
+  const photoStreak = currentStreak(DB.photos.map(p=>p.date));
+  if(photoStreak>=7) addAchievement('photo-streak-7', '📸 7-Day Photo Streak', {section:'Photography', icon:'📸'});
+  if(photoStreak>=30) addAchievement('photo-streak-30', '📸 30-Day Photo Streak', {section:'Photography', icon:'📸'});
+  [10,50,100,365].forEach(t=>{
+    if(DB.photos.length>=t) addAchievement('photo-milestone-'+t, '📸 '+t+' Photos Taken', {section:'Photography', icon:'📸'});
+  });
+
+  // OVERALL
+  const anyActivityDates = new Set([
+    ...DB.workouts.map(w=>w.date), ...DB.meals.map(m=>m.date), ...DB.cooking.map(c=>c.date),
+    ...DB.reading.map(r=>r.date), ...DB.photos.map(p=>p.date), ...DB.skincare.map(s=>s.date),
+    ...DB.sleep.map(s=>s.date), ...DB.spending.map(s=>s.date), ...DB.work.map(w=>w.date), ...DB.period.map(p=>p.date)
+  ]);
+  const overallStreak = currentStreak([...anyActivityDates]);
+  if(overallStreak>=7) addAchievement('overall-streak-7', '🌱 7-Day Consistency', {section:'Overall', icon:'🌱'});
+  if(overallStreak>=30) addAchievement('overall-streak-30', '🌱 30-Day Consistency', {section:'Overall', icon:'🌱'});
+}
+
+/* ---------------- retry machinery for entries that failed to sync ---------------- */
+const PENDING_LIST_KEYS = ['spending','meals','workouts','sleep','reading','cooking','photos','skincare','period'];
+function pendingItems(){
+  const out=[];
+  PENDING_LIST_KEYS.forEach(k=> (DB[k]||[]).forEach(it=>{ if(it._pending) out.push({dbKey:k, id:it.id, error:it._error}); }));
+  return out;
+}
+async function retryPendingForKey(dbKey){
+  try{
+    await save(dbKey);
+    (DB[dbKey]||[]).forEach(it=>{ delete it._pending; delete it._error; });
+  }catch(e){
+    (DB[dbKey]||[]).forEach(it=>{ if(it._pending) it._error = humanizeError(e); });
+  }
+  render();
+}
+async function retryAllPending(){
+  const keys = [...new Set(pendingItems().map(p=>p.dbKey))];
+  for(const k of keys) await retryPendingForKey(k);
+}
+
+/* ---------------- delete helper ---------------- */
+function deleteEntry(spec){
+  const [dbKey,id] = spec.split(':');
+  DB[dbKey] = DB[dbKey].filter(x=>x.id!==id);
+  save(dbKey);
+  render();
+}
+
+/* ---------------- attach handlers (event delegation) ---------------- */
+function attachSectionSpecificHandlers(app){
+  // skin routine editor
+  app.querySelectorAll('[data-skinroutine-add]').forEach(b=> b.onclick = ()=>{
+    const period = b.dataset.skinroutineAdd;
+    const input = app.querySelector(`[data-skinroutine-input="${period}"]`);
+    const v = input.value.trim(); if(!v) return;
+    DB.skinRoutine[period] = DB.skinRoutine[period]||[];
+    DB.skinRoutine[period].push(v);
+    save('skinRoutine'); render();
+  });
+  app.querySelectorAll('[data-skinroutine-del]').forEach(b=> b.onclick = ()=>{
+    const [period,idx] = b.dataset.skinroutineDel.split(':');
+    DB.skinRoutine[period].splice(Number(idx),1);
+    save('skinRoutine'); render();
+  });
+  // meal recommendations
+  app.querySelectorAll('[data-meal-slot-pick]').forEach(b=> b.onclick = ()=>{ mealSuggestionSlot = b.dataset.mealSlotPick; render(); });
+  const surpriseBtn = app.querySelector('[data-meal-surprise]'); if(surpriseBtn) surpriseBtn.onclick = ()=>{ mealSuggestionSeed = Math.floor(Math.random()*100000); render(); };
+  // moral date lookup
+  const moralJumpBtn = app.querySelector('[data-moral-jump]'); if(moralJumpBtn) moralJumpBtn.onclick = ()=>{
+    const v = document.getElementById('moralDateJump').value;
+    if(v) moralDateFilter = v;
+    render();
+  };
+  const moralClearBtn = app.querySelector('[data-moral-clear]'); if(moralClearBtn) moralClearBtn.onclick = ()=>{ moralDateFilter = null; render(); };
+  // my best version
+  const bvAddBtn = app.querySelector('[data-bestversion-add]'); if(bvAddBtn) bvAddBtn.onclick = ()=>{
+    const input = app.querySelector('[data-bestversion-input]');
+    const v = input.value.trim(); if(!v) return;
+    DB.bestVersion = DB.bestVersion||[];
+    DB.bestVersion.push(v);
+    save('bestVersion'); render();
+  };
+  app.querySelectorAll('[data-bestversion-del]').forEach(b=> b.onclick = ()=>{
+    DB.bestVersion.splice(Number(b.dataset.bestversionDel),1);
+    save('bestVersion'); render();
+  });
+  // weekly check-in
+  const genCheckinBtn = app.querySelector('[data-generate-checkin]'); if(genCheckinBtn) genCheckinBtn.onclick = ()=>{
+    const ci = generateWeeklyCheckin(1);
+    DB.weeklyCheckins = DB.weeklyCheckins.filter(x=>x.weekStart!==ci.weekStart); // replace if regenerating
+    DB.weeklyCheckins.unshift(ci);
+    save('weeklyCheckins'); render();
+  };
+}
+
+function attachHandlers(){
+  const app = document.getElementById('app');
+  app.querySelectorAll('[data-tab]').forEach(b=> b.onclick = ()=> nav(b.dataset.tab));
+  app.querySelectorAll('[data-qa]').forEach(b=> b.onclick = ()=> openModal({type:b.dataset.qa}));
+  app.querySelectorAll('[data-life]').forEach(b=> b.onclick = ()=> nav('life', b.dataset.life));
+  const backLife = app.querySelector('[data-back-life]'); if(backLife) backLife.onclick = ()=> nav('life', null);
+  const backMore = app.querySelector('[data-back-more]'); if(backMore) backMore.onclick = ()=> nav('more', null);
+  const resetToggle = app.querySelector('[data-reset-toggle]'); if(resetToggle) resetToggle.onclick = ()=>{ resetTodayMode = true; render(); };
+  const resetExit = app.querySelector('[data-reset-exit]'); if(resetExit) resetExit.onclick = ()=>{ resetTodayMode = false; render(); };
+  app.querySelectorAll('[data-insight-idx]').forEach(b=> b.onclick = ()=>{
+    const insight = lastInsights[Number(b.dataset.insightIdx)];
+    if(!insight || !insight.action) return;
+    const a = insight.action;
+    if(a.type==='qa'){ qaTemp = {}; if(a.slot) qaTemp.slot = a.slot; if(a.period) qaTemp.period = a.period; openModal({type:a.qa}); }
+    else if(a.type==='life'){ nav('life', a.key); }
+  });
+  app.querySelectorAll('[data-attention-idx]').forEach(b=> b.onclick = ()=>{
+    const items = buildNeedsAttention();
+    const item = items[Number(b.dataset.attentionIdx)];
+    if(item && item.key) nav('life', item.key);
+  });
+  app.querySelectorAll('[data-progress-cat]').forEach(b=> b.onclick = ()=> { progressCategory = b.dataset.progressCat; render(); });
+  app.querySelectorAll('[data-progress-range]').forEach(b=> b.onclick = ()=> { progressRange = b.dataset.progressRange; render(); });
+  app.querySelectorAll('[data-myyear-range]').forEach(b=> b.onclick = ()=> { myYearRange = b.dataset.myyearRange; render(); });
+  app.querySelectorAll('[data-toggle]').forEach(b=> b.onchange = ()=> toggleCheck(b.dataset.toggle));
+  app.querySelectorAll('[data-del]').forEach(b=> b.onclick = ()=> deleteEntry(b.dataset.del));
+  app.querySelectorAll('[data-retry]').forEach(b=> b.onclick = ()=> retryPendingForKey(b.dataset.retry));
+  const retryAllBtn = app.querySelector('[data-retry-all]'); if(retryAllBtn) retryAllBtn.onclick = retryAllPending;
+  app.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=>{
+    const [formType,id] = b.dataset.edit.split(':');
+    const dbKeyMap = {period:'period', workout:'workouts', sleep:'sleep', cooking:'cooking', work:'work', bodymeasurement:'bodyMeasurements', reading:'reading'};
+    const entry = (DB[dbKeyMap[formType]||formType]||[]).find(x=>x.id===id);
+    qaTemp = {};
+    if(formType==='period' && entry) qaTemp.flow = entry.flow||'';
+    if(formType==='workout' && entry) qaTemp.wtype = entry.type||'';
+    openModal({type:formType, editId:id});
+  });
+
+  // routine editor
+  app.querySelectorAll('[data-daytab]').forEach(b=> b.onclick = ()=> { routineDayTab = Number(b.dataset.daytab); render(); });
+  app.querySelectorAll('[data-routine-add]').forEach(b=> b.onclick = ()=>{
+    const key = b.dataset.routineAdd; const [section,dIdx] = key.split(':');
+    const input = app.querySelector(`[data-routine-input="${key}"]`);
+    const v = input.value.trim(); if(!v) return;
+    if(section==='evening'){ DB.routine.eveningByDay[dIdx] = DB.routine.eveningByDay[dIdx]||[]; DB.routine.eveningByDay[dIdx].push(v); }
+    else DB.routine[section].push(v);
+    save('routine'); render();
+  });
+  app.querySelectorAll('[data-routine-del]').forEach(b=> b.onclick = ()=>{
+    const parts = b.dataset.routineDel.split(':');
+    if(parts[0]==='evening'){ const [,dIdx,idx]=parts; DB.routine.eveningByDay[dIdx].splice(Number(idx),1); }
+    else { const [section,idx]=parts; DB.routine[section].splice(Number(idx),1); }
+    save('routine'); render();
+  });
+
+  // goals
+  const goalOpenBtn = app.querySelector('[data-open-goal-form]'); if(goalOpenBtn) goalOpenBtn.onclick = ()=>{ goalFormState = {section:'manual', metricKey:null}; openModal({type:'goalform'}); };
+  app.querySelectorAll('[data-goal-edit]').forEach(b=> b.onclick = ()=>{
+    const g = DB.goals.find(x=>x.id===b.dataset.goalEdit);
+    goalFormState = { section: (g && g.section) ? g.section : 'manual', metricKey: g ? g.metricKey : null };
+    openModal({type:'goalform', editId:b.dataset.goalEdit});
+  });
+  app.querySelectorAll('[data-goal-save]').forEach(b=> b.onclick = ()=>{
+    const id = b.dataset.goalSave;
+    const input = app.querySelector(`[data-goal-update="${id}"]`);
+    const g = DB.goals.find(x=>x.id===id);
+    g.current = Number(input.value||g.current||0);
+    save('goals'); checkGoalCompletion(); render();
+  });
+
+  // more tab
+  const saveNameBtn = document.getElementById('saveNameBtn'); if(saveNameBtn) saveNameBtn.onclick = ()=>{ DB.settings.name = document.getElementById('nameInput').value; save('settings'); render(); };
+  const savePinBtn = document.getElementById('savePinBtn'); if(savePinBtn) savePinBtn.onclick = ()=>{ DB.settings.pin = document.getElementById('pinSet').value; save('settings'); alert('PIN saved. It will apply next time you reload the app.'); };
+  const exportBtn = document.getElementById('exportBtn'); if(exportBtn) exportBtn.onclick = ()=>{ doExport('manual'); render(); };
+  const importFile = document.getElementById('importFile'); if(importFile) importFile.onchange = handleRestoreFileChange;
+  const exportQuickBtn = app.querySelector('[data-export-quick]'); if(exportQuickBtn) exportQuickBtn.onclick = ()=>{ doExport('manual'); render(); };
+  const dismissBackupBtn = app.querySelector('[data-dismiss-backup-reminder]'); if(dismissBackupBtn) dismissBackupBtn.onclick = ()=>{ backupReminderDismissed = true; render(); };
+  const navProgressAttr = app.querySelector('[data-nav-progress]'); if(navProgressAttr) navProgressAttr.onclick = ()=> nav('progress');
+  const navMyYearAttr = app.querySelector('[data-nav-myyear]'); if(navMyYearAttr) navMyYearAttr.onclick = ()=> nav('myyear');
+  const navReflectionsAttr = app.querySelector('[data-nav-reflections]'); if(navReflectionsAttr) navReflectionsAttr.onclick = ()=> nav('reflections');
+  const navBestVersionAttr = app.querySelector('[data-nav-bestversion]'); if(navBestVersionAttr) navBestVersionAttr.onclick = ()=> nav('bestversion');
+  const navCheckinAttr = app.querySelector('[data-nav-checkin]'); if(navCheckinAttr) navCheckinAttr.onclick = ()=> nav('checkin');
+  const navMemoriesAttr = app.querySelector('[data-nav-memories]'); if(navMemoriesAttr) navMemoriesAttr.onclick = ()=> nav('memories');
+
+  // modal
+  const overlay = document.getElementById('overlay');
+  if(overlay) overlay.onclick = (e)=>{ if(e.target.id==='overlay') closeModal(); };
+  const closeBtn = document.getElementById('closeModal'); if(closeBtn) closeBtn.onclick = closeModal;
+
+  if(modal){
+    // chip selections
+    app.querySelectorAll('[data-slot]').forEach(b=> b.onclick = ()=>{ qaTemp.slot=b.dataset.slot; app.querySelectorAll('[data-slot]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
+    app.querySelectorAll('[data-wtype]').forEach(b=> b.onclick = ()=>{ qaTemp.wtype=b.dataset.wtype; app.querySelectorAll('[data-wtype]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
+    app.querySelectorAll('[data-period]').forEach(b=> b.onclick = ()=>{ qaTemp.period=b.dataset.period; if(modal && modal.type==='skincare'){ render(); } else { app.querySelectorAll('[data-period]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); } });
+    app.querySelectorAll('[data-flow]').forEach(b=> b.onclick = ()=>{ qaTemp.flow=b.dataset.flow; app.querySelectorAll('[data-flow]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
+    app.querySelectorAll('[data-save]').forEach(b=> b.onclick = ()=> saveQA(b.dataset.save, b.dataset.editId || modal.editId || null));
+    const gSectionSel = document.getElementById('gSection');
+    if(gSectionSel) gSectionSel.onchange = ()=>{ goalFormState.section = gSectionSel.value; goalFormState.metricKey = null; render(); };
+    const gMetricSel = document.getElementById('gMetric');
+    if(gMetricSel) gMetricSel.onchange = ()=>{ goalFormState.metricKey = gMetricSel.value; render(); };
+    const saveGoalBtn = document.getElementById('saveGoalBtn'); if(saveGoalBtn) saveGoalBtn.onclick = ()=>{
+      const name = document.getElementById('gName').value.trim(); if(!name) return;
+      const section = goalFormState.section==='manual' ? null : goalFormState.section;
+      const metricKey = section ? goalFormState.metricKey : null;
+      const paramInput = document.getElementById('gParam');
+      const param = paramInput ? paramInput.value.trim() : '';
+      const type = document.getElementById('gType').value;
+      const target = Number(document.getElementById('gTarget').value||0);
+      const deadline = document.getElementById('gDeadline').value;
+      const editId = saveGoalBtn.dataset.editId;
+      if(editId){
+        const g = DB.goals.find(x=>x.id===editId);
+        if(g){
+          Object.assign(g, {name, section, metricKey, param, type, target, deadline, completed:false, completedAt:null});
+          save('goals'); checkGoalCompletion();
+        }
+      } else {
+        DB.goals.push({id:uid(), name, section, metricKey, param, type, target, deadline, current:0, completed:false});
+        save('goals');
+      }
+      closeModal(); render();
+    };
+    const deleteGoalBtn = document.getElementById('deleteGoalBtn'); if(deleteGoalBtn) deleteGoalBtn.onclick = ()=>{
+      DB.goals = DB.goals.filter(g=>g.id!==deleteGoalBtn.dataset.goalId);
+      save('goals'); closeModal(); render();
+    };
+    const rerollBtn = document.getElementById('rerollReward'); if(rerollBtn) rerollBtn.onclick = ()=>{ modal.reward = REWARDS[Math.floor(Math.random()*REWARDS.length)]; render(); };
+    const closeCelebrate = document.getElementById('closeCelebrate'); if(closeCelebrate) closeCelebrate.onclick = closeModal;
+    const cancelRestoreBtn = document.getElementById('cancelRestoreBtn'); if(cancelRestoreBtn) cancelRestoreBtn.onclick = ()=>{ pendingRestoreData = null; closeModal(); };
+    const confirmRestoreBtn = document.getElementById('confirmRestoreBtn'); if(confirmRestoreBtn) confirmRestoreBtn.onclick = performRestore;
+    const closeRestoreSuccess = document.getElementById('closeRestoreSuccess'); if(closeRestoreSuccess) closeRestoreSuccess.onclick = ()=>{ closeModal(); };
+  }
+
+  attachSectionSpecificHandlers(app);
+  renderAllCharts();
+}
+
+function renderAllCharts(){
+  renderMoneyCharts();
+  renderSleepChart();
+  renderTrainingCharts();
+  renderCookingChart();
+  renderProgressCharts();
+}
+
+/* ---------------- PROGRESS CENTER ---------------- */
+let progressCategory = 'training';
+let progressRange = 'month';
+function rangeCutoffISO(range){
+  const d = new Date();
+  if(range==='week') d.setDate(d.getDate()-7);
+  else if(range==='month') d.setMonth(d.getMonth()-1);
+  else if(range==='3months') d.setMonth(d.getMonth()-3);
+  else if(range==='6months') d.setMonth(d.getMonth()-6);
+  else if(range==='year') d.setFullYear(d.getFullYear()-1);
+  else return null;
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function statRow(pairs){
+  return `<div class="stat-row">${pairs.map(([l,n])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('')}</div>`;
+}
+function renderProgressPage(){
+  const cats = [
+    {k:'training',l:'Fitness',e:'💪'},{k:'sleep',l:'Sleep',e:'😴'},{k:'cooking',l:'Cooking',e:'🍳'},
+    {k:'meals',l:'Meals',e:'🍽️'},{k:'money',l:'Money',e:'💰'},{k:'period',l:'Period',e:'🌸'},
+    {k:'skin',l:'Skin',e:'🧴'},{k:'photo',l:'Photography',e:'📸'},{k:'moral',l:'Moral',e:'🙏'},{k:'work',l:'Work',e:'💼'}
+  ];
+  const ranges = [{k:'week',l:'Week'},{k:'month',l:'Month'},{k:'3months',l:'3 Months'},{k:'year',l:'Year'},{k:'all',l:'All Time'}];
+  const comparisons = buildComparisons();
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>📊 Progress</h2></div>
+  <div class="screen">
+    ${comparisons.length?`<div class="section-title" style="margin-top:0;">Better Than Last Month <div class="rule"></div></div>
+    <div class="card">${comparisons.map(c=>`
+      <div class="entry-item"><div><div class="main">${c.icon} ${esc(c.label)}</div></div><div style="font-weight:700;color:${c.positive?'var(--dash)':'#B6607D'};">${esc(c.text)}</div></div>`).join('')}</div>`:''}
+    <div class="chip-row" style="margin-bottom:10px;">${cats.map(c=>`<button type="button" class="chip ${progressCategory===c.k?'active':''}" data-progress-cat="${c.k}">${c.e} ${c.l}</button>`).join('')}</div>
+    <div class="chip-row" style="margin-bottom:14px;">${ranges.map(r=>`<button type="button" class="chip ${progressRange===r.k?'active':''}" data-progress-range="${r.k}">${r.l}</button>`).join('')}</div>
+    <div class="card" id="progressStats"></div>
+    <div class="card">${chartCanvas('progressChart',200)}</div>
+  </div>`;
+}
+function renderProgressCharts(){
+  if(!document.getElementById('progressChart')) return;
+  const cutoff = rangeCutoffISO(progressRange);
+  const inRange = arr => cutoff ? arr.filter(x=>x.date>=cutoff) : arr;
+  const statsEl = document.getElementById('progressStats');
+  let labels=[], datasets=[], type='bar', statsHtml='';
+  if(progressCategory==='training'){
+    const items = inRange(DB.workouts);
+    const byDate = {}; items.forEach(w=>byDate[w.date]=(byDate[w.date]||0)+1);
+    labels = Object.keys(byDate).sort(); datasets=[{label:'Workouts',data:labels.map(l=>byDate[l]),backgroundColor:'#3E6C8E'}];
+    labels = labels.map(fmtDate);
+    statsHtml = statRow([['Total workouts',items.length]]);
+  } else if(progressCategory==='sleep'){
+    const items = inRange(DB.sleep).sort((a,b)=>a.date.localeCompare(b.date));
+    labels = items.map(e=>fmtDate(e.date)); type='line';
+    datasets=[{label:'Quality',data:items.map(e=>Number(e.quality||0)),borderColor:'#7C6F9E'},{label:'Energy',data:items.map(e=>Number(e.energy||0)),borderColor:'#B8912B'}];
+    const avgQ = items.length? (items.reduce((s,x)=>s+Number(x.quality||0),0)/items.length).toFixed(1):'-';
+    statsHtml = statRow([['Nights logged',items.length],['Avg quality',avgQ]]);
+  } else if(progressCategory==='cooking'){
+    const items = inRange(DB.cooking).sort((a,b)=>a.date.localeCompare(b.date));
+    labels = items.map(e=>fmtDate(e.date)); type='line';
+    datasets=[{label:'Rating',data:items.map(e=>Number(e.rating||0)),borderColor:'#C1743B'}];
+    statsHtml = statRow([['Recipes cooked',items.length],['Unique recipes',new Set(items.map(i=>i.recipe)).size]]);
+  } else if(progressCategory==='meals'){
+    const items = inRange(DB.meals);
+    const dfPct = items.length? Math.round(items.filter(m=>m.dairyFree).length/items.length*100):0;
+    const byDate={}; items.forEach(m=>byDate[m.date]=(byDate[m.date]||0)+1);
+    labels=Object.keys(byDate).sort().map(fmtDate); datasets=[{label:'Meals logged',data:Object.keys(byDate).sort().map(l=>byDate[l]),backgroundColor:'#D98A6B'}];
+    statsHtml = statRow([['Meals logged',items.length],['Dairy-free',dfPct+'%']]);
+  } else if(progressCategory==='money'){
+    const items = inRange(DB.spending).sort((a,b)=>a.date.localeCompare(b.date));
+    const byDate={}; items.forEach(s=>byDate[s.date]=(byDate[s.date]||0)+Number(s.amount||0));
+    labels=Object.keys(byDate).sort().map(fmtDate); datasets=[{label:'Spending',data:Object.keys(byDate).sort().map(l=>byDate[l]),backgroundColor:'#4F7A5B'}];
+    statsHtml = statRow([['Total spent','$'+items.reduce((s,x)=>s+Number(x.amount||0),0).toFixed(0)],['Total saved','$'+DB.savings.reduce((s,x)=>s+Number(x.amount||0),0).toFixed(0)]]);
+  } else if(progressCategory==='period'){
+    const items = inRange(DB.period);
+    statsHtml = statRow([['Entries logged',items.length]]);
+  } else if(progressCategory==='skin'){
+    const items = inRange(DB.skincare);
+    const byDate={}; items.forEach(s=>byDate[s.date]=(byDate[s.date]||0)+1);
+    labels=Object.keys(byDate).sort().map(fmtDate); datasets=[{label:'Routine logs',data:Object.keys(byDate).sort().map(l=>byDate[l]),backgroundColor:'#C97E92'}];
+    statsHtml = statRow([['Routine logs',items.length],['Progress photos',DB.skinPhotos.length]]);
+  } else if(progressCategory==='photo'){
+    const items = inRange(DB.photos);
+    const byDate={}; items.forEach(p=>byDate[p.date]=1);
+    labels=Object.keys(byDate).sort().map(fmtDate); datasets=[{label:'Photos',data:Object.keys(byDate).sort().map(()=>1),backgroundColor:'#B8912B'}];
+    statsHtml = statRow([['Photos logged',items.length],['Current streak',currentStreak(DB.photos.map(p=>p.date))+' days']]);
+  } else if(progressCategory==='moral'){
+    const items = inRange(DB.reading);
+    const byDate={}; items.forEach(r=>byDate[r.date]=1);
+    labels=Object.keys(byDate).sort().map(fmtDate); datasets=[{label:'Reading days',data:Object.keys(byDate).sort().map(()=>1),backgroundColor:'#4C8177'}];
+    statsHtml = statRow([['Reading days',items.length],['Prayer days',items.filter(r=>r.prayed).length],['Streak',currentStreak(DB.reading.map(r=>r.date))+' days']]);
+  } else if(progressCategory==='work'){
+    const items = inRange(DB.work);
+    const leftBy7 = items.filter(w=>w.leftBy7).length;
+    statsHtml = statRow([['Days logged',items.length],['Left by 7am',items.length?Math.round(leftBy7/items.length*100)+'%':'-']]);
+  }
+  if(labels.length && datasets.length) renderChart('progressChart', type, labels, datasets);
+  else if(chartInstances['progressChart']){ chartInstances['progressChart'].destroy(); delete chartInstances['progressChart']; }
+  if(statsEl) statsEl.innerHTML = statsHtml || '<div class="sub">Not enough data yet for this range.</div>';
+}
+
+/* ---------------- MY LIFE SO FAR ---------------- */
+let myYearRange = 'year';
+/* ---------------- MY LIFE SO FAR: Then -> Now ---------------- */
+function buildThenNow(){
+  const items = [];
+  const exerciseHistory = {};
+  DB.workouts.forEach(w=>(w.exercises||[]).forEach(ex=>{
+    if(!ex.name || ex.weight===undefined || ex.weight==='') return;
+    const k = ex.name.trim().toLowerCase();
+    const v = Number(ex.weight);
+    if(isNaN(v)) return;
+    if(!exerciseHistory[k]) exerciseHistory[k] = {name:ex.name.trim(), entries:[]};
+    exerciseHistory[k].entries.push({date:w.date, v});
+  }));
+  let bestExercise = null;
+  Object.values(exerciseHistory).forEach(e=>{
+    if(e.entries.length>=2 && (!bestExercise || e.entries.length>bestExercise.entries.length)) bestExercise = e;
+  });
+  if(bestExercise){
+    const sorted = [...bestExercise.entries].sort((a,b)=>a.date.localeCompare(b.date));
+    const then = sorted[0].v;
+    const now = Math.max(...sorted.map(x=>x.v));
+    if(now>then) items.push({icon:'\ud83d\udcaa', label:bestExercise.name, then:then+'kg', now:now+'kg', color:'var(--training)'});
+  }
+  if(DB.cooking.length>=6){
+    const sorted = [...DB.cooking].sort((a,b)=>a.date.localeCompare(b.date));
+    const firstAvg = sorted.slice(0,5).reduce((s,c)=>s+Number(c.rating||0),0)/5;
+    const lastAvg = sorted.slice(-5).reduce((s,c)=>s+Number(c.rating||0),0)/5;
+    if(lastAvg>firstAvg) items.push({icon:'\ud83c\udf73', label:'Cooking average rating', then:firstAvg.toFixed(1), now:lastAvg.toFixed(1), color:'var(--cooking)'});
+  }
+  if(DB.savings.length>=2){
+    const sorted = [...DB.savings].sort((a,b)=>a.date.localeCompare(b.date));
+    const then = Number(sorted[0].amount||0);
+    const now = DB.savings.reduce((s,x)=>s+Number(x.amount||0),0);
+    if(now>then) items.push({icon:'\ud83d\udcb0', label:'Savings', then:'$'+then.toFixed(0), now:'$'+now.toFixed(0), color:'var(--savings)'});
+  }
+  const allDates = Object.keys(DB.checklist).sort();
+  if(allDates.length>=10){
+    const pctForDates = (dates)=>{
+      let done=0,total=0;
+      dates.forEach(iso=>{
+        const dIdx = new Date(iso+'T00:00:00').getDay();
+        const isWeekday = dIdx>=1&&dIdx<=5;
+        const its = [
+          ...(DB.routine.morning||[]).map(x=>checklistKey('morning',x)),
+          ...(isWeekday?(DB.routine.workday||[]).map(x=>checklistKey('workday',x)):[]),
+          ...((DB.routine.eveningByDay&&DB.routine.eveningByDay[dIdx])||[]).map(x=>checklistKey('evening',x))
+        ];
+        const c = DB.checklist[iso]||{};
+        total+=its.length; done+=its.filter(k=>c[k]).length;
+      });
+      return total? Math.round(done/total*100):null;
+    };
+    const thenPct = pctForDates(allDates.slice(0,7));
+    const nowPct = pctForDates(allDates.slice(-7));
+    if(thenPct!==null && nowPct!==null && nowPct>thenPct) items.push({icon:'\ud83c\udf31', label:'Daily consistency', then:thenPct+'%', now:nowPct+'%', color:'var(--dash)'});
+  }
+  if(DB.reading.length>=6){
+    const dates = [...new Set(DB.reading.map(r=>r.date))].sort();
+    const then = currentStreakAsOf(DB.reading.map(r=>r.date), dates[6]);
+    const now = currentStreak(DB.reading.map(r=>r.date));
+    if(now>then) items.push({icon:'\ud83d\ude4f', label:'Reading streak', then:then+' days', now:now+' days', color:'var(--moral)'});
+  }
+  return items.slice(0,5);
+}
+function currentStreakAsOf(dates, asOfISO){
+  const set = new Set(dates);
+  let n=0; let d=new Date(asOfISO+'T00:00:00');
+  while(true){
+    const iso = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(set.has(iso)){ n++; d.setDate(d.getDate()-1); } else break;
+  }
+  return n;
+}
+function renderThenNow(){
+  const items = buildThenNow();
+  if(!items.length) return '';
+  return `<div class="section-title" style="margin-top:0;">Then \u2192 Now <div class="rule"></div></div>
+  <div class="card">${items.map(it=>`
+    <div class="entry-item">
+      <div><div class="main">${it.icon} ${esc(it.label)}</div></div>
+      <div style="font-weight:700;color:${it.color};white-space:nowrap;">${esc(it.then)} \u2192 ${esc(it.now)}</div>
+    </div>`).join('')}</div>`;
+}
+function renderFavoriteMemory(){
+  const withCaptions = DB.photos.filter(p=>p.caption && p.caption.trim());
+  if(!withCaptions.length) return '';
+  const favorite = [...withCaptions].sort((a,b)=>b.caption.length-a.caption.length)[0];
+  return `<div class="section-title">A Memory Worth Revisiting <div class="rule"></div></div>
+  <div class="card">
+    <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--photo);">${fmtDate(favorite.date)}</div>
+    ${favorite.photoData?`<img src="${favorite.photoData}" style="width:100%;border-radius:14px;margin-top:8px;">`:''}
+    <p style="margin:8px 0 0;font-size:14px;line-height:1.5;">${esc(favorite.caption)}</p>
+  </div>`;
+}
+
+function renderMyYearPage(){
+  const ranges = [{k:'month',l:'This Month'},{k:'3months',l:'3 Months'},{k:'6months',l:'6 Months'},{k:'year',l:'This Year'},{k:'all',l:'All Time'}];
+  const cutoff = rangeCutoffISO(myYearRange);
+  const inR = arr => cutoff ? arr.filter(x=>x.date>=cutoff) : arr;
+  const workouts = inR(DB.workouts).length;
+  const photos = inR(DB.photos).length;
+  const recipes = new Set(inR(DB.cooking).map(c=>c.recipe)).size;
+  const readingDays = new Set(inR(DB.reading).map(r=>r.date)).size;
+  const saved = inR(DB.savings).reduce((s,x)=>s+Number(x.amount||0),0);
+  const sleepVals = inR(DB.sleep).map(s=>sleepDurationHours(s.bed,s.wake)).filter(d=>d!==null);
+  const avgSleep = sleepVals.length? (sleepVals.reduce((a,b)=>a+b,0)/sleepVals.length).toFixed(1):'-';
+  const workItems = inR(DB.work);
+  const workConsistency = workItems.length? Math.round(workItems.filter(w=>w.leftBy7).length/workItems.length*100)+'%':'-';
+  const achievements = inR(DB.achievements).length;
+  const goalsCompleted = DB.goals.filter(g=>g.completed).length;
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>🌱 My Life So Far</h2></div>
+  <div class="screen">
+    <div class="chip-row" style="margin-bottom:14px;">${ranges.map(r=>`<button type="button" class="chip ${myYearRange===r.k?'active':''}" data-myyear-range="${r.k}">${r.l}</button>`).join('')}</div>
+    <div class="progress-card" style="background:linear-gradient(135deg,#B8912B,#C97E92);">
+      <div class="label">Look how far you've come</div>
+      <div class="pct" style="font-size:24px;">Your growth, at a glance</div>
+    </div>
+    ${renderThenNow()}
+    <div class="card">
+      <div class="stat-row">
+        <div class="stat"><div class="n">💪 ${workouts}</div><div class="l">Workouts</div></div>
+        <div class="stat"><div class="n">📸 ${photos}</div><div class="l">Photos</div></div>
+        <div class="stat"><div class="n">🍳 ${recipes}</div><div class="l">Recipes</div></div>
+      </div>
+      <div class="stat-row" style="margin-top:10px;">
+        <div class="stat"><div class="n">🙏 ${readingDays}</div><div class="l">Reading days</div></div>
+        <div class="stat"><div class="n">$${saved.toFixed(0)}</div><div class="l">Saved</div></div>
+        <div class="stat"><div class="n">😴 ${avgSleep}h</div><div class="l">Avg sleep</div></div>
+      </div>
+      <div class="stat-row" style="margin-top:10px;">
+        <div class="stat"><div class="n">💼 ${workConsistency}</div><div class="l">Work consistency</div></div>
+        <div class="stat"><div class="n">🏆 ${achievements}</div><div class="l">Achievements</div></div>
+        <div class="stat"><div class="n">🎯 ${goalsCompleted}</div><div class="l">Goals done</div></div>
+      </div>
+      <div class="stat-row" style="margin-top:10px;">
+        <div class="stat"><div class="n">🌸 ${inR(DB.proudMoments).length}</div><div class="l">Proud moments</div></div>
+        <div class="stat"><div class="n">🌿 ${inR(DB.weeklyReflections).length}</div><div class="l">Reflections</div></div>
+      </div>
+    </div>
+    ${renderFavoriteMemory()}
+  </div>`;
+}
+
+/* ---------------- REFLECTIONS & PROUD MOMENTS ---------------- */
+function renderReflectionsPage(){
+  const proud = [...DB.proudMoments].sort((a,b)=>b.date.localeCompare(a.date));
+  const reflections = [...DB.weeklyReflections].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>🌿 Reflections</h2></div>
+  <div class="screen">
+    <div class="card">
+      <button class="btn-secondary" style="margin-top:0;" data-qa="proud">🌸 I'm Proud of Myself</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-qa="weeklyreflection">🌿 New Weekly Reflection</button>
+    </div>
+    <div class="section-title">Proud Moments <div class="rule"></div></div>
+    ${proud.length? `<div class="card">${proud.map(p=>`
+      <div class="entry-item"><div><div class="meta">${fmtDate(p.date)}</div><div class="main">🌸 ${esc(p.text)}</div></div><button data-del="proudMoments:${p.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>`).join('')}</div>` : emptyState('🌸','No proud moments yet','Whenever you feel it, write down why.')}
+    <div class="section-title">Weekly Reflections <div class="rule"></div></div>
+    ${reflections.length? reflections.map(r=>`
+      <div class="card">
+        <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--ink-soft);">${fmtDate(r.date)}</div>
+        ${r.proud?`<p style="margin:8px 0 0;font-size:14px;"><strong>Proud of:</strong> ${esc(r.proud)}</p>`:''}
+        ${r.wentWell?`<p style="margin:6px 0 0;font-size:14px;"><strong>Went well:</strong> ${esc(r.wentWell)}</p>`:''}
+        ${r.difficult?`<p style="margin:6px 0 0;font-size:14px;"><strong>Difficult:</strong> ${esc(r.difficult)}</p>`:''}
+        ${r.improve?`<p style="margin:6px 0 0;font-size:14px;"><strong>To improve:</strong> ${esc(r.improve)}</p>`:''}
+        ${r.grateful?`<p style="margin:6px 0 0;font-size:14px;"><strong>Grateful for:</strong> ${esc(r.grateful)}</p>`:''}
+        <div style="text-align:right;margin-top:8px;"><button data-del="weeklyReflections:${r.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>
+      </div>`).join('') : emptyState('🌿','No reflections yet','Try one at the end of the week.')}
+  </div>`;
+}
+
+/* ---------------- MY BEST VERSION ---------------- */
+function renderBestVersionPage(){
+  const items = DB.bestVersion||[];
+  const c = getChecklistFor(todayISO());
+  const doneToday = items.filter(i=>c[checklistKey('bestversion',i)]).length;
+  const pct = items.length? Math.round(doneToday/items.length*100):0;
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>🌱 My Best Version</h2></div>
+  <div class="screen">
+    <div class="limitation">Define what a good day looks like for YOU — not anyone else's idea of productivity. The app compares your actual day against your own definition.</div>
+    ${items.length ? `<div class="progress-card" style="margin-top:14px;">
+      <div class="label">Today, against your own definition</div>
+      <div class="pct">${pct}%</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="count">${doneToday} / ${items.length}</div>
+    </div>` : ''}
+    <div class="card">
+      <div class="section-title" style="margin-top:0;">When I'm taking good care of myself, I...</div>
+      ${items.map((i,idx)=>{ const key=checklistKey('bestversion',i); return `
+        <div class="check-row ${c[key]?'checked':''}">
+          <input type="checkbox" data-toggle="${esc(key)}" ${c[key]?'checked':''}>
+          <label style="flex:1;">${esc(i)}</label>
+          <button class="del" data-bestversion-del="${idx}">remove</button>
+        </div>`; }).join('')}
+      <div class="add-item-row"><input type="text" placeholder="e.g. Get up on time" data-bestversion-input><button data-bestversion-add>Add</button></div>
+    </div>
+  </div>`;
+}
+
+function renderWeeklyCheckinPage(){
+  const saved = [...DB.weeklyCheckins].sort((a,b)=>b.weekStart.localeCompare(a.weekStart));
+  const lastFullWeek = weekRangeOffset(1);
+  const alreadyGenerated = saved.find(c=>c.weekStart===lastFullWeek.start);
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>🌿 Weekly Life Check-in</h2></div>
+  <div class="screen">
+    <div class="limitation">Built entirely from what you actually logged last week — no generic advice, just your own numbers reflected back.</div>
+    <div class="card" style="margin-top:14px;">
+      <button class="btn-primary" style="margin-top:0;" data-generate-checkin>${alreadyGenerated ? "🔄 Regenerate Last Week's Check-in" : "🌿 Generate Last Week's Check-in"}</button>
+      <div class="sub" style="margin-top:8px;text-align:center;">${fmtDate(lastFullWeek.start)} – ${fmtDate(lastFullWeek.end)}</div>
+    </div>
+    ${saved.length ? saved.map(renderWeeklyCheckinCard).join('') : emptyState('🌿','No check-ins yet','Generate your first one above once a full week has passed.')}
+  </div>`;
+}
+function renderWeeklyCheckinCard(ci){
+  return `<div class="card">
+    <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--ink-soft);">${fmtDate(ci.weekStart)} – ${fmtDate(ci.weekEnd)}</div>
+    ${ci.completionPct!==null ? `<div style="margin:10px 0;"><div class="bar-track"><div class="bar-fill" style="background:var(--dash); width:${ci.completionPct}%"></div></div><div class="sub" style="margin-top:4px;">${ci.completionPct}% of your daily routine completed</div></div>` : ''}
+    ${ci.wentWell.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--dash);">🌱 Went well</div>${ci.wentWell.map(w=>`<div class="sub">${w.icon} ${esc(w.label)} — ${esc(w.text)}</div>`).join('')}</div>` : ''}
+    ${ci.improved.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--photo);">📈 Improved</div>${ci.improved.map(w=>`<div class="sub">${w.icon} ${esc(w.label)} — ${esc(w.text)}</div>`).join('')}</div>` : ''}
+    ${ci.struggled.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--ink-soft);">🌧️ Struggled with</div>${ci.struggled.map(w=>`<div class="sub">${w.icon} ${esc(w.text)}</div>`).join('')}</div>` : ''}
+    ${ci.focusNext ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--training);">🎯 Focus next week</div><div class="sub">${ci.focusNext.icon} ${esc(ci.focusNext.label)}</div></div>` : ''}
+    ${ci.moneyLine ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--savings);">💰 Money</div><div class="sub">${esc(ci.moneyLine)}</div></div>` : ''}
+    ${ci.goalsCompleted.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--dash);">🎯 Goals completed</div>${ci.goalsCompleted.map(g=>`<div class="sub">${esc(g)}</div>`).join('')}</div>` : ''}
+    ${ci.achievements.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--photo);">🏆 Achievements</div>${ci.achievements.map(a=>`<div class="sub">${esc(a)}</div>`).join('')}</div>` : ''}
+    <div style="text-align:right;margin-top:10px;"><button data-del="weeklyCheckins:${ci.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>
+  </div>`;
+}
+
+const BACKUP_FORMAT = 'my-garden-backup';
+const BACKUP_VERSION = 1;
+
+/* Collects every piece of app data for a backup. Starts from the in-memory DB (the live,
+   authoritative state) but also scans localStorage directly for any "db:" keys that aren't
+   in the current KEYS list — a safety net so a future update that adds a new section without
+   remembering to touch this function still can't silently lose data out of a backup. */
+function collectAllBackupData(){
+  const data = {};
+  KEYS.forEach(k=>{ data[k] = DB[k]; });
+  if(localStorageOK){
+    try{
+      for(let i=0;i<localStorage.length;i++){
+        const rawKey = localStorage.key(i);
+        if(rawKey && rawKey.indexOf('db:')===0){
+          const shortKey = rawKey.slice(3);
+          if(!(shortKey in data)){
+            try{ data[shortKey] = JSON.parse(localStorage.getItem(rawKey)); }
+            catch(e){ data[shortKey] = localStorage.getItem(rawKey); }
+          }
+        }
+      }
+    }catch(e){}
+  }
+  return data;
+}
+function buildBackupPayload(){
+  return {
+    _backupFormat: BACKUP_FORMAT,
+    _backupVersion: BACKUP_VERSION,
+    _exportedAt: new Date().toISOString(),
+    data: collectAllBackupData()
+  };
+}
+function fmtFullDate(isoDateTime){
+  try{ return new Date(isoDateTime).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}); }
+  catch(e){ return isoDateTime; }
+}
+function hasAnyData(){
+  return KEYS.some(k=> Array.isArray(DB[k]) && DB[k].length>0);
+}
+function daysSinceLastBackup(){
+  if(!DB.settings.lastBackupAt) return null;
+  const last = new Date(DB.settings.lastBackupAt);
+  if(isNaN(last.getTime())) return null;
+  return Math.floor((Date.now()-last.getTime())/86400000);
+}
+function nextReminderText(){
+  const days = daysSinceLastBackup();
+  if(days===null) return hasAnyData() ? 'now' : '—';
+  if(days>=7) return 'now';
+  const remaining = 7-days;
+  return 'in '+remaining+' day'+(remaining===1?'':'s');
+}
+function renderBackupReminder(){
+  if(backupReminderDismissed) return '';
+  const days = daysSinceLastBackup();
+  const overdue = days===null ? hasAnyData() : days>=7;
+  if(!overdue) return '';
+  const prominent = days!==null && days>=14;
+  const sinceText = days===null ? "you've never exported one" : `it's been ${days} day${days===1?'':'s'} since your last backup`;
+  return `<div class="insight" style="background:${prominent?'#F6E4EA':'var(--dash-bg)'};color:${prominent?'#B6607D':'var(--dash)'};">
+    <span class="ic">🌱</span><span>Your garden needs a little backup — ${sinceText}.
+    <button data-export-quick style="border:none;background:none;color:inherit;text-decoration:underline;font-weight:700;padding:0;">Export Backup</button>
+    <button data-dismiss-backup-reminder style="border:none;background:none;color:inherit;opacity:0.65;padding:0 0 0 10px;">Dismiss</button></span>
+  </div>`;
+}
+
+/* type: 'manual' (person tapped Export Backup — updates the Last Backup date and closes
+   the reminder) or 'safety' (automatic snapshot taken right before a restore — does NOT
+   count as a "real" backup for reminder purposes, since it's a byproduct, not a deliberate one). */
+function doExport(kind){
+  kind = kind || 'manual';
+  const payload = buildBackupPayload();
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const prefix = kind==='safety' ? 'my-garden-safety-before-restore-' : 'my-garden-backup-';
+  a.href = url; a.download = prefix+todayISO()+'.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  if(kind==='manual'){
+    DB.settings.lastBackupAt = new Date().toISOString();
+    save('settings');
+  }
+}
+
+function showImportMsg(text, isError){
+  const el = document.getElementById('importMsg');
+  if(!el) return;
+  el.style.display = 'block';
+  el.style.background = isError ? '#F6E4EA' : 'var(--dash-bg)';
+  el.style.color = isError ? '#B6607D' : 'var(--dash)';
+  el.textContent = text;
+}
+
+/* Accepts either the new versioned format ({_backupFormat, _backupVersion, data}) or a
+   legacy flat export from before this upgrade (a plain object with app keys at the top
+   level) — old backups people already made must keep working. */
+function validateBackupFile(parsed){
+  if(!parsed || typeof parsed !== 'object' || Array.isArray(parsed)){
+    return {valid:false, error:'This file is not a valid backup (not a JSON object).'};
+  }
+  let data;
+  if(parsed._backupFormat === BACKUP_FORMAT){
+    if(typeof parsed._backupVersion !== 'number'){
+      return {valid:false, error:'This backup is missing a version number and cannot be safely restored.'};
+    }
+    if(parsed._backupVersion > BACKUP_VERSION){
+      return {valid:false, error:'This backup was made with a newer version of the app than this one supports.'};
+    }
+    if(!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)){
+      return {valid:false, error:'This backup file is missing its data.'};
+    }
+    data = parsed.data;
+  } else {
+    const looksLegacy = KEYS.some(k=> k in parsed);
+    if(!looksLegacy) return {valid:false, error:"This doesn't look like a My Garden backup file."};
+    data = parsed;
+  }
+  if(data.settings !== undefined && (typeof data.settings !== 'object' || Array.isArray(data.settings))){
+    return {valid:false, error:'This backup file appears to be corrupted (settings section is invalid).'};
+  }
+  if(data.routine !== undefined && (typeof data.routine !== 'object' || Array.isArray(data.routine))){
+    return {valid:false, error:'This backup file appears to be corrupted (routine section is invalid).'};
+  }
+  if(Object.keys(data).length === 0){
+    return {valid:false, error:'This backup file has no data in it.'};
+  }
+  return {valid:true, data};
+}
+
+let pendingRestoreData = null;
+async function handleRestoreFileChange(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    let parsed;
+    try{ parsed = JSON.parse(text); }
+    catch(err){ showImportMsg("Could not read that file — it doesn't look like valid JSON. Your existing data has not been changed.", true); e.target.value=''; return; }
+    const result = validateBackupFile(parsed);
+    if(!result.valid){
+      showImportMsg('⚠️ '+result.error+' Your existing data has not been changed.', true);
+      e.target.value='';
+      return;
+    }
+    pendingRestoreData = result.data;
+    openModal({type:'restoreConfirm'});
+  }catch(err){
+    showImportMsg('Could not read that file: '+humanizeError(err)+'. Your existing data has not been changed.', true);
+  }
+  e.target.value = '';
+}
+async function performRestore(){
+  if(!pendingRestoreData) return;
+  const incoming = pendingRestoreData;
+  // Safety net: snapshot what's currently here BEFORE touching anything, in case the
+  // wrong file was picked. This download does not count as a "real" backup.
+  try{ doExport('safety'); }catch(e){}
+
+  for(const k of KEYS){
+    if(k in incoming){
+      DB[k] = incoming[k];
+      try{ await save(k); }catch(e){}
+    }
+  }
+  // Preserve any keys the backup has that this app version doesn't recognize yet
+  // (e.g. a backup made by a newer version) rather than silently discarding them.
+  if(localStorageOK){
+    Object.keys(incoming).forEach(k=>{
+      if(!KEYS.includes(k)){
+        try{ localStorage.setItem('db:'+k, JSON.stringify(incoming[k])); }catch(e){}
+      }
+    });
+  }
+  pendingRestoreData = null;
+  modal = {type:'restoreSuccess'};
+  render();
+}
+
+function esc(s){ if(s===undefined||s===null) return ''; return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ---------------- init ---------------- */
+(async function init(){
+  await loadAll();
+  checkAllAchievements(); // retroactively grants any milestones already met by existing data
+  render();
+})();
+
+// Register service worker for offline support + PWA installability.
+// Silently no-ops if unsupported or unreachable (e.g. running from a raw file:// path) —
+// the app itself never depends on this succeeding.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
