@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-garden-v1';
+const CACHE_NAME = 'my-garden-v5';
 const APP_SHELL = [
   './',
   './index.html',

@@ -40,6 +40,13 @@
   --moral:#4C8177;  --moral-bg:#E2F0EC;
   --work:#33526B;   --work-bg:#E2E9EF;
   --routine:#7A8F5C; --routine-bg:#EDF1E3;
+
+  --body:#3E6C8E;    --body-bg:#E6EFF5;
+  --beauty:#C97E92;  --beauty-bg:#F8E9EE;
+  --mind:#7C6F9E;    --mind-bg:#EEEAF5;
+  --faith:#4C8177;   --faith-bg:#E2F0EC;
+  --lifearea:#B8912B; --lifearea-bg:#F6EFD9;
+  --relationships:#B6607D; --relationships-bg:#F6E4EA;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;}
@@ -98,12 +105,13 @@ input,select,textarea{font-family:inherit; font-size:16px;}
 /* Focus checklist */
 .focus-block{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:14px 16px; margin-bottom:12px; border:1px solid var(--line);}
 .focus-block h4{margin:0 0 8px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); display:flex; align-items:center; justify-content:space-between;}
-.check-row{display:flex; align-items:center; gap:10px; padding:8px 2px; border-bottom:1px solid var(--cream-2);}
+.check-row{display:flex; align-items:center; gap:12px; padding:11px 4px; border-bottom:1px solid var(--cream-2); cursor:pointer; min-height:24px;}
 .check-row:last-child{border-bottom:none;}
+.check-row:active{background:var(--cream-2); border-radius:10px;}
 .check-row input[type=checkbox]{width:22px; height:22px; accent-color:var(--dash); flex-shrink:0;}
-.check-row label{font-size:15px; flex:1;}
-.check-row.checked label{color:var(--ink-soft); text-decoration:line-through;}
-.check-row .del{color:#B98; font-size:12px; opacity:0.5; padding:4px;}
+.check-row label, .check-row .check-row-text{font-size:15px; flex:1; line-height:1.4;}
+.check-row.checked label, .check-row.checked .check-row-text{color:var(--ink-soft); text-decoration:line-through;}
+.check-row .del{color:#B98; font-size:12px; opacity:0.6; padding:8px; min-height:32px; display:inline-flex; align-items:center;}
 .add-item-row{display:flex; gap:8px; margin-top:8px;}
 .add-item-row input{flex:1; border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:14px;}
 .add-item-row button{border:none; background:var(--cream-2); border-radius:10px; padding:8px 12px; font-size:13px; font-weight:700; color:var(--ink-soft);}
@@ -124,6 +132,31 @@ input,select,textarea{font-family:inherit; font-size:16px;}
 .life-card .emoji{font-size:24px;}
 .life-card .name{font-weight:700; font-size:14.5px; margin-top:6px;}
 .life-card .sub{font-size:11.5px; font-weight:600; opacity:0.75; margin-top:2px;}
+
+/* Area cards (Becoming) */
+.area-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.area-card{
+  border-radius:var(--radius-sm); padding:14px 8px 12px; box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column; align-items:center; gap:4px; border:1px solid rgba(0,0,0,0.03); text-align:center;
+}
+.area-card .emoji{font-size:22px;}
+.area-card .name{font-weight:700; font-size:12px;}
+
+/* Season banner */
+.season-card{
+  background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin:0 0 16px;
+  box-shadow:var(--shadow-sm);
+}
+.season-card .tag{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-soft);}
+.season-card h3{margin:3px 0 6px; font-size:17px;}
+.season-card p{font-size:13px; color:var(--ink-soft); margin:0 0 10px; line-height:1.5;}
+
+/* Journey timeline */
+.timeline-item{display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--cream-2);}
+.timeline-item:last-child{border-bottom:none;}
+.timeline-dot{width:34px; height:34px; border-radius:50%; background:var(--cream-2); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;}
+.timeline-body .main{font-size:14.5px; font-weight:600;}
+.timeline-body .meta{font-size:11px; color:var(--ink-soft); font-weight:700; text-transform:uppercase; letter-spacing:0.03em; margin-top:2px;}
 
 /* generic card / list */
 .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-sm); border:1px solid var(--line); padding:16px; margin-bottom:12px;}
@@ -169,7 +202,11 @@ input,select,textarea{font-family:inherit; font-size:16px;}
 
 /* nav header w/ back */
 .nav-header{display:flex; align-items:center; gap:10px; padding:18px 16px 10px; position:relative; z-index:1;}
-.back-btn{width:36px; height:36px; border-radius:50%; background:var(--card); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:var(--shadow-sm); flex-shrink:0;}
+.back-btn{width:40px; height:40px; border-radius:50%; background:var(--card); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:16px; box-shadow:var(--shadow-sm); flex-shrink:0;}
+/* Consistent small action buttons (edit/delete/archive/move icons) — kept visually quiet but with a real touch target */
+.icon-btn{border:none; background:none; color:var(--ink-soft); font-size:15px; min-width:36px; min-height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; padding:0; flex-shrink:0;}
+.icon-btn:active{background:var(--cream-2);}
+.icon-btn[disabled]{opacity:0.3;}
 .nav-header h2{margin:0; font-size:20px; font-weight:600;}
 
 /* bottom nav */
@@ -189,7 +226,16 @@ input,select,textarea{font-family:inherit; font-size:16px;}
 .modal-sheet{background:var(--cream); width:100%; max-width:520px; border-radius:24px 24px 0 0; padding:20px 20px calc(20px + env(safe-area-inset-bottom)); max-height:88vh; overflow-y:auto; animation:slideUp .25s ease;}
 @keyframes slideUp{from{transform:translateY(30px); opacity:0.6;} to{transform:translateY(0); opacity:1;}}
 .modal-sheet h3{margin:0 0 14px; font-size:19px;}
-.modal-close{position:absolute; top:14px; right:18px; background:var(--card); border:1px solid var(--line); border-radius:50%; width:32px; height:32px; font-size:14px; color:var(--ink-soft);}
+.modal-close{position:absolute; top:14px; right:18px; background:var(--card); border:1px solid var(--line); border-radius:50%; width:38px; height:38px; font-size:14px; color:var(--ink-soft); display:flex; align-items:center; justify-content:center;}
+
+/* Toast feedback — brief, quiet confirmation, no modal interruption */
+.toast{
+  position:fixed; left:50%; bottom:96px; transform:translateX(-50%) translateY(10px);
+  background:var(--ink); color:#fff; font-size:13.5px; font-weight:600; padding:10px 18px;
+  border-radius:20px; box-shadow:0 8px 20px -6px rgba(0,0,0,0.35); z-index:200; opacity:0;
+  transition:opacity .25s ease, transform .25s ease; pointer-events:none; max-width:86%; text-align:center;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
 /* celebration */
 .celebrate{background:linear-gradient(135deg,#F6EFD9,#F8F6EF); text-align:center; padding:30px 20px;}
@@ -209,6 +255,7 @@ input,select,textarea{font-family:inherit; font-size:16px;}
   <defs></defs>
 </svg>
 <div id="app"></div>
+<div class="toast" id="toast"></div>
 
 <script>
 /* ---------------- storage helpers ----------------
@@ -221,7 +268,7 @@ input,select,textarea{font-family:inherit; font-size:16px;}
    detects that up front and tells you plainly, plus falls back to keeping your
    data in memory for the session with auto-backup downloads, so you're never
    silently losing data even in that worst case. */
-const KEYS = ["routine","checklist","spending","income","meals","workouts","sleep","cooking","reading","skincare","period","photos","work","savings","goals","achievements","settings","bodyMeasurements","fitnessPhotos","skinPhotos","skinRoutine","proudMoments","weeklyReflections","bestVersion","weeklyCheckins"];
+const KEYS = ["routine","checklist","spending","income","meals","workouts","sleep","cooking","reading","skincare","period","photos","work","savings","goals","achievements","settings","bodyMeasurements","fitnessPhotos","skinPhotos","skinRoutine","proudMoments","weeklyReflections","bestVersion","weeklyCheckins","seasons","identityStatements","relationships","customRoutines","progressPhotos","milestones"];
 let DB = {};
 let loaded = false;
 let localStorageOK = false;
@@ -264,6 +311,14 @@ function defaultFor(k){
   if(k==='achievements') return [];
   if(k==='settings') return {name:"", pin:"", locked:false};
   if(k==='skinRoutine') return { am:["Cleanser","Moisturiser","SPF"], pm:["Cleanser","Treatment","Moisturiser"] };
+  if(k==='seasons') return [
+    { id:uid(), number:1, name:"Foundation", focus:"Building the habits and routines that everything else grows from.", start:"2026-10-02", end:"2026-12-30", status:"active" }
+  ];
+  if(k==='identityStatements') return [];
+  if(k==='relationships') return [];
+  if(k==='customRoutines') return [];
+  if(k==='progressPhotos') return [];
+  if(k==='milestones') return [];
   return [];
 }
 let storageBroken = false;
@@ -368,6 +423,16 @@ let modal = null;
 function nav(tab,view=null,params={}){ route={tab,view,params}; render(); window.scrollTo(0,0); }
 function openModal(content){ modal=content; render(); }
 function closeModal(){ modal=null; render(); }
+
+let toastTimer = null;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> el.classList.remove('show'), 1800);
+}
 
 /* ---------------- daily progress / checklist ---------------- */
 function getChecklistFor(date){
@@ -687,6 +752,15 @@ function render(){
   else if(route.tab==='bestversion') html = renderBestVersionPage();
   else if(route.tab==='checkin') html = renderWeeklyCheckinPage();
   else if(route.tab==='memories') html = renderMemoriesPage();
+  else if(route.tab==='area') html = renderAreaPage(route.view);
+  else if(route.tab==='journey') html = renderJourneyPage();
+  else if(route.tab==='routines') html = renderRoutinesPage();
+  else if(route.tab==='identity') html = renderIdentityPage();
+  else if(route.tab==='relationships') html = renderRelationshipsPage();
+  else if(route.tab==='seasons') html = renderSeasonsPage();
+  else if(route.tab==='progressphotos') html = renderProgressPhotosPage(route.view||undefined);
+  else if(route.tab==='search') html = renderSearchPage();
+  else if(route.tab==='thennow') html = renderThenNowPage();
 
   html += renderBottomNav();
   if(modal) html += renderModal();
@@ -726,9 +800,12 @@ function renderHome(){
   const needsAttention = buildNeedsAttention();
 
   return `
-  <div class="topbar">
-    <div class="greeting">${greetingWord()}${DB.settings.name?', '+esc(DB.settings.name):''} 🌱</div>
-    <h1>${fmtDate(todayISO())}</h1>
+  <div class="topbar" style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <div class="greeting">${greetingWord()}${DB.settings.name?', '+esc(DB.settings.name):''} 🌱</div>
+      <h1>${fmtDate(todayISO())}</h1>
+    </div>
+    <button data-nav-search style="border:none;background:var(--card);box-shadow:var(--shadow-sm);border-radius:50%;width:38px;height:38px;font-size:16px;margin-top:4px;">🔍</button>
   </div>
   <div class="screen">
     ${!localStorageOK?`<div class="insight" style="background:#F6E4EA;color:#B6607D;"><span class="ic">⚠️</span><span>This viewer won't let the app save to your device. Everything still works this session — see More → Data for how to fix persistence.</span></div>`:''}
@@ -742,6 +819,24 @@ function renderHome(){
       <div class="count">${prog.done} / ${prog.total} completed today</div>
     </div>
 
+    ${renderSeasonBanner()}
+
+    <div class="section-title">My Areas <div class="rule"></div></div>
+    <div class="area-grid">
+      ${AREAS.map(a=>`
+        <button class="area-card" data-area="${a.key}" style="background:var(${a.bg}); color:var(${a.color});">
+          <div class="emoji">${a.emoji}</div>
+          <div class="name">${a.name}</div>
+        </button>`).join('')}
+    </div>
+
+    <button data-tab="journey" style="all:unset; display:block; cursor:pointer; margin-bottom:16px;">
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0;">
+        <div><div style="font-weight:700; font-size:14px;">🌿 Continue your journey</div><div class="sub" style="margin-top:2px;">See how far you've come</div></div>
+        <div style="font-size:18px; color:var(--ink-soft);">›</div>
+      </div>
+    </button>
+    ${renderHomeRoutinesWidget()}
     ${renderLifeGarden()}
     ${renderOnThisDay()}
 
@@ -789,10 +884,10 @@ function qaButton(emoji,label,formKey){
 function renderChecklistBlock(section,items,c){
   if(!items.length) return `<div class="focus-block"><div class="empty-state" style="padding:10px 0;"><p>Nothing set for ${section} yet — add items in Daily Routine.</p></div></div>`;
   return `<div class="focus-block">${items.map(i=>{ const key=checklistKey(section,i); return `
-    <div class="check-row ${c[key]?'checked':''}">
+    <label class="check-row ${c[key]?'checked':''}">
       <input type="checkbox" data-toggle="${esc(key)}" ${c[key]?'checked':''}>
-      <label>${esc(i)}</label>
-    </div>`; }).join('')}</div>`;
+      <span class="check-row-text">${esc(i)}</span>
+    </label>`; }).join('')}</div>`;
 }
 let lastInsights = [];
 function buildInsights(){
@@ -1055,6 +1150,16 @@ function generateWeeklyCheckin(weeksAgo){
 }
 
 /* ---------------- LIFE TAB ---------------- */
+const AREAS = [
+  {key:'body', emoji:'💪', name:'Body', color:'--body', bg:'--body-bg', tagline:'Strength, movement and energy.', sections:['training','period','sleep']},
+  {key:'beauty', emoji:'✨', name:'Beauty', color:'--beauty', bg:'--beauty-bg', tagline:'Skin, care and style.', sections:['skin']},
+  {key:'mind', emoji:'🧠', name:'Mind', color:'--mind', bg:'--mind-bg', tagline:'Confidence and growth.', special:'mind'},
+  {key:'faith', emoji:'✝️', name:'Faith', color:'--faith', bg:'--faith-bg', tagline:'Reading, prayer, gratitude.', sections:['moral']},
+  {key:'life', emoji:'🏡', name:'Life', color:'--lifearea', bg:'--lifearea-bg', tagline:'Home, work, money, memories.', sections:['photo','work','money','cooking','meals','routine']},
+  {key:'relationships', emoji:'❤️', name:'Relationships', color:'--relationships', bg:'--relationships-bg', tagline:'People and moments.', special:'relationships'},
+];
+function areaFor(sectionKey){ return AREAS.find(a=> (a.sections||[]).includes(sectionKey)); }
+
 const LIFE_SECTIONS = [
   {key:'training', emoji:'💪', name:'Training', color:'--training', bg:'--training-bg'},
   {key:'sleep', emoji:'😴', name:'Sleep', color:'--sleep', bg:'--sleep-bg'},
@@ -1129,7 +1234,7 @@ function renderLifeDetail(key){
 function cap(s){ return s? s.charAt(0).toUpperCase()+s.slice(1):''; }
 function renderSimpleList(dbKey, mainFn, subFn, editType){
   const items = [...DB[dbKey]].sort((a,b)=> b.date.localeCompare(a.date));
-  if(!items.length) return emptyState('🌱','Nothing logged yet','Use Quick Actions on Home to add your first entry.');
+  if(!items.length) return emptyState('🌱','Nothing here yet','This is where your growth will begin — add your first entry from Home Quick Actions.');
   return `<div class="card">${items.map(it=>`
     <div class="entry-item">
       <div>
@@ -1527,7 +1632,7 @@ function renderPhotoDetail(){
       <div class="meta" style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--ink-soft);">${fmtDate(p.date)}</div>
       ${p.photoData?`<img src="${p.photoData}" style="width:100%;border-radius:14px;margin-top:8px;">`:''}
       ${p.caption?`<p style="margin:10px 0 0;font-size:14.5px;line-height:1.5;">${esc(p.caption)}</p>`:''}
-      <div style="text-align:right;margin-top:6px;"><button data-del="photos:${p.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>
+      <div style="text-align:right;margin-top:6px;"><button data-del="photos:${p.id}" class="icon-btn">✕</button></div>
     </div>`).join('') : emptyState('📸','No photos yet',"Take one and start today's memory.")}
   `;
 }
@@ -1599,7 +1704,7 @@ function renderMoneyDetail(){
         ${it.category?`<div class="sub">${esc(it.category)}</div>`:''}
       </div>
       <div style="font-weight:700; color:${it._kind!=='spend'?'var(--savings)':'var(--ink)'};">${it._kind!=='spend'?'+':'-'}$${Number(it.amount).toFixed(0)}</div>
-    </div>`).join('')}</div>` : emptyState('💰','No activity yet','Log spending or savings from Home Quick Actions.')}
+    </div>`).join('')}</div>` : emptyState('💰','Nothing here yet','This is where your growth will begin — log spending or savings from Home Quick Actions.')}
   `;
 }
 function renderMoneyCharts(){
@@ -1635,7 +1740,7 @@ function renderGoalsTab(){
   <div class="screen">
     <button class="btn-primary" data-open-goal-form>+ New Goal</button>
     <div style="height:14px;"></div>
-    ${DB.goals.length? DB.goals.map(renderGoalCard).join('') : emptyState('🎯','No goals yet','Create a goal to start tracking your progress toward it.')}
+    ${DB.goals.length? DB.goals.map(renderGoalCard).join('') : emptyState('🎯','Nothing here yet','This is where your growth will begin — create a goal to start tracking it.')}
   </div>`;
 }
 function renderGoalCard(g){
@@ -1653,8 +1758,8 @@ function renderGoalCard(g){
         <div class="sub" style="color:var(--ink-soft);font-size:12px;margin-top:2px;">${cap(g.type)}${g.deadline?' · by '+fmtDate(g.deadline):''}${metric?' · '+esc(metric.label)+(g.param?' ('+esc(g.param)+')':''):''}</div>
       </div>
       <div style="display:flex;gap:2px;">
-        <button data-goal-edit="${g.id}" style="border:none;background:none;color:var(--ink-soft);padding:4px;">✎</button>
-        <button data-del="goals:${g.id}" style="border:none;background:none;color:var(--ink-soft);padding:4px;">✕</button>
+        <button data-goal-edit="${g.id}" class="icon-btn">✎</button>
+        <button data-del="goals:${g.id}" class="icon-btn">✕</button>
       </div>
     </div>
     <div class="bar-track" style="background:var(--cream-2); margin-top:10px;"><div class="bar-fill" style="background:var(--dash); width:${pct}%"></div></div>
@@ -1668,7 +1773,7 @@ function renderGoalCard(g){
 function renderAchievementsTab(){
   const list = [...DB.achievements].sort((a,b)=>b.date.localeCompare(a.date));
   return `
-  <div class="topbar"><h1>🏆 Achievements</h1></div>
+  <div class="nav-header"><button class="back-btn" data-back-more>←</button><h2>🏆 Achievements</h2></div>
   <div class="screen">
     ${list.length? `<div class="card">${list.map(a=>`
       <div class="entry-item">
@@ -1679,7 +1784,7 @@ function renderAchievementsTab(){
           <div class="meta" style="margin-top:2px;">${fmtDate(a.date)}${a.section?' · '+esc(a.section):''}</div>
         </div>
       </div>`).join('')}</div>`
-    : emptyState('🏆','No achievements yet','Keep logging — your first milestone is close.')}
+    : emptyState('🏆','Nothing here yet','This is where your growth will begin — keep logging, your first milestone is close.')}
   </div>`;
 }
 
@@ -1689,18 +1794,37 @@ function renderMoreTab(){
   return `
   <div class="topbar"><h1>☰ More</h1></div>
   <div class="screen">
+    <button class="btn-secondary" data-nav-search style="margin-top:0;">🔍 Search Everything</button>
+
+    <div class="section-title" style="margin-top:18px;">Becoming <div class="rule"></div></div>
     <div class="card">
-      <button class="btn-secondary" style="margin-top:0;" data-nav-progress>📊 Progress & Insights</button>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-seasons>🌱 Seasons</button>
       <div style="height:8px;"></div>
-      <button class="btn-secondary" style="margin-top:0;" data-nav-myyear>🌱 My Life So Far</button>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-identity>🌿 Who I'm Becoming</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-relationships>❤️ Relationships</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-progressphotos-all>📸 Progress Photos</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-achievements>🏆 Achievements</button>
+    </div>
+
+    <div class="section-title">Reflect & Review <div class="rule"></div></div>
+    <div class="card">
+      <button class="btn-secondary" style="margin-top:0;" data-nav-checkin>🌿 Weekly Life Check-in</button>
       <div style="height:8px;"></div>
       <button class="btn-secondary" style="margin-top:0;" data-nav-reflections>🌿 Reflections & Proud Moments</button>
       <div style="height:8px;"></div>
       <button class="btn-secondary" style="margin-top:0;" data-nav-bestversion>🌱 My Best Version</button>
       <div style="height:8px;"></div>
-      <button class="btn-secondary" style="margin-top:0;" data-nav-checkin>🌿 Weekly Life Check-in</button>
-      <div style="height:8px;"></div>
       <button class="btn-secondary" style="margin-top:0;" data-nav-memories>📸 Memories</button>
+    </div>
+
+    <div class="section-title">Progress & Insights <div class="rule"></div></div>
+    <div class="card">
+      <button class="btn-secondary" style="margin-top:0;" data-nav-progress>📊 Progress & Insights</button>
+      <div style="height:8px;"></div>
+      <button class="btn-secondary" style="margin-top:0;" data-nav-myyear>🌱 My Life So Far</button>
     </div>
     <div class="card">
       <div class="form-field"><label>Your name</label><input type="text" id="nameInput" value="${esc(DB.settings.name||'')}" placeholder="What should we call you?"></div>
@@ -1737,13 +1861,15 @@ function renderMoreTab(){
 function renderBottomNav(){
   const tabs = [
     {k:'home', ic:'🏠', l:'Home'},
-    {k:'life', ic:'🌱', l:'Life'},
+    {k:'journey', ic:'🌿', l:'Journey'},
     {k:'goals', ic:'🎯', l:'Goals'},
-    {k:'achievements', ic:'🏆', l:'Wins'},
+    {k:'routines', ic:'📅', l:'Routines'},
     {k:'more', ic:'☰', l:'More'},
   ];
+  const activeTabs = new Set(['home','journey','goals','routines','more']);
+  const activeKey = activeTabs.has(route.tab) ? route.tab : (route.tab==='life'||route.tab==='area' ? 'home' : null);
   return `<div class="bottomnav">${tabs.map(t=>`
-    <button class="nav-btn ${route.tab===t.k?'active':''}" data-tab="${t.k}"><span class="ic">${t.ic}</span>${t.l}</button>`).join('')}</div>`;
+    <button class="nav-btn ${activeKey===t.k?'active':''}" data-tab="${t.k}"><span class="ic">${t.ic}</span>${t.l}</button>`).join('')}</div>`;
 }
 
 /* ---------------- Modal (quick action forms + goal form + celebration) ---------------- */
@@ -1811,6 +1937,8 @@ function renderGoalForm(){
   </select></div>
   <div class="form-field"><label>Target${metric&&metric.unit?' ('+metric.unit+')':''}</label><input type="number" id="gTarget" value="${editing?editing.target:''}" placeholder="e.g. 200"></div>
   <div class="form-field"><label>Deadline (optional)</label><input type="date" id="gDeadline" value="${editing?(editing.deadline||''):''}"></div>
+  <div class="form-field"><label>Area (optional)</label><select id="gArea"><option value="">No specific area</option>${AREAS.map(a=>`<option value="${a.key}" ${editing&&editing.area===a.key?'selected':''}>${a.emoji} ${a.name}</option>`).join('')}</select></div>
+  <div class="form-field"><label>Season (optional)</label><select id="gSeason"><option value="">No specific season</option>${DB.seasons.map(s=>`<option value="${s.id}" ${editing&&editing.seasonId===s.id?'selected':''}>Season ${String(s.number).padStart(2,'0')} — ${esc(s.name)}</option>`).join('')}</select></div>
   <button class="btn-primary" id="saveGoalBtn" data-edit-id="${editing?editing.id:''}">${editing?'Save Changes':'Create Goal'}</button>
   ${editing?`<button class="btn-secondary" id="deleteGoalBtn" data-goal-id="${editing.id}">Delete Goal</button>`:''}`;
 }
@@ -1910,7 +2038,7 @@ function renderQAForm(type){
       return `<h3>🧴 Skincare</h3>
       <div class="form-field"><label>Routine</label><div class="chip-row">${['AM','PM'].map(s=>`<button type="button" class="chip ${period===s.toLowerCase()?'active':''}" data-period="${s.toLowerCase()}">${s}</button>`).join('')}</div></div>
       <div class="form-field"><label>Today's ${period.toUpperCase()} routine</label>
-        ${products.length? products.map(p=>`<div class="check-row"><input type="checkbox" class="skinProductCheck" data-product="${esc(p)}"><label>${esc(p)}</label></div>`).join('') : '<div class="sub">No products set yet — add some in Life → Skin.</div>'}
+        ${products.length? products.map(p=>`<label class="check-row"><input type="checkbox" class="skinProductCheck" data-product="${esc(p)}"><span class="check-row-text">${esc(p)}</span></label>`).join('') : '<div class="sub">No products set yet — add some in Life → Skin.</div>'}
       </div>
       ${sliderField('f_redness','Redness')}
       ${sliderField('f_breakouts','Breakouts')}
@@ -2128,6 +2256,7 @@ async function saveQA(type, editId){
     qaTemp = {};
     if(!celebrated) closeModal();
     render();
+    if(!celebrated) showToast('🌿 Saved');
   }catch(e){
     // Do NOT roll back and discard what was typed — that's a second, worse bug than the save
     // failing in the first place. Keep the entry, flag it as unsynced, let the person retry.
@@ -2136,6 +2265,7 @@ async function saveQA(type, editId){
     qaTemp = {};
     closeModal();
     render();
+    showToast('Saved on this device — will sync when possible');
   }
 }
 function checkStreakAchievements(){
@@ -2303,6 +2433,62 @@ function attachHandlers(){
   app.querySelectorAll('[data-life]').forEach(b=> b.onclick = ()=> nav('life', b.dataset.life));
   const backLife = app.querySelector('[data-back-life]'); if(backLife) backLife.onclick = ()=> nav('life', null);
   const backMore = app.querySelector('[data-back-more]'); if(backMore) backMore.onclick = ()=> nav('more', null);
+  const backHome = app.querySelector('[data-back-home]'); if(backHome) backHome.onclick = ()=> nav('home', null);
+
+  // Becoming: areas, journey, routines, identity, relationships, seasons
+  app.querySelectorAll('[data-area]').forEach(b=> b.onclick = ()=> nav('area', b.dataset.area));
+  app.querySelectorAll('[data-nav-seasons]').forEach(b=> b.onclick = ()=> nav('seasons'));
+  app.querySelectorAll('[data-nav-identity]').forEach(b=> b.onclick = ()=> nav('identity'));
+  app.querySelectorAll('[data-nav-relationships]').forEach(b=> b.onclick = ()=> nav('relationships'));
+  app.querySelectorAll('[data-nav-achievements]').forEach(b=> b.onclick = ()=> nav('achievements'));
+
+  const identityAddBtn = app.querySelector('#identityAddBtn');
+  if(identityAddBtn) identityAddBtn.onclick = ()=>{ const v = document.getElementById('identityInput').value; addIdentityStatement(v); };
+  app.querySelectorAll('[data-identity-edit]').forEach(b=> b.onclick = ()=>{ identityEditingId = b.dataset.identityEdit; const it = DB.identityStatements.find(x=>x.id===identityEditingId); if(it) it.editing = true; render(); });
+  app.querySelectorAll('[data-identity-save]').forEach(b=> b.onclick = ()=>{
+    const id = b.dataset.identitySave; const it = DB.identityStatements.find(x=>x.id===id);
+    const ta = document.getElementById('identityEdit_'+id);
+    if(it && ta){ it.text = ta.value.trim(); delete it.editing; save('identityStatements'); }
+    render();
+  });
+  app.querySelectorAll('[data-identity-del]').forEach(b=> b.onclick = ()=> deleteIdentityStatement(b.dataset.identityDel));
+
+  const relTypeRow = app.querySelector('#relTypeRow');
+  if(relTypeRow){
+    relTypeRow.querySelectorAll('[data-rel-type]').forEach(chip=> chip.onclick = ()=>{
+      relTypeRow.querySelectorAll('[data-rel-type]').forEach(c2=>c2.classList.remove('active'));
+      chip.classList.add('active');
+      const saveBtn = app.querySelector('#relSaveBtn'); if(saveBtn) saveBtn.dataset.relTypeSelected = chip.dataset.relType;
+    });
+  }
+  const relSaveBtn = app.querySelector('#relSaveBtn');
+  if(relSaveBtn) relSaveBtn.onclick = ()=>{
+    const name = document.getElementById('relName').value.trim();
+    const title = document.getElementById('relTitle').value.trim();
+    const date = document.getElementById('relDate').value || todayISO();
+    const note = document.getElementById('relNote').value.trim();
+    const type = relSaveBtn.dataset.relTypeSelected || 'memory';
+    if(!title) return;
+    DB.relationships.unshift({id:uid(), name, title, date, note, type});
+    save('relationships'); render();
+  };
+
+  const openSeasonFormBtn = app.querySelector('#openSeasonFormBtn'); if(openSeasonFormBtn) openSeasonFormBtn.onclick = ()=>{ seasonFormOpen = true; render(); };
+  const cancelSeasonBtn = app.querySelector('#cancelSeasonBtn'); if(cancelSeasonBtn) cancelSeasonBtn.onclick = ()=>{ seasonFormOpen = false; render(); };
+  const createSeasonBtn = app.querySelector('#createSeasonBtn');
+  if(createSeasonBtn) createSeasonBtn.onclick = ()=>{
+    startNewSeason(
+      document.getElementById('newSeasonName').value,
+      document.getElementById('newSeasonFocus').value,
+      document.getElementById('newSeasonStart').value,
+      document.getElementById('newSeasonEnd').value
+    );
+  };
+  const seasonFocusSaveBtn = app.querySelector('#seasonFocusSaveBtn');
+  if(seasonFocusSaveBtn) seasonFocusSaveBtn.onclick = ()=>{
+    const s = currentSeason(); if(s){ s.focus = document.getElementById('seasonFocusInput').value; save('seasons'); }
+    render();
+  };
   const resetToggle = app.querySelector('[data-reset-toggle]'); if(resetToggle) resetToggle.onclick = ()=>{ resetTodayMode = true; render(); };
   const resetExit = app.querySelector('[data-reset-exit]'); if(resetExit) resetExit.onclick = ()=>{ resetTodayMode = false; render(); };
   app.querySelectorAll('[data-insight-idx]').forEach(b=> b.onclick = ()=>{
@@ -2379,6 +2565,100 @@ function attachHandlers(){
   const navBestVersionAttr = app.querySelector('[data-nav-bestversion]'); if(navBestVersionAttr) navBestVersionAttr.onclick = ()=> nav('bestversion');
   const navCheckinAttr = app.querySelector('[data-nav-checkin]'); if(navCheckinAttr) navCheckinAttr.onclick = ()=> nav('checkin');
   const navMemoriesAttr = app.querySelector('[data-nav-memories]'); if(navMemoriesAttr) navMemoriesAttr.onclick = ()=> nav('memories');
+  const navSearchAttr = app.querySelector('[data-nav-search]'); if(navSearchAttr) navSearchAttr.onclick = ()=> nav('search');
+  const navPPAllAttr = app.querySelector('[data-nav-progressphotos-all]'); if(navPPAllAttr) navPPAllAttr.onclick = ()=> nav('progressphotos');
+  app.querySelectorAll('[data-nav-progressphotos]').forEach(b=> b.onclick = ()=> nav('progressphotos', b.dataset.navProgressphotos));
+
+  // ---- Custom Routines ----
+  const newRoutineBtn = app.querySelector('#newRoutineBtn'); if(newRoutineBtn) newRoutineBtn.onclick = ()=> openRoutineForm('new');
+  const routineCancelBtn = app.querySelector('#routineCancelBtn'); if(routineCancelBtn) routineCancelBtn.onclick = closeRoutineForm;
+  app.querySelectorAll('[data-routine-day]').forEach(chip=> chip.onclick = ()=>{
+    const d = Number(chip.dataset.routineDay);
+    const i = routineFormDays.indexOf(d);
+    if(i>-1) routineFormDays.splice(i,1); else routineFormDays.push(d);
+    chip.classList.toggle('active'); // avoid a full re-render so unsaved name/steps text isn't lost
+  });
+  if(app.querySelector('#routineStepsList')) wireRoutineStepRows();
+  const routineSaveBtn = app.querySelector('#routineSaveBtn');
+  if(routineSaveBtn) routineSaveBtn.onclick = ()=>{
+    syncStepsFromDOM();
+    const editId = routineSaveBtn.dataset.routineSaveId || null;
+    saveRoutineForm(
+      editId,
+      document.getElementById('routineName').value,
+      document.getElementById('routineArea').value,
+      document.getElementById('routineFrequency').value,
+      [...routineFormDays],
+      routineFormSteps.join('\n')
+    );
+  };
+  app.querySelectorAll('[data-routine-edit]').forEach(b=> b.onclick = ()=> openRoutineForm(b.dataset.routineEdit));
+  app.querySelectorAll('[data-routine-archive]').forEach(b=> b.onclick = ()=> archiveRoutine(b.dataset.routineArchive, true));
+  app.querySelectorAll('[data-routine-archive-off]').forEach(b=> b.onclick = ()=> archiveRoutine(b.dataset.routineArchiveOff, false));
+  app.querySelectorAll('[data-routine-delete]').forEach(b=> b.onclick = ()=> deleteRoutineForever(b.dataset.routineDelete));
+  if(route.tab==='routines' && !routineFormOpen) wireRoutineDrag(app);
+  app.querySelectorAll('[data-routine-step]').forEach(b=> b.onchange = ()=>{ const [rid,sid] = b.dataset.routineStep.split(':'); toggleRoutineStep(rid,sid); });
+  app.querySelectorAll('[data-routine-complete-all]').forEach(b=> b.onclick = ()=> completeRoutineAll(b.dataset.routineCompleteAll));
+
+  // ---- Progress Photos ----
+  const progPhotoAddBtn = app.querySelector('#progPhotoAddBtn'); if(progPhotoAddBtn) progPhotoAddBtn.onclick = ()=>{ progressPhotoFormOpen = true; render(); };
+  const progPhotoCancelBtn = app.querySelector('#progPhotoCancelBtn'); if(progPhotoCancelBtn) progPhotoCancelBtn.onclick = ()=>{ progressPhotoFormOpen = false; qaTemp.ppPhotoData=null; render(); };
+  const progPhotoSaveBtn = app.querySelector('#progPhotoSaveBtn'); if(progPhotoSaveBtn) progPhotoSaveBtn.onclick = saveProgressPhoto;
+  app.querySelectorAll('[data-progphoto-area-filter]').forEach(b=> b.onclick = ()=>{ progressPhotoAreaFilter = b.dataset.progphotoAreaFilter || null; render(); });
+  app.querySelectorAll('[data-progphoto-select]').forEach(b=> b.onclick = ()=>{
+    const id = b.dataset.progphotoSelect;
+    const i = compareSelection.indexOf(id);
+    if(i>-1) compareSelection.splice(i,1);
+    else { if(compareSelection.length>=2) compareSelection.shift(); compareSelection.push(id); }
+    render();
+  });
+  const clearCompareBtn = app.querySelector('#clearCompareBtn'); if(clearCompareBtn) clearCompareBtn.onclick = ()=>{ compareSelection = []; render(); };
+
+  // ---- Milestones ----
+  app.querySelectorAll('[data-ms-open]').forEach(b=> b.onclick = ()=>{ milestoneFormOpenFor = b.dataset.msOpen; render(); });
+  const msCancelBtn = app.querySelector('#msCancelBtn'); if(msCancelBtn) msCancelBtn.onclick = ()=>{ milestoneFormOpenFor = null; render(); };
+  const msSaveBtn = app.querySelector('#msSaveBtn');
+  if(msSaveBtn) msSaveBtn.onclick = ()=> createMilestone(
+    document.getElementById('msTitle').value,
+    document.getElementById('msDate').value,
+    msSaveBtn.dataset.msArea,
+    document.getElementById('msDesc').value,
+    document.getElementById('msTags').value
+  );
+  app.querySelectorAll('[data-ms-del]').forEach(b=> b.onclick = ()=> deleteMilestone(b.dataset.msDel));
+
+  // ---- Global Search ----
+  const searchInput = app.querySelector('#searchInput');
+  if(searchInput) searchInput.oninput = ()=>{ searchQuery = searchInput.value; render(); setTimeout(()=>{ const el=document.getElementById('searchInput'); if(el){ el.focus(); el.selectionStart=el.selectionEnd=el.value.length; } },0); };
+  app.querySelectorAll('[data-search-area-filter]').forEach(b=> b.onclick = ()=>{ searchAreaFilter = b.dataset.searchAreaFilter; render(); });
+  app.querySelectorAll('[data-search-type-filter]').forEach(b=> b.onclick = ()=>{ searchTypeFilter = b.dataset.searchTypeFilter; render(); });
+  app.querySelectorAll('[data-search-season-filter]').forEach(b=> b.onclick = ()=>{ searchSeasonFilter = b.dataset.searchSeasonFilter; render(); });
+  const searchDateFromInp = app.querySelector('#searchDateFrom'); if(searchDateFromInp) searchDateFromInp.onchange = ()=>{ searchDateFrom = searchDateFromInp.value; render(); };
+  const searchDateToInp = app.querySelector('#searchDateTo'); if(searchDateToInp) searchDateToInp.onchange = ()=>{ searchDateTo = searchDateToInp.value; render(); };
+  const searchClearFiltersBtn = app.querySelector('#searchClearFiltersBtn'); if(searchClearFiltersBtn) searchClearFiltersBtn.onclick = ()=>{ searchAreaFilter=''; searchTypeFilter=''; searchSeasonFilter=''; searchDateFrom=''; searchDateTo=''; render(); };
+  app.querySelectorAll('[data-search-result]').forEach(b=> b.onclick = ()=>{
+    const results = getFilteredSearchResults();
+    const r = results[Number(b.dataset.searchResult)];
+    if(r) nav(r.navTab, r.navView||null);
+  });
+
+  // ---- Then → Now compare ----
+  const navThenNowAttr = app.querySelector('[data-nav-thennow]'); if(navThenNowAttr) navThenNowAttr.onclick = ()=> nav('thennow');
+  app.querySelectorAll('[data-nav-thennow-area]').forEach(b=> b.onclick = ()=>{ thenNowArea = b.dataset.navThennowArea; thenNowOlderId=''; thenNowNewerId=''; nav('thennow'); });
+  app.querySelectorAll('[data-thennow-area]').forEach(b=> b.onclick = ()=>{ thenNowArea = b.dataset.thennowArea; thenNowOlderId=''; thenNowNewerId=''; render(); });
+  app.querySelectorAll('[data-thennow-cat]').forEach(b=> b.onclick = ()=>{ thenNowCategory = b.dataset.thennowCat; thenNowOlderId=''; thenNowNewerId=''; render(); });
+  const thenNowOlderSelect = app.querySelector('#thenNowOlderSelect'); if(thenNowOlderSelect) thenNowOlderSelect.onchange = ()=>{ thenNowOlderId = thenNowOlderSelect.value; render(); };
+  const thenNowNewerSelect = app.querySelector('#thenNowNewerSelect'); if(thenNowNewerSelect) thenNowNewerSelect.onchange = ()=>{ thenNowNewerId = thenNowNewerSelect.value; render(); };
+  const thenNowRange = app.querySelector('#thenNowRange');
+  if(thenNowRange) thenNowRange.oninput = ()=>{
+    thenNowSlider = Number(thenNowRange.value);
+    const clip = document.getElementById('thenNowClip');
+    const img = document.getElementById('thenNowOlderImg');
+    const divider = document.getElementById('thenNowDivider');
+    if(clip) clip.style.width = thenNowSlider+'%';
+    if(img) img.style.width = (100/(thenNowSlider/100))+'%';
+    if(divider) divider.style.left = thenNowSlider+'%';
+  };
 
   // modal
   const overlay = document.getElementById('overlay');
@@ -2405,18 +2685,21 @@ function attachHandlers(){
       const type = document.getElementById('gType').value;
       const target = Number(document.getElementById('gTarget').value||0);
       const deadline = document.getElementById('gDeadline').value;
+      const area = (document.getElementById('gArea')||{}).value || '';
+      const seasonId = (document.getElementById('gSeason')||{}).value || '';
       const editId = saveGoalBtn.dataset.editId;
       if(editId){
         const g = DB.goals.find(x=>x.id===editId);
         if(g){
-          Object.assign(g, {name, section, metricKey, param, type, target, deadline, completed:false, completedAt:null});
+          Object.assign(g, {name, section, metricKey, param, type, target, deadline, area, seasonId, completed:false, completedAt:null});
           save('goals'); checkGoalCompletion();
         }
       } else {
-        DB.goals.push({id:uid(), name, section, metricKey, param, type, target, deadline, current:0, completed:false});
+        DB.goals.push({id:uid(), name, section, metricKey, param, type, target, deadline, area, seasonId, current:0, completed:false});
         save('goals');
       }
       closeModal(); render();
+      showToast(editId ? '🌿 Goal updated' : '🎯 Goal created');
     };
     const deleteGoalBtn = document.getElementById('deleteGoalBtn'); if(deleteGoalBtn) deleteGoalBtn.onclick = ()=>{
       DB.goals = DB.goals.filter(g=>g.id!==deleteGoalBtn.dataset.goalId);
@@ -2698,7 +2981,7 @@ function renderReflectionsPage(){
     </div>
     <div class="section-title">Proud Moments <div class="rule"></div></div>
     ${proud.length? `<div class="card">${proud.map(p=>`
-      <div class="entry-item"><div><div class="meta">${fmtDate(p.date)}</div><div class="main">🌸 ${esc(p.text)}</div></div><button data-del="proudMoments:${p.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>`).join('')}</div>` : emptyState('🌸','No proud moments yet','Whenever you feel it, write down why.')}
+      <div class="entry-item"><div><div class="meta">${fmtDate(p.date)}</div><div class="main">🌸 ${esc(p.text)}</div></div><button data-del="proudMoments:${p.id}" class="icon-btn">✕</button></div>`).join('')}</div>` : emptyState('🌸','No proud moments yet','Whenever you feel it, write down why.')}
     <div class="section-title">Weekly Reflections <div class="rule"></div></div>
     ${reflections.length? reflections.map(r=>`
       <div class="card">
@@ -2708,7 +2991,7 @@ function renderReflectionsPage(){
         ${r.difficult?`<p style="margin:6px 0 0;font-size:14px;"><strong>Difficult:</strong> ${esc(r.difficult)}</p>`:''}
         ${r.improve?`<p style="margin:6px 0 0;font-size:14px;"><strong>To improve:</strong> ${esc(r.improve)}</p>`:''}
         ${r.grateful?`<p style="margin:6px 0 0;font-size:14px;"><strong>Grateful for:</strong> ${esc(r.grateful)}</p>`:''}
-        <div style="text-align:right;margin-top:8px;"><button data-del="weeklyReflections:${r.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>
+        <div style="text-align:right;margin-top:8px;"><button data-del="weeklyReflections:${r.id}" class="icon-btn">✕</button></div>
       </div>`).join('') : emptyState('🌿','No reflections yet','Try one at the end of the week.')}
   </div>`;
 }
@@ -2732,9 +3015,11 @@ function renderBestVersionPage(){
     <div class="card">
       <div class="section-title" style="margin-top:0;">When I'm taking good care of myself, I...</div>
       ${items.map((i,idx)=>{ const key=checklistKey('bestversion',i); return `
-        <div class="check-row ${c[key]?'checked':''}">
-          <input type="checkbox" data-toggle="${esc(key)}" ${c[key]?'checked':''}>
-          <label style="flex:1;">${esc(i)}</label>
+        <div class="check-row ${c[key]?'checked':''}" style="cursor:default;">
+          <label class="check-row" style="flex:1; padding:0; border:none;">
+            <input type="checkbox" data-toggle="${esc(key)}" ${c[key]?'checked':''}>
+            <span class="check-row-text">${esc(i)}</span>
+          </label>
           <button class="del" data-bestversion-del="${idx}">remove</button>
         </div>`; }).join('')}
       <div class="add-item-row"><input type="text" placeholder="e.g. Get up on time" data-bestversion-input><button data-bestversion-add>Add</button></div>
@@ -2768,7 +3053,7 @@ function renderWeeklyCheckinCard(ci){
     ${ci.moneyLine ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--savings);">💰 Money</div><div class="sub">${esc(ci.moneyLine)}</div></div>` : ''}
     ${ci.goalsCompleted.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--dash);">🎯 Goals completed</div>${ci.goalsCompleted.map(g=>`<div class="sub">${esc(g)}</div>`).join('')}</div>` : ''}
     ${ci.achievements.length ? `<div style="margin-top:10px;"><div style="font-weight:700;font-size:13px;color:var(--photo);">🏆 Achievements</div>${ci.achievements.map(a=>`<div class="sub">${esc(a)}</div>`).join('')}</div>` : ''}
-    <div style="text-align:right;margin-top:10px;"><button data-del="weeklyCheckins:${ci.id}" style="border:none;background:none;color:var(--ink-soft);">✕</button></div>
+    <div style="text-align:right;margin-top:10px;"><button data-del="weeklyCheckins:${ci.id}" class="icon-btn">✕</button></div>
   </div>`;
 }
 
@@ -2954,6 +3239,747 @@ async function performRestore(){
 }
 
 function esc(s){ if(s===undefined||s===null) return ''; return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ================= BECOMING: Seasons, Areas, Journey, Identity, Relationships ================= */
+
+function currentSeason(){
+  return DB.seasons.find(s=>s.status==='active') || DB.seasons[DB.seasons.length-1];
+}
+function daysBetween(aIso,bIso){ return Math.round((new Date(bIso+'T00:00:00') - new Date(aIso+'T00:00:00'))/86400000); }
+function renderSeasonBanner(){
+  const s = currentSeason();
+  if(!s) return '';
+  const today = todayISO();
+  const total = daysBetween(s.start, s.end);
+  const elapsed = Math.min(Math.max(daysBetween(s.start, today),0), total);
+  const pct = total>0 ? Math.round(elapsed/total*100) : 0;
+  const daysLeft = Math.max(daysBetween(today, s.end), 0);
+  return `<button data-nav-seasons style="all:unset; display:block; width:100%; cursor:pointer;">
+  <div class="season-card">
+    <div class="tag">🌱 Season ${String(s.number).padStart(2,'0')} — ${esc(s.name)}</div>
+    <h3>${esc(s.focus||'')}</h3>
+    <div class="bar-track" style="background:var(--cream-2);"><div class="bar-fill" style="background:var(--dash); width:${pct}%"></div></div>
+    <p style="margin-top:8px;">${fmtDate(s.start)} → ${fmtDate(s.end)} · ${daysLeft>0 ? daysLeft+' days left in this season' : 'Season complete — start the next one in Seasons'}</p>
+  </div></button>`;
+}
+
+/* ---------------- Area pages ---------------- */
+function renderAreaPage(key){
+  const a = AREAS.find(x=>x.key===key);
+  if(!a) return renderHome();
+  let body = '';
+  if(a.special==='mind'){
+    body = `
+    <div class="life-grid">
+      <button class="life-card" data-nav-identity style="background:var(--mind-bg); color:var(--mind);"><div class="emoji">🌿</div><div><div class="name">Who I'm Becoming</div><div class="sub">${DB.identityStatements.length} statements</div></div></button>
+      <button class="life-card" data-nav-reflections style="background:var(--mind-bg); color:var(--mind);"><div class="emoji">🌸</div><div><div class="name">Reflections</div><div class="sub">${DB.proudMoments.length+DB.weeklyReflections.length} entries</div></div></button>
+      <button class="life-card" data-nav-bestversion style="background:var(--mind-bg); color:var(--mind);"><div class="emoji">🌱</div><div><div class="name">My Best Version</div><div class="sub">Your own definition</div></div></button>
+      <button class="life-card" data-life="sleep" style="background:var(--sleep-bg); color:var(--sleep);"><div class="emoji">😴</div><div><div class="name">Sleep</div><div class="sub">${lifeSubtext('sleep')}</div></div></button>
+    </div>`;
+  } else if(a.special==='relationships'){
+    body = `
+    <div class="life-grid">
+      <button class="life-card" data-nav-relationships style="background:var(--relationships-bg); color:var(--relationships);"><div class="emoji">❤️</div><div><div class="name">Memories & Moments</div><div class="sub">${DB.relationships.length} recorded</div></div></button>
+    </div>`;
+  } else {
+    const secs = LIFE_SECTIONS.filter(s=>a.sections.includes(s.key));
+    body = `<div class="life-grid">${secs.map(s=>`
+      <button class="life-card" data-life="${s.key}" style="background:var(${s.bg}); color:var(${s.color});">
+        <div class="emoji">${s.emoji}</div>
+        <div><div class="name">${s.name}</div><div class="sub">${lifeSubtext(s.key)}</div></div>
+      </button>`).join('')}</div>`;
+  }
+  const areaGoals = DB.goals.filter(g=>g.area===key);
+  const areaPhotos = DB.progressPhotos.filter(p=>p.area===key).sort((x,y)=>y.date.localeCompare(x.date)).slice(0,6);
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>${a.emoji} ${esc(a.name)}</h2></div>
+  <div class="screen">
+    <p class="sub" style="margin:-4px 0 14px;">${esc(a.tagline)}</p>
+    ${body}
+
+    ${areaGoals.length ? `<div class="section-title">Goals in ${esc(a.name)} <div class="rule"></div></div><div class="card">${areaGoals.map(g=>{
+      const cur = goalCurrent(g);
+      return `<div class="entry-item"><div><div class="main">${esc(g.name)}</div><div class="sub">${g.completed?'✅ Completed':(g.target?cur+' / '+g.target:'')}</div></div></div>`;
+    }).join('')}</div>` : ''}
+
+    ${renderMilestonesForArea(key)}
+
+    <div class="section-title">Progress Photos <div class="rule"></div></div>
+    <button class="btn-secondary" data-nav-progressphotos="${key}">📸 Open ${esc(a.name)} Progress Photos</button>
+    <div style="height:8px;"></div>
+    <button class="btn-ghost" data-nav-thennow-area="${key}">🌿 Then → Now for ${esc(a.name)}</button>
+    ${areaPhotos.length ? `<div class="area-grid" style="grid-template-columns:repeat(3,1fr); margin-top:10px;">${areaPhotos.map(p=>`
+      <div><img src="${p.photoData}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;"><div style="font-size:10px;color:var(--ink-soft);text-align:center;">${fmtDate(p.date)}</div></div>`).join('')}</div>` : ''}
+  </div>`;
+}
+
+/* ---------------- Journey ---------------- */
+function buildJourneyTimeline(){
+  const items = [];
+  DB.achievements.forEach(a=> items.push({date:a.date, icon:a.icon||'🏆', main:a.title, meta:'Achievement'}));
+  DB.proudMoments.forEach(p=> items.push({date:p.date, icon:'🌸', main:p.text, meta:'Proud moment'}));
+  DB.weeklyReflections.forEach(r=> items.push({date:r.date, icon:'🌿', main:r.proud||r.wentWell||'Weekly reflection', meta:'Reflection'}));
+  (DB.goals||[]).filter(g=>g.completedAt).forEach(g=> items.push({date:g.completedAt.slice(0,10), icon:'🎯', main:'Goal completed: '+g.name, meta:'Goal'}));
+  DB.seasons.filter(s=>s.status!=='active').forEach(s=> items.push({date:s.end, icon:'🌱', main:'Season '+String(s.number).padStart(2,'0')+' — '+s.name+' complete', meta:'Season'}));
+  (DB.relationships||[]).forEach(r=> items.push({date:r.date, icon:'❤️', main:r.title, meta:'Relationships'}));
+  (DB.milestones||[]).forEach(m=> items.push({date:m.date, icon:'🏵️', main:m.title, meta:(m.area?cap(m.area):'Milestone')}));
+  items.sort((x,y)=> y.date.localeCompare(x.date));
+  return items;
+}
+function renderJourneyPage(){
+  const timeline = buildJourneyTimeline();
+  return `
+  <div class="topbar"><h1>🌿 Journey</h1></div>
+  <div class="screen">
+    <div class="progress-card" style="background:linear-gradient(135deg,#7C6F9E,#B8912B);">
+      <div class="label">Who I was → Who I am → Who I'm becoming</div>
+      <div class="pct" style="font-size:22px;">Your story, in order</div>
+    </div>
+    ${renderThenNow()}
+    <button class="btn-secondary" data-nav-thennow>🌿 Then → Now Photos</button>
+    <div style="height:8px;"></div>
+    <button class="btn-secondary" data-nav-myyear>🌱 Open My Life So Far (full stats)</button>
+    <div style="height:8px;"></div>
+    <button class="btn-secondary" data-nav-memories>📸 Open Memories</button>
+    <div class="section-title">Timeline <div class="rule"></div></div>
+    ${timeline.length ? `<div class="card">${timeline.slice(0,60).map(t=>`
+      <div class="timeline-item">
+        <div class="timeline-dot">${t.icon}</div>
+        <div class="timeline-body"><div class="main">${esc(t.main)}</div><div class="meta">${fmtDate(t.date)} · ${esc(t.meta)}</div></div>
+      </div>`).join('')}</div>` : emptyState('🌿','Your journey starts now',"As you log things, achieve goals and reflect, they'll build into your story here.")}
+  </div>`;
+}
+
+/* ---------------- Who I'm Becoming ---------------- */
+function renderIdentityPage(){
+  const items = [...DB.identityStatements].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>🌿 Who I'm Becoming</h2></div>
+  <div class="screen">
+    <div class="limitation">Not a checklist — these are the values and identity you're intentionally growing into. Add, revisit and edit them as you change.</div>
+    <div class="card" style="margin-top:14px;">
+      <div class="form-field"><label>I am becoming someone who...</label><textarea id="identityInput" placeholder="e.g. follows through on what she commits to"></textarea></div>
+      <button class="btn-primary" id="identityAddBtn" style="margin-top:0;">+ Add Statement</button>
+    </div>
+    ${items.length ? items.map(i=> i.editing ? `
+      <div class="card">
+        <textarea id="identityEdit_${i.id}">${esc(i.text)}</textarea>
+        <button class="btn-secondary" data-identity-save="${i.id}" style="margin-top:8px;">Save</button>
+      </div>` : `
+      <div class="card" style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+        <div><div style="font-size:14.5px;">🌿 I am becoming someone who ${esc(i.text)}</div><div class="sub" style="margin-top:4px;">${fmtDate(i.date)}</div></div>
+        <div style="display:flex; gap:6px; flex-shrink:0;">
+          <button data-identity-edit="${i.id}" class="icon-btn">✎</button>
+          <button data-identity-del="${i.id}" class="icon-btn">✕</button>
+        </div>
+      </div>`).join('') : emptyState('🌿','No statements yet','Start with one thing you want to keep becoming.')}
+  </div>`;
+}
+let identityEditingId = null;
+function addIdentityStatement(text){
+  if(!text || !text.trim()) return;
+  DB.identityStatements.unshift({id:uid(), text:text.trim(), date:todayISO()});
+  save('identityStatements'); render();
+}
+function deleteIdentityStatement(id){
+  DB.identityStatements = DB.identityStatements.filter(i=>i.id!==id);
+  save('identityStatements'); render();
+}
+
+/* ---------------- Relationships ---------------- */
+const RELATIONSHIP_TYPES = [
+  {k:'memory', ic:'❤️', l:'Memory'},
+  {k:'date', ic:'📅', l:'Important Date'},
+  {k:'moment', ic:'🌸', l:'Moment'},
+];
+function renderRelationshipsPage(){
+  const items = [...DB.relationships].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>❤️ Relationships</h2></div>
+  <div class="screen">
+    <div class="limitation">Loving people well, remembered — family, friends, important moments and dates.</div>
+    <div class="card" style="margin-top:14px;">
+      <div class="form-field"><label>Who / what is this about?</label><input type="text" id="relName" placeholder="e.g. Ant, Mum, a friend"></div>
+      <div class="form-field"><label>Title</label><input type="text" id="relTitle" placeholder="e.g. Anniversary, A really good day together"></div>
+      <div class="chip-row" id="relTypeRow">${RELATIONSHIP_TYPES.map((t,idx)=>`<button type="button" class="chip ${idx===0?'active':''}" data-rel-type="${t.k}">${t.ic} ${t.l}</button>`).join('')}</div>
+      <div class="form-field" style="margin-top:12px;"><label>Date</label><input type="date" id="relDate" value="${todayISO()}"></div>
+      <div class="form-field"><label>Note</label><textarea id="relNote" placeholder="What happened, why it mattered..."></textarea></div>
+      <button class="btn-primary" id="relSaveBtn" style="margin-top:0;" data-rel-type-selected="memory">+ Save</button>
+    </div>
+    ${items.length ? `<div class="card">${items.map(r=>{
+      const t = RELATIONSHIP_TYPES.find(x=>x.k===r.type)||RELATIONSHIP_TYPES[0];
+      return `<div class="entry-item"><div><div class="meta">${fmtDate(r.date)} · ${t.l}</div><div class="main">${t.ic} ${esc(r.title)}${r.name?' — '+esc(r.name):''}</div>${r.note?`<div class="sub">${esc(r.note)}</div>`:''}</div><button data-del="relationships:${r.id}" class="icon-btn">✕</button></div>`;
+    }).join('')}</div>` : emptyState('❤️','Nothing recorded yet','Save a memory, an important date, or a moment worth keeping.')}
+  </div>`;
+}
+
+/* ---------------- Seasons ---------------- */
+let seasonFormOpen = false;
+function renderSeasonsPage(){
+  const s = currentSeason();
+  const past = [...DB.seasons].filter(x=>x.id!==(s&&s.id)).sort((a,b)=>b.number-a.number);
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>🌱 Seasons</h2></div>
+  <div class="screen">
+    ${s ? `<div class="card">
+      <div class="section-title" style="margin-top:0;">Current Season</div>
+      <div class="tag" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-soft);">Season ${String(s.number).padStart(2,'0')} — ${esc(s.name)}</div>
+      <div class="sub" style="margin:4px 0 10px;">${fmtDate(s.start)} → ${fmtDate(s.end)}</div>
+      <div class="form-field"><label>Focus for this season</label><textarea id="seasonFocusInput">${esc(s.focus||'')}</textarea></div>
+      <button class="btn-secondary" id="seasonFocusSaveBtn" style="margin-top:0;">Save Focus</button>
+      ${(()=>{
+        const sGoals = DB.goals.filter(g=>g.seasonId===s.id);
+        const sMilestones = DB.milestones.filter(m=>m.seasonId===s.id);
+        if(!sGoals.length && !sMilestones.length) return '';
+        return `<div class="stat-row" style="margin-top:12px;">
+          <div class="stat"><div class="n">${sGoals.filter(g=>g.completed).length}/${sGoals.length}</div><div class="l">Goals done</div></div>
+          <div class="stat"><div class="n">${sMilestones.length}</div><div class="l">Milestones</div></div>
+        </div>`;
+      })()}
+    </div>` : emptyState('🌱','No season yet','Start your first season below.')}
+
+    ${seasonFormOpen ? `<div class="card">
+      <div class="section-title" style="margin-top:0;">Start a New Season</div>
+      <div class="form-field"><label>Name</label><input type="text" id="newSeasonName" placeholder="e.g. Growth"></div>
+      <div class="form-field"><label>Focus</label><textarea id="newSeasonFocus" placeholder="What is this season about?"></textarea></div>
+      <div class="form-field"><label>Start date</label><input type="date" id="newSeasonStart" value="${todayISO()}"></div>
+      <div class="form-field"><label>End date</label><input type="date" id="newSeasonEnd"></div>
+      <button class="btn-primary" id="createSeasonBtn" style="margin-top:0;">Create Season</button>
+      <button class="btn-ghost" id="cancelSeasonBtn">Cancel</button>
+    </div>` : `<button class="btn-secondary" id="openSeasonFormBtn">🌱 Start New Season</button>`}
+
+    <div class="section-title">Past Seasons <div class="rule"></div></div>
+    ${past.length ? `<div class="card">${past.map(p=>`
+      <div class="entry-item"><div><div class="meta">Season ${String(p.number).padStart(2,'0')}</div><div class="main">${esc(p.name)}</div><div class="sub">${fmtDate(p.start)} → ${fmtDate(p.end)}${p.focus?' · '+esc(p.focus):''}</div></div></div>`).join('')}</div>` : emptyState('🌱','No past seasons yet','Your first season stays here forever once you start a new one.')}
+  </div>`;
+}
+function startNewSeason(name, focus, start, end){
+  if(!name || !start || !end) return;
+  const s = currentSeason();
+  if(s){ s.status = 'completed'; if(!s.end) s.end = todayISO(); }
+  const nextNumber = DB.seasons.reduce((m,x)=>Math.max(m,x.number||0),0) + 1;
+  DB.seasons.push({ id:uid(), number:nextNumber, name:name.trim(), focus:(focus||'').trim(), start, end, status:'active' });
+  save('seasons');
+  addAchievement('season-'+nextNumber, 'Started Season '+String(nextNumber).padStart(2,'0')+' — '+name.trim(), {icon:'🌱', description:'A new season of Becoming began.'});
+  seasonFormOpen = false; render();
+}
+
+/* ================= CUSTOM ROUTINES ================= */
+const WEEKDAY_LABELS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function routineChecklistKey(routineId, stepId){ return checklistKey('cr:'+routineId, stepId); }
+function isRoutineActiveOn(r, iso){
+  if(r.frequency==='weekly') return (r.days||[]).includes(dayIdx(iso));
+  return true; // daily and custom routines are always available to complete
+}
+function routineStepsDoneToday(r){
+  const c = getChecklistFor(todayISO());
+  return (r.steps||[]).filter(s=>c[routineChecklistKey(r.id,s.id)]).length;
+}
+function routineHistorySummary(r, daysBack){
+  daysBack = daysBack || 14;
+  let activeDays=0, completedDays=0;
+  const d = new Date();
+  for(let i=0;i<daysBack;i++){
+    const iso = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(isRoutineActiveOn(r, iso) && r.steps && r.steps.length){
+      activeDays++;
+      const c = DB.checklist[iso]||{};
+      if(r.steps.every(s=>c[routineChecklistKey(r.id,s.id)])) completedDays++;
+    }
+    d.setDate(d.getDate()-1);
+  }
+  return {activeDays, completedDays};
+}
+let routineFormOpen = null; // null | 'new' | routineId being edited
+let routineFormDays = [];
+let routineFormSteps = [];
+function openRoutineForm(editId){
+  routineFormOpen = editId || 'new';
+  const r = editId ? DB.customRoutines.find(x=>x.id===editId) : null;
+  routineFormDays = r ? [...(r.days||[])] : [];
+  routineFormSteps = r ? r.steps.map(s=>s.text) : [];
+  render();
+}
+function closeRoutineForm(){ routineFormOpen = null; routineFormDays = []; routineFormSteps = []; render(); }
+function renderRoutineStepRows(){
+  return `<div id="routineStepsList">${routineFormSteps.map((text,idx)=>`
+    <div class="check-row" style="border-bottom:1px solid var(--cream-2);">
+      <input type="text" class="routine-step-text" data-step-idx="${idx}" value="${esc(text)}" style="flex:1; border:none; background:none; font-size:15px; padding:4px 0;">
+      <button type="button" data-step-up="${idx}" class="icon-btn" ${idx===0?'disabled':''}>↑</button>
+      <button type="button" data-step-down="${idx}" class="icon-btn" ${idx===routineFormSteps.length-1?'disabled':''}>↓</button>
+      <button type="button" data-step-remove="${idx}" class="del">✕</button>
+    </div>`).join('')}
+    <div class="add-item-row"><input type="text" placeholder="Add a step" id="newStepInput"><button type="button" id="addStepBtn">Add</button></div>
+  </div>`;
+}
+function syncStepsFromDOM(){
+  document.querySelectorAll('.routine-step-text').forEach(inp=>{ routineFormSteps[Number(inp.dataset.stepIdx)] = inp.value; });
+}
+function refreshRoutineStepsList(){
+  const container = document.getElementById('routineStepsList');
+  if(!container) return;
+  container.outerHTML = renderRoutineStepRows();
+  wireRoutineStepRows();
+}
+function wireRoutineStepRows(){
+  document.querySelectorAll('[data-step-up]').forEach(b=> b.onclick = ()=>{
+    syncStepsFromDOM();
+    const i = Number(b.dataset.stepUp);
+    if(i>0){ [routineFormSteps[i-1],routineFormSteps[i]] = [routineFormSteps[i],routineFormSteps[i-1]]; }
+    refreshRoutineStepsList();
+  });
+  document.querySelectorAll('[data-step-down]').forEach(b=> b.onclick = ()=>{
+    syncStepsFromDOM();
+    const i = Number(b.dataset.stepDown);
+    if(i<routineFormSteps.length-1){ [routineFormSteps[i+1],routineFormSteps[i]] = [routineFormSteps[i],routineFormSteps[i+1]]; }
+    refreshRoutineStepsList();
+  });
+  document.querySelectorAll('[data-step-remove]').forEach(b=> b.onclick = ()=>{
+    syncStepsFromDOM();
+    routineFormSteps.splice(Number(b.dataset.stepRemove),1);
+    refreshRoutineStepsList();
+  });
+  const addBtn = document.getElementById('addStepBtn');
+  if(addBtn) addBtn.onclick = ()=>{
+    syncStepsFromDOM();
+    const input = document.getElementById('newStepInput');
+    const v = input.value.trim(); if(!v) return;
+    routineFormSteps.push(v);
+    refreshRoutineStepsList();
+    const newInput = document.getElementById('newStepInput'); if(newInput) newInput.focus();
+  };
+}
+function saveRoutineForm(editId, name, area, frequency, days, stepsText){
+  name = (name||'').trim();
+  if(!name) return;
+  const lines = (stepsText||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const existing = editId ? DB.customRoutines.find(x=>x.id===editId) : null;
+  const prevSteps = existing ? (existing.steps||[]) : [];
+  const steps = lines.map(text=>{
+    const match = prevSteps.find(ps=> ps.text.toLowerCase()===text.toLowerCase());
+    return { id: match ? match.id : uid(), text };
+  });
+  if(existing){
+    existing.name = name; existing.area = area; existing.frequency = frequency; existing.days = days||[]; existing.steps = steps;
+  } else {
+    DB.customRoutines.push({ id:uid(), name, area, frequency, days: days||[], steps, archived:false, createdAt: todayISO() });
+  }
+  save('customRoutines');
+  closeRoutineForm();
+  showToast(existing ? '🌿 Routine updated' : '🌱 Routine created');
+}
+function archiveRoutine(id, archived){ const r=DB.customRoutines.find(x=>x.id===id); if(r){ r.archived=archived; save('customRoutines'); render(); } }
+function deleteRoutineForever(id){ DB.customRoutines = DB.customRoutines.filter(x=>x.id!==id); save('customRoutines'); render(); }
+function moveRoutine(id, dir){
+  const arr = DB.customRoutines;
+  const idx = arr.findIndex(x=>x.id===id);
+  const swapIdx = dir==='up' ? idx-1 : idx+1;
+  if(idx<0 || swapIdx<0 || swapIdx>=arr.length) return;
+  [arr[idx], arr[swapIdx]] = [arr[swapIdx], arr[idx]];
+  save('customRoutines'); render();
+}
+function toggleRoutineStep(routineId, stepId){
+  const iso = todayISO();
+  const c = getChecklistFor(iso);
+  const key = routineChecklistKey(routineId, stepId);
+  c[key] = !c[key];
+  save('checklist'); render();
+}
+function completeRoutineAll(routineId){
+  const r = DB.customRoutines.find(x=>x.id===routineId); if(!r) return;
+  const c = getChecklistFor(todayISO());
+  r.steps.forEach(s=> c[routineChecklistKey(r.id,s.id)] = true);
+  save('checklist'); render();
+  showToast('🌱 Routine complete for today');
+}
+function areaBadge(areaKey){
+  const a = AREAS.find(x=>x.key===areaKey);
+  if(!a) return '';
+  return `<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(${a.color});background:var(${a.bg});border-radius:8px;padding:2px 7px;">${a.emoji} ${esc(a.name)}</span>`;
+}
+function renderRoutineCard(r){
+  const activeToday = isRoutineActiveOn(r, todayISO());
+  const doneToday = routineStepsDoneToday(r);
+  const totalSteps = (r.steps||[]).length;
+  const hist = routineHistorySummary(r);
+  const freqLabel = r.frequency==='weekly' ? 'Weekly · '+(r.days||[]).map(d=>WEEKDAY_LABELS[d]).join('/') : r.frequency==='custom' ? 'Anytime' : 'Daily';
+  return `<div class="card" data-routine-card="${r.id}">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <div data-drag-handle style="touch-action:none; cursor:grab; color:var(--ink-soft); font-size:18px; padding:2px 2px 0 0; user-select:none;">⠿</div>
+        <div>
+          <div style="font-weight:700; font-size:15px;">${esc(r.name)}</div>
+          <div style="margin-top:4px; display:flex; gap:6px; flex-wrap:wrap;">${r.area?areaBadge(r.area):''}<span class="sub" style="font-size:11px;">${freqLabel}</span></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:4px; flex-shrink:0;">
+        <button data-routine-edit="${r.id}" class="icon-btn">✎</button>
+        <button data-routine-archive="${r.id}" class="icon-btn">📦</button>
+        <button data-routine-delete="${r.id}" class="icon-btn">✕</button>
+      </div>
+    </div>
+    ${!totalSteps ? `<div class="sub" style="margin-top:8px;">No steps yet — edit this routine to add some.</div>` : !activeToday ? `<div class="sub" style="margin-top:8px;">Not scheduled for today.</div>` : `
+    <div style="margin-top:10px;">${r.steps.map(s=>{
+      const c = getChecklistFor(todayISO()); const key=routineChecklistKey(r.id,s.id);
+      return `<label class="check-row ${c[key]?'checked':''}">
+        <input type="checkbox" data-routine-step="${r.id}:${s.id}" ${c[key]?'checked':''}>
+        <span class="check-row-text">${esc(s.text)}</span>
+      </label>`;
+    }).join('')}</div>
+    ${doneToday<totalSteps ? `<button class="btn-secondary" data-routine-complete-all="${r.id}" style="margin-top:8px;">Mark whole routine done</button>` : `<div class="sub" style="margin-top:8px;color:var(--dash);font-weight:700;">🌱 Complete for today</div>`}
+    `}
+    ${hist.activeDays>0 ? `<div class="sub" style="margin-top:8px;">${hist.completedDays} of the last ${hist.activeDays} active days completed — steady is enough.</div>` : ''}
+  </div>`;
+}
+function renderRoutineFormCard(editId){
+  const r = editId!=='new' ? DB.customRoutines.find(x=>x.id===editId) : null;
+  return `<div class="card">
+    <div class="section-title" style="margin-top:0;">${r?'Edit Routine':'New Routine'}</div>
+    <div class="form-field"><label>Name</label><input type="text" id="routineName" value="${r?esc(r.name):''}" placeholder="e.g. Sunday Reset"></div>
+    <div class="form-field"><label>Area (optional)</label><select id="routineArea">
+      <option value="" ${!r||!r.area?'selected':''}>No specific area</option>
+      ${AREAS.map(a=>`<option value="${a.key}" ${r&&r.area===a.key?'selected':''}>${a.emoji} ${a.name}</option>`).join('')}
+    </select></div>
+    <div class="form-field"><label>Frequency</label><select id="routineFrequency">
+      <option value="daily" ${(!r||r.frequency==='daily')?'selected':''}>Daily</option>
+      <option value="weekly" ${r&&r.frequency==='weekly'?'selected':''}>Weekly (choose days)</option>
+      <option value="custom" ${r&&r.frequency==='custom'?'selected':''}>Anytime (custom)</option>
+    </select></div>
+    <div class="form-field" id="routineDaysField"><label>Days</label><div class="chip-row">${WEEKDAY_LABELS.map((l,idx)=>`<button type="button" class="chip ${routineFormDays.includes(idx)?'active':''}" data-routine-day="${idx}">${l}</button>`).join('')}</div></div>
+    <div class="form-field"><label>Steps</label>${renderRoutineStepRows()}</div>
+    <button class="btn-primary" id="routineSaveBtn" data-routine-save-id="${editId==='new'?'':editId}" style="margin-top:0;">${r?'Save Changes':'Create Routine'}</button>
+    <button class="btn-ghost" id="routineCancelBtn">Cancel</button>
+  </div>`;
+}
+function renderHomeRoutinesWidget(){
+  const todays = DB.customRoutines.filter(r=>!r.archived && isRoutineActiveOn(r, todayISO()) && (r.steps||[]).length);
+  if(!todays.length) return '';
+  return `<div class="section-title">Your Routines Today <div class="rule"></div></div>
+  <div class="card">${todays.map(r=>{
+    const done = routineStepsDoneToday(r); const total = r.steps.length;
+    return `<div class="entry-item">
+      <div style="flex:1;"><div class="main">${esc(r.name)}</div><div class="sub">${done} / ${total} steps</div></div>
+      ${done<total ? `<button data-routine-complete-all="${r.id}" class="btn-ghost">Mark done</button>` : `<span style="color:var(--dash);font-weight:700;font-size:13px;">🌱 Done</span>`}
+    </div>`;
+  }).join('')}</div>`;
+}
+function renderRoutinesPage(){
+  const active = DB.customRoutines.filter(r=>!r.archived);
+  const archived = DB.customRoutines.filter(r=>r.archived);
+  return `
+  <div class="topbar"><h1>📅 Routines</h1></div>
+  <div class="screen">
+    <p class="sub" style="margin:-4px 0 14px;">Your daily rhythm, plus any routines you've built for yourself. Consistency, not perfection.</p>
+    <div class="section-title" style="margin-top:0;">Daily Rhythm <div class="rule"></div></div>
+    ${renderRoutineEditor()}
+    <div class="section-title">Your Routines <div class="rule"></div></div>
+    ${routineFormOpen ? renderRoutineFormCard(routineFormOpen) : `<button class="btn-secondary" id="newRoutineBtn">+ New Routine</button>`}
+    ${active.length ? `<div id="routinesList">${active.map(renderRoutineCard).join('')}</div>` : (!routineFormOpen ? emptyState('🌿','No routines yet','Create one for your mornings, your skincare, a weekly reset — whatever helps you.') : '')}
+    ${active.length>1 && !routineFormOpen ? `<div class="sub" style="text-align:center;margin-top:-4px;">Drag ⠿ to reorder</div>` : ''}
+    ${archived.length ? `<div class="section-title">Archived <div class="rule"></div></div>${archived.map(r=>`
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:14px;">${esc(r.name)}</div>
+        <button class="btn-ghost" data-routine-archive-off="${r.id}">Restore</button>
+      </div>`).join('')}` : ''}
+    <div class="section-title">Also see <div class="rule"></div></div>
+    <button class="life-card" data-life="skin" style="width:100%; flex-direction:row; justify-content:flex-start; gap:12px; background:var(--skin-bg); color:var(--skin);"><span class="emoji">🧴</span><span class="name">Skincare Routine (AM/PM)</span></button>
+  </div>`;
+}
+
+/* ================= PROGRESS PHOTOS ================= */
+const PROGRESS_PHOTO_CATEGORIES = ['Hair','Skin','Body','Style','Other'];
+let progressPhotoFormOpen = false;
+let progressPhotoAreaFilter = null;
+let compareSelection = [];
+function groupProgressPhotosByCategory(list){
+  const groups = {};
+  list.forEach(p=>{ const cat = p.category||'Other'; (groups[cat]=groups[cat]||[]).push(p); });
+  Object.keys(groups).forEach(k=> groups[k].sort((a,b)=>a.date.localeCompare(b.date)));
+  return groups;
+}
+function renderProgressPhotosPage(presetArea){
+  const areaFilter = presetArea!==undefined ? presetArea : progressPhotoAreaFilter;
+  let list = [...DB.progressPhotos];
+  if(areaFilter) list = list.filter(p=>p.area===areaFilter);
+  const groups = groupProgressPhotosByCategory(list);
+  const catKeys = Object.keys(groups);
+  const compareImgs = compareSelection.map(id=>DB.progressPhotos.find(p=>p.id===id)).filter(Boolean);
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>📸 Progress Photos</h2></div>
+  <div class="screen">
+    ${presetArea===undefined ? `<div class="chip-row" style="margin-bottom:10px;">
+      <button type="button" class="chip ${!progressPhotoAreaFilter?'active':''}" data-progphoto-area-filter="">All areas</button>
+      ${AREAS.map(a=>`<button type="button" class="chip ${progressPhotoAreaFilter===a.key?'active':''}" data-progphoto-area-filter="${a.key}">${a.emoji} ${a.name}</button>`).join('')}
+    </div>` : ''}
+    ${progressPhotoFormOpen ? `<div class="card">
+      <div class="section-title" style="margin-top:0;">Add Progress Photo</div>
+      <div class="form-field"><label>Photo</label><input type="file" accept="image/*" id="pp_photoFile" onchange="handleProgressPhotoFileChange(this)"><div id="ppPhotoPreview" style="margin-top:8px;"></div></div>
+      <div class="form-field"><label>Date</label><input type="date" id="pp_date" value="${todayISO()}"></div>
+      <div class="form-field"><label>Area</label><select id="pp_area"><option value="">No specific area</option>${AREAS.map(a=>`<option value="${a.key}" ${presetArea===a.key?'selected':''}>${a.emoji} ${a.name}</option>`).join('')}</select></div>
+      <div class="form-field"><label>Category</label><select id="pp_category">${PROGRESS_PHOTO_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('')}</select></div>
+      <div class="form-field"><label>Note</label><textarea id="pp_note" placeholder="Anything you want to remember about this one"></textarea></div>
+      <div class="form-field"><label>Tags (comma separated)</label><input type="text" id="pp_tags" placeholder="e.g. before, new routine"></div>
+      <button class="btn-primary" id="progPhotoSaveBtn" style="margin-top:0;">Save Photo</button>
+      <button class="btn-ghost" id="progPhotoCancelBtn">Cancel</button>
+    </div>` : `<button class="btn-secondary" id="progPhotoAddBtn">+ Add Progress Photo</button><div style="height:8px;"></div><button class="btn-ghost" data-nav-thennow>🌿 Open Then → Now comparison</button>`}
+
+    ${compareImgs.length===2 ? `<div class="card">
+      <div class="section-title" style="margin-top:0;">Comparing</div>
+      <div style="display:flex; gap:8px;">
+        ${compareImgs.map(p=>`<div style="flex:1;"><img src="${p.photoData}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;"><div class="sub" style="text-align:center;margin-top:4px;">${fmtDate(p.date)}</div></div>`).join('')}
+      </div>
+      <button class="btn-ghost" id="clearCompareBtn">Clear comparison</button>
+    </div>` : ''}
+
+    ${catKeys.length ? catKeys.map(cat=>`
+      <div class="section-title">${esc(cat)} <div class="rule"></div></div>
+      <div class="area-grid" style="grid-template-columns:repeat(3,1fr);">
+        ${groups[cat].map(p=>`
+          <button data-progphoto-select="${p.id}" style="all:unset; cursor:pointer; position:relative; display:block;">
+            <img src="${p.photoData}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px; ${compareSelection.includes(p.id)?'outline:3px solid var(--dash);':''}">
+            <div style="font-size:10px;color:var(--ink-soft);text-align:center;margin-top:2px;">${fmtDate(p.date)}</div>
+          </button>`).join('')}
+      </div>`).join('') : emptyState('📸','No progress photos yet','Add your first one above — hair, skin, body, style, whatever you want to track over time.')}
+  </div>`;
+}
+async function handleProgressPhotoFileChange(input){
+  const file = input.files && input.files[0];
+  const preview = document.getElementById('ppPhotoPreview');
+  const saveBtn = document.getElementById('progPhotoSaveBtn');
+  if(!file) return;
+  if(saveBtn){ saveBtn.disabled = true; saveBtn.textContent = 'Processing photo...'; }
+  if(preview) preview.innerHTML = `<div class="sub">Processing photo...</div>`;
+  try{
+    const dataUrl = await compressImageFile(file, 640);
+    qaTemp.ppPhotoData = dataUrl;
+    if(preview) preview.innerHTML = `<img src="${dataUrl}" style="width:100%;border-radius:12px;">`;
+  }catch(e){
+    if(preview) preview.innerHTML = `<div class="sub" style="color:#B6607D;">Could not process that photo.</div>`;
+  }finally{
+    if(saveBtn){ saveBtn.disabled = false; saveBtn.textContent = 'Save Photo'; }
+  }
+}
+function saveProgressPhoto(){
+  if(!qaTemp.ppPhotoData) return;
+  const date = document.getElementById('pp_date').value || todayISO();
+  const area = document.getElementById('pp_area').value;
+  const category = document.getElementById('pp_category').value;
+  const note = document.getElementById('pp_note').value.trim();
+  const tags = document.getElementById('pp_tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  DB.progressPhotos.push({ id:uid(), photoData: qaTemp.ppPhotoData, date, area, category, note, tags, seasonId: (currentSeason()||{}).id });
+  save('progressPhotos');
+  qaTemp.ppPhotoData = null;
+  progressPhotoFormOpen = false;
+  render();
+}
+
+/* ================= MILESTONES ================= */
+let milestoneFormOpenFor = null; // area key or null
+function createMilestone(title, date, area, description, tags){
+  if(!title || !title.trim()) return;
+  DB.milestones.push({ id:uid(), title:title.trim(), date: date||todayISO(), area, description:(description||'').trim(), tags:(tags||'').split(',').map(t=>t.trim()).filter(Boolean), seasonId:(currentSeason()||{}).id });
+  save('milestones');
+  milestoneFormOpenFor = null;
+  render();
+  showToast('🏆 Milestone added');
+}
+function deleteMilestone(id){ DB.milestones = DB.milestones.filter(m=>m.id!==id); save('milestones'); render(); }
+function renderMilestonesForArea(areaKey){
+  const items = DB.milestones.filter(m=>m.area===areaKey).sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="section-title">Milestones <div class="rule"></div></div>
+  ${milestoneFormOpenFor===areaKey ? `<div class="card">
+    <div class="form-field"><label>Title</label><input type="text" id="msTitle" placeholder="e.g. First 100kg leg press"></div>
+    <div class="form-field"><label>Date</label><input type="date" id="msDate" value="${todayISO()}"></div>
+    <div class="form-field"><label>Description</label><textarea id="msDesc" placeholder="What made this meaningful?"></textarea></div>
+    <div class="form-field"><label>Tags (comma separated)</label><input type="text" id="msTags"></div>
+    <button class="btn-primary" id="msSaveBtn" data-ms-area="${areaKey}" style="margin-top:0;">Save Milestone</button>
+    <button class="btn-ghost" id="msCancelBtn">Cancel</button>
+  </div>` : `<button class="btn-secondary" data-ms-open="${areaKey}">+ Add Milestone</button>`}
+  ${items.length ? items.map(m=>`
+    <div class="card"><div style="display:flex; justify-content:space-between; gap:10px;">
+      <div><div style="font-weight:700;font-size:14.5px;">🏵️ ${esc(m.title)}</div><div class="sub">${fmtDate(m.date)}</div>${m.description?`<div class="sub" style="margin-top:4px;">${esc(m.description)}</div>`:''}</div>
+      <button data-ms-del="${m.id}" class="icon-btn">✕</button>
+    </div></div>`).join('') : ''}`;
+}
+
+/* ================= GLOBAL SEARCH ================= */
+let searchQuery = '';
+let searchAreaFilter = '';
+let searchTypeFilter = '';
+let searchSeasonFilter = '';
+let searchDateFrom = '';
+let searchDateTo = '';
+const SEARCH_TYPES = ['goal','routine','milestone','reflection','journal','memory','season','achievement','relationship'];
+function buildSearchIndex(){
+  const idx = [];
+  DB.goals.forEach(g=> idx.push({type:'goal', icon:'🎯', title:g.name, sub:g.completed?'Completed goal':'Goal in progress', date:g.completedAt?g.completedAt.slice(0,10):(g.deadline||''), area:g.area||'', seasonId:g.seasonId||'', navTab:'goals'}));
+  DB.customRoutines.forEach(r=> idx.push({type:'routine', icon:'📅', title:r.name, sub:'Routine', date:r.createdAt||'', area:r.area||'', seasonId:'', navTab:'routines'}));
+  DB.milestones.forEach(m=> idx.push({type:'milestone', icon:'🏵️', title:m.title, sub:m.description||'Milestone', date:m.date, area:m.area||'', seasonId:m.seasonId||'', navTab:'area', navView:m.area}));
+  DB.proudMoments.forEach(p=> idx.push({type:'journal', icon:'🌸', title:p.text, sub:'Proud moment', date:p.date, area:'mind', seasonId:'', navTab:'reflections'}));
+  DB.weeklyReflections.forEach(r=> idx.push({type:'reflection', icon:'🌿', title:r.proud||r.wentWell||'Weekly reflection', sub:'Reflection', date:r.date, area:'mind', seasonId:'', navTab:'reflections'}));
+  DB.identityStatements.forEach(i=> idx.push({type:'journal', icon:'🌿', title:'I am becoming someone who '+i.text, sub:'Identity statement', date:i.date, area:'mind', seasonId:'', navTab:'identity'}));
+  DB.reading.forEach(r=> idx.push({type:'journal', icon:'📖', title:r.passage||'Reading', sub:r.impression||'Moral reading', date:r.date, area:'faith', seasonId:'', navTab:'life', navView:'moral'}));
+  DB.photos.forEach(p=> idx.push({type:'memory', icon:'📸', title:p.caption? p.caption.slice(0,60) : 'Photo of the Day', sub:'Memory', date:p.date, area:'life', seasonId:'', navTab:'memories'}));
+  DB.relationships.forEach(r=> idx.push({type:'relationship', icon:'❤️', title:r.title, sub:(r.name||'')+(r.note?' — '+r.note:''), date:r.date, area:'relationships', seasonId:'', navTab:'relationships'}));
+  DB.seasons.forEach(s=> idx.push({type:'season', icon:'🌱', title:'Season '+String(s.number).padStart(2,'0')+' — '+s.name, sub:s.focus||'Season', date:s.start, area:'', seasonId:s.id, navTab:'seasons'}));
+  DB.achievements.forEach(a=> idx.push({type:'achievement', icon:a.icon||'🏆', title:a.title, sub:a.description||'Achievement', date:a.date, area:'', seasonId:'', navTab:'achievements'}));
+  DB.progressPhotos.forEach(p=> idx.push({type:'memory', icon:'📸', title:(p.category||'Photo')+(p.note?': '+p.note:''), sub:'Progress photo', date:p.date, area:p.area||'', seasonId:p.seasonId||'', navTab:'progressphotos'}));
+  return idx;
+}
+function getFilteredSearchResults(){
+  let results = buildSearchIndex();
+  const q = searchQuery.trim().toLowerCase();
+  if(q) results = results.filter(r=> (r.title+' '+r.sub).toLowerCase().includes(q));
+  if(searchAreaFilter) results = results.filter(r=> r.area===searchAreaFilter);
+  if(searchTypeFilter) results = results.filter(r=> r.type===searchTypeFilter);
+  if(searchSeasonFilter) results = results.filter(r=> r.seasonId===searchSeasonFilter);
+  if(searchDateFrom) results = results.filter(r=> r.date && r.date>=searchDateFrom);
+  if(searchDateTo) results = results.filter(r=> r.date && r.date<=searchDateTo);
+  return results.sort((a,b)=> (b.date||'').localeCompare(a.date||'')).slice(0,80);
+}
+function renderSearchPage(){
+  const results = getFilteredSearchResults();
+  const activeFilters = !!(searchAreaFilter||searchTypeFilter||searchSeasonFilter||searchDateFrom||searchDateTo);
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>🔍 Search</h2></div>
+  <div class="screen">
+    <div class="form-field"><input type="text" id="searchInput" value="${esc(searchQuery)}" placeholder="Search your garden..." autofocus></div>
+    <div class="chip-row" style="margin-bottom:6px;">
+      <button type="button" class="chip ${!searchAreaFilter?'active':''}" data-search-area-filter="">All areas</button>
+      ${AREAS.map(a=>`<button type="button" class="chip ${searchAreaFilter===a.key?'active':''}" data-search-area-filter="${a.key}">${a.emoji} ${a.name}</button>`).join('')}
+    </div>
+    <div class="chip-row" style="margin-bottom:6px;">
+      <button type="button" class="chip ${!searchTypeFilter?'active':''}" data-search-type-filter="">All types</button>
+      ${SEARCH_TYPES.map(t=>`<button type="button" class="chip ${searchTypeFilter===t?'active':''}" data-search-type-filter="${t}">${cap(t)}</button>`).join('')}
+    </div>
+    <div class="chip-row" style="margin-bottom:10px;">
+      <button type="button" class="chip ${!searchSeasonFilter?'active':''}" data-search-season-filter="">All seasons</button>
+      ${DB.seasons.map(s=>`<button type="button" class="chip ${searchSeasonFilter===s.id?'active':''}" data-search-season-filter="${s.id}">Season ${String(s.number).padStart(2,'0')}</button>`).join('')}
+    </div>
+    <div class="form-field">
+      <label>Date range (optional)</label>
+      <div style="display:flex; gap:8px;">
+        <input type="date" id="searchDateFrom" value="${esc(searchDateFrom)}">
+        <input type="date" id="searchDateTo" value="${esc(searchDateTo)}">
+      </div>
+    </div>
+    ${activeFilters ? `<button class="btn-ghost" id="searchClearFiltersBtn" style="margin:-6px 0 10px;">Clear filters</button>` : ''}
+    ${results.length ? `<div class="card">${results.map((r,idx)=>`
+      <button data-search-result="${idx}" style="width:100%;text-align:left;border:none;background:none;font-family:inherit;cursor:pointer;" class="entry-item">
+        <div style="font-size:18px;width:26px;flex-shrink:0;">${r.icon}</div>
+        <div style="flex:1;"><div class="main">${esc(r.title)}</div><div class="sub">${esc(r.sub)}${r.date?' · '+fmtDate(r.date):''}</div></div>
+      </button>`).join('')}</div>` : emptyState('🔍', searchQuery||activeFilters ? 'Nothing matched' : 'Search your whole garden', 'Goals, routines, milestones, reflections, memories, seasons, achievements and more — filterable by area, type, season and date.')}
+  </div>`;
+}
+
+/* ================= THEN → NOW COMPARE ================= */
+let thenNowArea = '';
+let thenNowCategory = '';
+let thenNowOlderId = '';
+let thenNowNewerId = '';
+let thenNowSlider = 50;
+function thenNowFilteredPhotos(){
+  let list = [...DB.progressPhotos];
+  if(thenNowArea) list = list.filter(p=>p.area===thenNowArea);
+  if(thenNowCategory) list = list.filter(p=>p.category===thenNowCategory);
+  return list.sort((a,b)=>a.date.localeCompare(b.date));
+}
+function renderThenNowPage(){
+  const list = thenNowFilteredPhotos();
+  if(!thenNowOlderId && list.length>1) thenNowOlderId = list[0].id;
+  if(!thenNowNewerId && list.length>1) thenNowNewerId = list[list.length-1].id;
+  const older = list.find(p=>p.id===thenNowOlderId);
+  const newer = list.find(p=>p.id===thenNowNewerId);
+  const cats = [...new Set(DB.progressPhotos.map(p=>p.category).filter(Boolean))];
+  return `
+  <div class="nav-header"><button class="back-btn" data-back-home>←</button><h2>🌿 Then → Now</h2></div>
+  <div class="screen">
+    <p class="sub" style="margin:-4px 0 14px;">Where you started, how you've grown — in your own progress photos.</p>
+    <div class="chip-row" style="margin-bottom:8px;">
+      <button type="button" class="chip ${!thenNowArea?'active':''}" data-thennow-area="">All areas</button>
+      ${AREAS.map(a=>`<button type="button" class="chip ${thenNowArea===a.key?'active':''}" data-thennow-area="${a.key}">${a.emoji} ${a.name}</button>`).join('')}
+    </div>
+    ${cats.length ? `<div class="chip-row" style="margin-bottom:14px;">
+      <button type="button" class="chip ${!thenNowCategory?'active':''}" data-thennow-cat="">All categories</button>
+      ${cats.map(c=>`<button type="button" class="chip ${thenNowCategory===c?'active':''}" data-thennow-cat="${esc(c)}">${esc(c)}</button>`).join('')}
+    </div>` : ''}
+
+    ${list.length<2 ? emptyState('📸','Not enough photos yet', 'Add at least two progress photos in the same area or category to build a Then → Now comparison.') : `
+    <div class="form-field"><label>Then</label><select id="thenNowOlderSelect">${list.map(p=>`<option value="${p.id}" ${thenNowOlderId===p.id?'selected':''}>${fmtDate(p.date)}${p.category?' · '+esc(p.category):''}</option>`).join('')}</select></div>
+    <div class="form-field"><label>Now</label><select id="thenNowNewerSelect">${list.map(p=>`<option value="${p.id}" ${thenNowNewerId===p.id?'selected':''}>${fmtDate(p.date)}${p.category?' · '+esc(p.category):''}</option>`).join('')}</select></div>
+    ${older && newer ? `
+    <div class="card">
+      <div style="position:relative; width:100%; aspect-ratio:1; border-radius:14px; overflow:hidden;">
+        <img src="${newer.photoData}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+        <div id="thenNowClip" style="position:absolute; inset:0; width:${thenNowSlider}%; height:100%; overflow:hidden;">
+          <img src="${older.photoData}" style="width:${list.length?100/(thenNowSlider/100):100}%; height:100%; object-fit:cover; max-width:none;" id="thenNowOlderImg">
+        </div>
+        <div id="thenNowDivider" style="position:absolute; left:${thenNowSlider}%; top:0; bottom:0; width:2px; background:#fff; box-shadow:0 0 8px rgba(0,0,0,0.3);"></div>
+        <div style="position:absolute; bottom:8px; left:8px; font-size:11px; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.6); font-weight:700;">THEN · ${fmtDate(older.date)}</div>
+        <div style="position:absolute; bottom:8px; right:8px; font-size:11px; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.6); font-weight:700;">NOW · ${fmtDate(newer.date)}</div>
+      </div>
+      <input type="range" min="1" max="99" value="${thenNowSlider}" id="thenNowRange" style="width:100%; margin-top:10px; accent-color:var(--dash);">
+      ${older.note || newer.note ? `<div style="margin-top:10px;">
+        ${older.note?`<div class="sub"><strong>Then:</strong> ${esc(older.note)}</div>`:''}
+        ${newer.note?`<div class="sub" style="margin-top:4px;"><strong>Now:</strong> ${esc(newer.note)}</div>`:''}
+      </div>` : ''}
+      ${(older.tags&&older.tags.length)||(newer.tags&&newer.tags.length) ? `<div class="chip-row" style="margin-top:10px;">${[...(older.tags||[]),...(newer.tags||[])].map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
+    </div>` : ''}` }
+  </div>`;
+}
+
+/* ================= ROUTINE DRAG REORDER ================= */
+function applyRoutineOrder(idsInOrder){
+  const byId = {}; DB.customRoutines.forEach(r=> byId[r.id]=r);
+  const reordered = idsInOrder.map(id=>byId[id]).filter(Boolean);
+  // keep any routine not present in idsInOrder (shouldn't normally happen) appended at the end
+  DB.customRoutines.forEach(r=>{ if(!idsInOrder.includes(r.id)) reordered.push(r); });
+  DB.customRoutines = reordered;
+  save('customRoutines');
+}
+function wireRoutineDrag(app){
+  const list = app.querySelector('#routinesList');
+  if(!list) return;
+  let dragEl = null, startY = 0, startTransform = 0;
+  const cards = ()=> Array.from(list.querySelectorAll('[data-routine-card]'));
+  list.querySelectorAll('[data-drag-handle]').forEach(handle=>{
+    handle.addEventListener('pointerdown', (e)=>{
+      dragEl = handle.closest('[data-routine-card]');
+      if(!dragEl) return;
+      startY = e.clientY;
+      dragEl.style.zIndex = 5;
+      dragEl.style.position = 'relative';
+      if(handle.setPointerCapture) handle.setPointerCapture(e.pointerId);
+      const onMove = (ev)=>{
+        const dy = ev.clientY - startY;
+        dragEl.style.transform = `translateY(${dy}px)`;
+        const siblings = cards().filter(c=>c!==dragEl);
+        for(const sib of siblings){
+          const rect = sib.getBoundingClientRect();
+          const dragRect = dragEl.getBoundingClientRect();
+          const dragMid = dragRect.top + dragRect.height/2;
+          if(dragMid > rect.top && dragMid < rect.bottom){
+            if(dragRect.top < rect.top) sib.after(dragEl); else sib.before(dragEl);
+            dragEl.style.transform = 'translateY(0px)';
+            startY = ev.clientY;
+            break;
+          }
+        }
+      };
+      const onUp = ()=>{
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        if(dragEl){ dragEl.style.transform=''; dragEl.style.zIndex=''; }
+        const newOrder = cards().map(c=>c.dataset.routineCard);
+        applyRoutineOrder(newOrder);
+        render();
+      };
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+  });
+}
 
 /* ---------------- init ---------------- */
 (async function init(){
